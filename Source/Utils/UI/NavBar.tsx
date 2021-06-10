@@ -77,7 +77,7 @@ export class NavBarButton extends BaseComponentPlus(
 }
 
 @Observer
-export class NavBarPageButton extends BaseComponentPlus({} as {page?: string, text: string, style?}, {}) {
+export class NavBarPageButton extends BaseComponentPlus({} as {page?: string, subpage?: string, text: string, style?}, {}) {
 	render() {
 		const {...rest} = this.props;
 		return (
