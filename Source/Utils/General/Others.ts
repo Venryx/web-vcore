@@ -1,5 +1,4 @@
 import {VRect, Vector2, GetPropChanges} from "js-vextensions";
-import {AddSchema, GetSchemaJSON} from "mobx-firelink";
 
 // like js-vextensions GetPropChanges(), except also applies RemoveHelpers on the result (since intended to be used for db-objects)
 export function GetUpdates(oldData, newData, useJSONCompare = false, useNullInsteadOfUndefined = true) {
@@ -40,33 +39,36 @@ export function GetPageRect(el: Element) {
 	);
 }
 
-AddSchema("Vector2", {
-	properties: {
-		x: {type: "number"},
-		y: {type: "number"},
-	},
-});
-AddSchema("Vector3", {
-	properties: {
-		x: {type: "number"},
-		y: {type: "number"},
-		z: {type: "number"},
-	},
-});
-AddSchema("VRect", {
-	properties: {
-		x: {type: "number"},
-		y: {type: "number"},
-		width: {type: "number"},
-		height: {type: "number"},
-	},
-});
-AddSchema("VBounds", {
-	properties: {
-		position: {$ref: "Vector3"},
-		size: {$ref: "Vector3"},
-	},
-});
+//import {AddSchema, GetSchemaJSON} from "mobx-firelink";
+export function AddVectorSchemas(AddSchema: (schemaName: string, schema: any)=>any) {
+	AddSchema("Vector2", {
+		properties: {
+			x: {type: "number"},
+			y: {type: "number"},
+		},
+	});
+	AddSchema("Vector3", {
+		properties: {
+			x: {type: "number"},
+			y: {type: "number"},
+			z: {type: "number"},
+		},
+	});
+	AddSchema("VRect", {
+		properties: {
+			x: {type: "number"},
+			y: {type: "number"},
+			width: {type: "number"},
+			height: {type: "number"},
+		},
+	});
+	AddSchema("VBounds", {
+		properties: {
+			position: {$ref: "Vector3"},
+			size: {$ref: "Vector3"},
+		},
+	});
+}
 
 const click_lastInfoForElement = {};
 export function IsDoubleClick(event: React.MouseEvent<any>, maxTimeGap = 500, compareByPath = true) {
@@ -146,7 +148,7 @@ export function GetDOMPath(el) {
 	return stack.join(" > ");
 }
 
-export function ClearPropsNotInSchema(obj, schemaName: string) {
+export function ClearPropsNotInSchema(obj, schemaName: string, GetSchemaJSON: (schemaName: string)=>any) {
 	const schema = GetSchemaJSON(schemaName);
 	for (const key of obj.VKeys()) {
 		if (schema["properties"][key] == null) {

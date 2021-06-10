@@ -15,6 +15,6 @@ Object.defineProperty = function(o, p, attributes) {
 	if (p == "__DisableExportOverwrites__") {
 		Object.defineProperty = defineProperty_orig;
 	}
-};
+} as any;
 
 export const __EnableExportOverwrites__ = true; // by having user module "export *" from here, we end up marking that module with the special key checked for above

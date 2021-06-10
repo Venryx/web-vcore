@@ -11,11 +11,11 @@ import {Observer} from "../Store/MobX";
 
 @Observer
 export class NavBarButton extends BaseComponentPlus(
-	{} as {page?: string, text: string, panel?: boolean, active?: boolean, style?, onClick?: (e)=>void},
+	{} as {page?: string, subpage?: string, text: string, panel?: boolean, active?: boolean, style?, onClick?: (e)=>void},
 	{hovered: false},
 ) {
 	render() {
-		let {page, text, active, style, onClick} = this.props;
+		let {page, subpage, text, active, style, onClick} = this.props;
 		// let {_radiumStyleState: {main: radiumState = {}} = {}} = this.state as any;
 		// let {_radiumStyleState} = this.state as any;
 		const {hovered} = this.state;
@@ -57,6 +57,11 @@ export class NavBarButton extends BaseComponentPlus(
 						//runInAction("NavBarPageButton.actionIfActive", ()=>pageEntry.actionIfActive(s));
 					}
 				}
+			}
+
+			const pageStore = s.main[currentPage];
+			if (subpage != null && subpage != pageStore.subpage) {
+				pageStore.subpage = subpage;
 			}
 		} : null;
 

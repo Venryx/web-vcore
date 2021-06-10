@@ -6,6 +6,7 @@ import {IReactComponent} from "mobx-react/dist/types/IReactComponent";
 import React, {Component, useRef} from "react";
 import {EnsureClassProtoRenderFunctionIsWrapped} from "react-vextensions";
 import {HandleError} from "../General/Errors";
+//import {useClassRef} from "react-universal-hooks";
 
 // old: call ConfigureMobX() before any part of mobx tree is created (ie. at start of Store/index.ts); else, immer produce() doesn't work properly
 //ConfigureMobX();
@@ -90,14 +91,19 @@ export function ClassHooks(targetClass: Function) {
 let magicStackSymbol_cached: Symbol;
 export function GetMagicStackSymbol(comp: Component) {
 	if (magicStackSymbol_cached == null) {
-		const instanceKey = React.version.indexOf("16") === 0 ? "stateNode" : "_instance";
+		const instanceKey = React.version.indexOf("15") === 0 ? "_instance" : "stateNode";
 		const ReactInternals = React["__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED"];
 		const compBeingRendered_real = ReactInternals.ReactCurrentOwner.current;
 
 		const compBeingRendered_fake = {render: ()=>({})};
 		ReactInternals.ReactCurrentOwner.current = {[instanceKey]: compBeingRendered_fake};
-		useRef(); // this triggers react-universal-hooks to attach data to the "comp being rendered" (fake object above)
-		//useClassRef(); // variant, if only using the underlying react-class-hooks library
+		// eslint-disable-next-line
+		{
+			//useClassRef(); // more straight-forward, but involves `require("react-universal-hooks")` from web-vcore, which is nice to be able to avoid
+			/*const useRefIsModified = useRef["isModified"] ?? (useRef["isModified"] = useRef.toString().includes("useClassRef"));
+			if (!useRefIsModified) throw new Error("Cannot get magic-stack symbol, because react-universal-hooks has not overridden the React.useRef function.");*/
+			useRef(); // this triggers react-universal-hooks to attach data to the "comp being rendered" (fake object above)
+		}
 		ReactInternals.ReactCurrentOwner.current = compBeingRendered_real;
 
 		// now we can obtain the secret magic-stacks symbol, by iterating the symbols on compBeingRendered_fake

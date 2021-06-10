@@ -51,8 +51,17 @@ function GetAliases(opt: CreateWebpackConfig_Options) {
 	];
 	//const map = {};
 
-	const flatList_existent = flatList.filter(a=>fs.existsSync(paths.base("node_modules", a)));
-	return CE(flatList_existent).ToMapObj(name=>name, name=>paths.base("node_modules", name));
+	const result = {};
+	for (const name of flatList) {
+		if (fs.existsSync(paths.base("node_modules", name))) {
+			result[name] = paths.base("node_modules", name);
+		}
+		// for if in monorepo, check root/hoist node_modules folder
+		if (fs.existsSync(paths.base("..", "..", "node_modules", name))) {
+			result[name] = paths.base("..", "..", "node_modules", name);
+		}
+	}
+	return result;
 }
 
 
@@ -70,7 +79,7 @@ export class CreateWebpackConfig_Options {
 	};
 
 	// custom options
-	sourcesFromRoot? = false;
+	sourcesFromRoot?= false;
 	//tsLoaderPaths?: webpack.RuleSetConditions;
 	//tsLoaderPaths?: string[];
 	tsLoaderEntries?: TSLoaderEntry[];
@@ -296,6 +305,13 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 				plugins: [
 					"@babel/plugin-proposal-nullish-coalescing-operator",
 					"@babel/plugin-proposal-optional-chaining",
+					// for some reason this is needed now (eg. first noticed for GD repo)
+					[
+						"@babel/plugin-proposal-class-properties",
+						{
+							loose: true,
+						},
+					],
 				],
 			},
 		},

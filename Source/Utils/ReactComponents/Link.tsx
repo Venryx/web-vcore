@@ -1,8 +1,6 @@
 import {VURL, Assert, E} from "js-vextensions";
 import React from "react";
 import {BaseComponent, FilterOutUnrecognizedProps, BaseComponentPlus} from "react-vextensions";
-import produce from "immer";
-import {WithStore} from "mobx-firelink";
 import {runInAction} from "mobx";
 import {GetCurrentURL} from "../URL/URLs";
 import {manager} from "../../Manager";
