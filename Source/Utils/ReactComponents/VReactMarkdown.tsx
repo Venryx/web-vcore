@@ -1,4 +1,4 @@
-import ReactMarkdown, {ReactMarkdownProps} from "react-markdown";
+import ReactMarkdown, {ReactMarkdownOptions} from "react-markdown";
 import {BaseComponent, ShallowChanged, FilterOutUnrecognizedProps} from "react-vextensions";
 //import {Component as BaseComponent} from "react";
 import {VURL, E} from "js-vextensions";
@@ -12,16 +12,16 @@ export type ReplacementFunc = (segment: Segment, index: number, extraInfo)=>JSX.
 
 // this is distinct from react-vmarkdown (this is a markdown renderer, whereas react-vmarkdown is a markdown editor)
 export class VReactMarkdown extends BaseComponent
-	<{source: string, replacements?: {[key: string]: ReplacementFunc}, extraInfo?, style?, addMarginsForDanglingNewLines?: boolean, containerProps?: any} & ReactMarkdownProps,
+	<{source: string, replacements?: {[key: string]: ReplacementFunc}, extraInfo?, style?, addMarginsForDanglingNewLines?: boolean, containerProps?: any} & Omit<ReactMarkdownOptions, "children">,
 	{}> {
 	render() {
-		const {source, replacements, extraInfo, style, addMarginsForDanglingNewLines, containerProps, renderers, ...rest} = this.props;
+		const {source, replacements, extraInfo, style, addMarginsForDanglingNewLines, containerProps, components, ...rest} = this.props;
 
 		const containerProps_final = {...containerProps};
 		containerProps_final.style = E(containerProps_final.style, style);
 
-		const renderers_final = {...renderers} as any;
-		renderers_final.link = renderers_final.link || (props=>{
+		const components_final = {...components} as any;
+		components_final.link = components_final.link || (props=>{
 			let {href, target, ...rest} = props;
 			const toURL = VURL.Parse(href);
 			const sameDomain = toURL.domain == GetCurrentURL().domain;
@@ -54,7 +54,7 @@ export class VReactMarkdown extends BaseComponent
 									marginTop: text.startsWith("\n\n") ? 15 : text.startsWith("\n") ? 5 : 0,
 									marginBottom: text.endsWith("\n\n") ? 15 : text.endsWith("\n") ? 5 : 0,
 								})}>
-									<ReactMarkdown {...rest} key={index} source={text.trim()} renderers={renderers_final}/>
+									<ReactMarkdown {...rest} key={index} children={text.trim()} components={components_final}/>
 								</div>
 							);
 						}
@@ -67,7 +67,7 @@ export class VReactMarkdown extends BaseComponent
 
 		return (
 			<div {...containerProps_final}>
-				<ReactMarkdown {...rest} source={source} renderers={renderers_final}/>
+				<ReactMarkdown {...rest} children={source} components={components_final}/>
 			</div>
 		);
 	}

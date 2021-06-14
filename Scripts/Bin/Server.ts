@@ -32,19 +32,22 @@ export function Serve(config: ReturnType<typeof CreateConfig>, webpackConfig: we
 	if (DEV) {
 		const compiler = webpack(webpackConfig);
 
-		// compiler.apply(new webpack.ProgressPlugin({ profile: true }));
-		compiler.apply(new webpack.ProgressPlugin());
+		//compiler.apply(new webpack.ProgressPlugin({ profile: true }));
+		//compiler.apply(new webpack.ProgressPlugin());
 
 		debug("Enable webpack dev and HMR middleware");
 		app.use(devMiddleware(compiler, {
-			publicPath: webpackConfig.output.publicPath,
+			// removed from webpack 5 update apparently
+			/*publicPath: webpackConfig.output.publicPath,
 			contentBase: paths.source(),
 			hot: config.useHotReloading,
 			quiet: config.compiler_quiet,
 			noInfo: config.compiler_quiet,
 			lazy: false,
+			progress: true,*/
+
 			stats: config.compiler_stats,
-			progress: true,
+			writeToDisk,
 			/* watchOptions: {
 				// makes-so a typescript-recompile (with multiple changed files) only triggers one webpack-recompile
 				// [not needed anymore, since using tsc-watch]
@@ -53,7 +56,6 @@ export function Serve(config: ReturnType<typeof CreateConfig>, webpackConfig: we
 				//ignored: "**#/*",
 				ignored: "!./Source_JS/TSCompileDone.marker",
 			} */
-			writeToDisk,
 		}));
 		if (config.useHotReloading) {
 			//app.use(hotMiddleware(compiler));

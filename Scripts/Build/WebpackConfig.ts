@@ -14,7 +14,7 @@ import WebpackStringReplacer from "webpack-string-replacer";
 // const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 // const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 // const AutoDllPlugin = require("autodll-webpack-plugin");
-import vwafPackageJSON from "../../package.json";
+import wvcPackageJSON from "../../package.json";
 import {MakeSoWebpackConfigOutputsStats} from "./WebpackConfig/OutputStats";
 
 declare const ENV, DEV, PROD, TEST;
@@ -23,7 +23,7 @@ const debug = debug_base("app:webpack:config");
 
 const {QUICK, USE_TSLOADER, OUTPUT_STATS} = process.env;
 
-const peerDeps = CE(vwafPackageJSON.peerDependencies).VKeys();
+const peerDeps = CE(wvcPackageJSON.peerDependencies).VKeys();
 const ownModules = [
 	"js-vextensions", // js (base)
 	"react-vextensions", "react-vcomponents", "react-vmenu", "react-vmessagebox", "react-vscrollview", "react-vmarkdown", // +react
@@ -89,12 +89,12 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	opt = E(new CreateWebpackConfig_Options(), opt);
 
 	const paths = opt.config.utils_paths;
-	const vwafFolderInfo = fs.lstatSync(paths.base("node_modules/web-vcore"));
-	const vwafSymlinked = vwafFolderInfo.isSymbolicLink();
-	if (vwafSymlinked) console.log("VWAF folder detected to be symlinked. Will adjust webpack config to be compatible.");
+	const wvcFolderInfo = fs.lstatSync(paths.base("node_modules/web-vcore"));
+	const wvcSymlinked = wvcFolderInfo.isSymbolicLink();
+	if (wvcSymlinked) console.log("WVC folder detected to be symlinked. Will adjust webpack config to be compatible.");
 	function SubdepPath(subPath: string) {
 		// if vwaf is symlinked, we have to tunnel into vwaf folder to find its subdeps
-		if (vwafSymlinked) {
+		if (wvcSymlinked) {
 			return `web-vcore/node_modules/${subPath}`;
 		}
 		// if vwaf is installed normally (from npm install), then its subdeps will be peers/directly-under-user-project, so don't prepend anything
@@ -108,7 +108,8 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 		optimization: {
 			// use paths as runtime identifiers for webpack modules (easier debugging)
 			// namedModules: true, // commented; not needed, since "output.pathinfo=true" (and, before at least, would cause problems when inconsistent between bundles)
-			namedModules: true,
+			//namedModules: true,
+			moduleIds: "named",
 			noEmitOnErrors: true,
 		},
 		target: "web",
@@ -334,7 +335,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	];*/
 	const tsLoaderEntries_base = [
 		{test: /web-vcore[/\\]Source[/\\].*\.tsx?$/},
-		{test: /js-vextensions[/\\]Helpers[/\\]@ApplyCETypes\.tsx?$/},
+		{test: /js-vextensions[/\\]Helpers[/\\]@ApplyCETypes\.d\.ts$/},
 	];
 	const tsLoaderEntries = opt.tsLoaderEntries ?? tsLoaderEntries_base;
 
@@ -375,7 +376,10 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 			MiniCssExtractPlugin.loader,
 			{
 				loader: SubdepPath("css-loader"),
-				// options: { minimize: false }, // cssnano already minifies
+				options: {
+					url: false,
+					//minimize: false, // cssnano already minifies
+				},
 			},
 		],
 	});
@@ -385,34 +389,38 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 			MiniCssExtractPlugin.loader,
 			{
 				loader: SubdepPath("css-loader"),
-				// options: { minimize: false }, // cssnano already minifies
+				options: {
+					url: false,
+					//minimize: false, // cssnano already minifies
+				},
 			},
 			{
 				loader: SubdepPath("postcss-loader"),
 				options: {
-					ident: "postcss",
-					plugins: loader=>[
-						PROD && CSSNano({
-							// it seems this weird wrapper thing is needed, from examining source, but will just comment for now
-							/* preset: ()=> ({
-								plugins: new Promise(resolve=> {
-									resolve({ */
-							autoprefixer: {
-								add: true,
-								remove: true,
-								browsers: ["last 2 versions"],
-							},
-							discardComments: {removeAll: true},
-							discardUnused: false,
-							mergeIdents: false,
-							reduceIdents: false,
-							safe: true,
-							// sourcemap: true
-							/*		});
-								}),
-							}), */
-						}),
-					].filter(a=>a),
+					postcssOptions: {
+						plugins: loader=>[
+							PROD && CSSNano({
+								// it seems this weird wrapper thing is needed, from examining source, but will just comment for now
+								/* preset: ()=> ({
+									plugins: new Promise(resolve=> {
+										resolve({ */
+								autoprefixer: {
+									add: true,
+									remove: true,
+									browsers: ["last 2 versions"],
+								},
+								discardComments: {removeAll: true},
+								discardUnused: false,
+								mergeIdents: false,
+								reduceIdents: false,
+								safe: true,
+								// sourcemap: true
+								/*		});
+									}),
+								}), */
+							}),
+						].filter(a=>a),
+					},
 				},
 			},
 			{
@@ -439,7 +447,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 							return content.slice(0, startPoint) + vwafPart_fixed + content.slice(endPoint);
 						}*/
 
-						if (content.includes("web-vcore/Source/Utils/Styles/Entry_Base.scss") && vwafSymlinked) {
+						if (content.includes("web-vcore/Source/Utils/Styles/Entry_Base.scss") && wvcSymlinked) {
 							return content.replace(/Styles\/Entry_Base.scss/g, "Styles/Entry_Symlinked.scss");
 						}
 
@@ -459,6 +467,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	webpackConfig.module.rules.push({
 		test: /\.svg$/,
 		loader: SubdepPath("svg-sprite-loader"),
+		options: {}, // "options" must be present
 	});
 
 	if (OUTPUT_STATS) {

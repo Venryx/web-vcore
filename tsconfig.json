@@ -36,9 +36,10 @@
 		"jsx": "react",
 		"noImplicitAny": false,
 		"experimentalDecorators": true,
-		"allowSyntheticDefaultImports": true
+		"allowSyntheticDefaultImports": true,
 		//"declaration": true,
 		//"declarationDir": "Dist",
+		"resolveJsonModule": true,
 
 		// needed to fix "cannot find [vwaf file] under rootDir [of some other linked package]" compile error that occurs sometimes
 		//"composite": true

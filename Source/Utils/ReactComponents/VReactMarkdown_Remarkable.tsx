@@ -1,6 +1,6 @@
 import {VURL, E} from "js-vextensions";
 import {BaseComponent, ShallowChanged, FilterOutUnrecognizedProps} from "react-vextensions";
-import Remarkable from "remarkable";
+import {Remarkable} from "remarkable";
 import RemarkableReactRenderer from "remarkable-react";
 import React from "react";
 import {ParseSegmentsForPatterns} from "../General/RegexHelpers";

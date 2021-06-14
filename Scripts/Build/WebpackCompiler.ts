@@ -4,7 +4,7 @@ import debug_base from "debug";
 declare const {CreateConfig}: typeof import("../Config");
 const debug = debug_base("app:build:webpack-compiler");
 
-export function StartWebpackCompiler(config: ReturnType<typeof CreateConfig>, webpackConfig: webpack.Configuration, statsFormat?): Promise<webpack.Stats.ToJsonOutput> {
+export function StartWebpackCompiler(config: ReturnType<typeof CreateConfig>, webpackConfig: webpack.Configuration, statsFormat?): Promise<webpack.StatsCompilation> {
 	statsFormat = statsFormat || config.compiler_stats;
 
 	return new Promise((resolve, reject)=>{

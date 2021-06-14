@@ -1,14 +1,16 @@
 import {Options, Rule} from "webpack-string-replacer";
 
-const npmPatch_replacerConfig_base: Options = {
+type Options_WithAdditions = Options & {AddRule(rule: Rule): void};
+const npmPatch_replacerConfig_base: Options_WithAdditions = {
 	shouldValidate: ({compilations})=>compilations.length == 3, // only validate on initial compile
 	// validationLogType: 'logError',
 	rules: [],
+	AddRule(rule: Rule) {
+		const self = this as Options ?? npmPatch_replacerConfig_base;
+		self.rules.push(rule);
+	}
 };
-
-function AddRule(rule: Rule) {
-	npmPatch_replacerConfig_base.rules.push(rule);
-}
+const AddRule = npmPatch_replacerConfig_base.AddRule;
 
 AddRule({
 	fileInclude: /\.jsx?$/,
@@ -237,10 +239,10 @@ AddRule({
 	],
 });
 
-export function CreateNPMPatchesConfig(ext: Partial<Options>): Options {
-	const config = Object.assign(
-		npmPatch_replacerConfig_base,
-		ext,
-	);
+export function CreateNPMPatchesConfig(ext: Partial<Options>): Options_WithAdditions {
+	const config = {
+		...npmPatch_replacerConfig_base,
+		...ext,
+	};
 	return config;
 }
