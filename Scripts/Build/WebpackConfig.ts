@@ -9,13 +9,9 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 //import {CE} from "js-vextensions";
 import {CE, E} from "js-vextensions/Source"; // temp; require source, thus ts-node compiles to commonjs (fix for that ts-node doesn't support es2015-modules)
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
-//import HardSourceWebpackPlugin from "hard-source-webpack-plugin";
 import SpriteLoaderPlugin from "svg-sprite-loader/plugin";
 import webpack from "webpack";
 import WebpackStringReplacer from "webpack-string-replacer";
-// const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
-// const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-// const AutoDllPlugin = require("autodll-webpack-plugin");
 import wvcPackageJSON from "../../package.json";
 import {MakeSoWebpackConfigOutputsStats} from "./WebpackConfig/OutputStats";
 
@@ -29,40 +25,25 @@ const __dirname = pathModule.dirname(fileURLToPath(import.meta.url));
 function PathFromWebVCoreRoot(...subpathNodes: string[]) {
 	return pathModule.join(__dirname, "..", "..", ...subpathNodes);
 }
-// [comment wrong:] func needed because fs.existsSync errors, if the parent-folder of the folder-path being checked doesn't exist
-function PathExists(path: string, partsPossiblyMissing: number) {
-	/*let parts = path.split("/");
-	let result = "";
-	for (let [index, part] of parts.entries()) {
-		result = pathModule.join(result, part);
-		// if we're to a part that is possibly missing, check it
-		if (index >= parts.length - partsPossiblyMissing) {
-			if (!fs.existsSync(result)) return false;
-		}
-	}
-	return true;*/
-	return fs.existsSync(path);
-}
 function FindNodeModule_FromUserProjectRoot(opt: CreateWebpackConfig_Options, name: string) {
 	const paths = opt.config.utils_paths;
-	if (PathExists(paths.base("node_modules", name), 2)) {
+	if (fs.existsSync(paths.base("node_modules", name))) {
 		return paths.base("node_modules", name);
 	}
 	// for if in monorepo, check root/hoist node_modules folder
-	if (PathExists(paths.base("..", "..", "node_modules", name), 2)) {
+	if (fs.existsSync(paths.base("..", "..", "node_modules", name))) {
 		return paths.base("..", "..", "node_modules", name);
 	}
 	throw new Error(`Cannot find node-module "${name}". FirstCheck: ${paths.base("node_modules", name)}`);
 }
 function FindNodeModule_FromWebVCoreRoot(opt: CreateWebpackConfig_Options, name: string) {
 	const paths = opt.config.utils_paths;
-	if (PathExists(PathFromWebVCoreRoot("node_modules", name), 2)) {
+	if (fs.existsSync(PathFromWebVCoreRoot("node_modules", name))) {
 		return PathFromWebVCoreRoot("node_modules", name);
 	}
 	return FindNodeModule_FromUserProjectRoot(opt, name);
 }
 
-//const deps = CE(wvcPackageJSON.dependencies).VKeys();
 const peerDeps = CE(wvcPackageJSON.peerDependencies).VKeys();
 const ownModules = [
 	"js-vextensions", // js (base)
@@ -72,8 +53,6 @@ const ownModules = [
 	"web-vcore", // +framework
 	"webpack-runtime-require", // misc
 ];
-//const webVCore_nodeModules = fs.readdirSync(PathFromWebVCoreRoot("node_modules"), {withFileTypes: true}).map(a=>a.name);
-//const reExportedModules = fs.readdirSync(PathFromWebVCoreRoot("nm"), {withFileTypes: true}).filter(a=>a.isFile() && !a.name.startsWith("@All")).map(a=>a.name.split(".").slice(0, -1).join("."));
 function GetAliases(opt: CreateWebpackConfig_Options) {
 	const flatList = [
 		...peerDeps,
@@ -90,7 +69,6 @@ function GetAliases(opt: CreateWebpackConfig_Options) {
 		// convenience consolidations (for any own-modules not in peer-deps), to keep things tidy (fine since we know the different versions will be compatible anyway)
 		...ownModules,
 	];
-	//const map = {};
 
 	const result = {};
 	for (const name of flatList) {
@@ -100,13 +78,6 @@ function GetAliases(opt: CreateWebpackConfig_Options) {
 			// if couldn't find node-module, just ignore entry (to match with old behavior; the alias stuff needs a general cleanup)
 		}
 	}
-	/*for (const name of reExportedModules) {
-		if (fs.existsSync(PathFromWebVCoreRoot("node_modules", name))) {
-			result[`@vcnm/${name}`] = PathFromWebVCoreRoot("node_modules", name);
-		} else {
-			throw new Error(`Could not find module "${name}" to re-export. FirstCheck: ${paths.base("node_modules", name)}`);
-		}
-	}*/
 	
 	// keep synced with "tsconfig.base.json/compilerOptions/paths" in user-projects
 	//result["react"] = FindNodeModule_FromUserProjectRoot("react");
@@ -142,17 +113,9 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	const paths = opt.config.utils_paths;
 	const wvcFolderInfo = fs.existsSync(FindNodeModule_FromUserProjectRoot(opt, "web-vcore")) ? fs.lstatSync(FindNodeModule_FromUserProjectRoot(opt, "web-vcore")) : null;
 	const wvcSymlinked = wvcFolderInfo?.isSymbolicLink() ?? false;
-	//if (wvcSymlinked) console.log("WVC folder detected to be symlinked. Will adjust webpack config to be compatible.");
 	console.log(`web-vcore running in symlink mode?: ${wvcSymlinked}`);
 
 	function SubdepPath(subPath: string) {
-		// if vwaf is symlinked, we have to tunnel into vwaf folder to find its subdeps
-		/*if (wvcSymlinked) {
-			return `web-vcore/node_modules/${subPath}`;
-		}
-		// if vwaf is installed normally (from npm install), then its subdeps will be peers/directly-under-user-project, so don't prepend anything
-		//return subPath;
-		return FindNodeModule_FromUserProjectRoot(opt, subPath);*/
 		return FindNodeModule_FromWebVCoreRoot(opt, subPath);
 	}
 
@@ -162,7 +125,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 		mode: PROD && !QUICK ? "production" : "development",
 		optimization: {
 			// use paths as runtime identifiers for webpack modules (easier debugging)
-			// namedModules: true, // commented; not needed, since "output.pathinfo=true" (and, before at least, would cause problems when inconsistent between bundles)
+			//namedModules: true, // commented; not needed, since "output.pathinfo=true" (and, before at least, would cause problems when inconsistent between bundles)
 			//namedModules: true,
 			moduleIds: "named",
 			noEmitOnErrors: true,
@@ -259,19 +222,19 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	// ==========
 
 	webpackConfig.plugins = [
-		// Plugin to show any webpack warnings and prevent tests from running
+		// plugin to show any webpack warnings and prevent tests from running
 		function() {
 			const errors = [];
 			this.hooks.done.tap("ShowWarningsAndStopTests", stats=>{
 				if (!stats.compilation.errors.length) return;
 
-				// Log each of the warnings
+				// log each of the warnings
 				stats.compilation.errors.forEach(error=>{
 					errors.push(error.message || error);
 				});
 
 				// Pretend no assets were generated. This prevents the tests from running, making it clear that there were warnings.
-				// throw new Error(errors)
+				//throw new Error(errors)
 			});
 		},
 		new webpack.DefinePlugin(opt.config.globals),
