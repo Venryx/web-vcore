@@ -2,7 +2,7 @@ import {enableES5, setAutoFreeze, setUseProxies} from "immer";
 import {E, emptyArray, RemoveCircularLinks, ToJSON} from "js-vextensions";
 import {$mobx, autorun, configure, observable, ObservableMap, ObservableSet, onReactionError, runInAction, _getGlobalState} from "mobx";
 import {observer} from "mobx-react";
-import {IReactComponent} from "mobx-react/dist/types/IReactComponent";
+import {IReactComponent} from "mobx-react";
 import React, {Component, useRef} from "react";
 import {EnsureClassProtoRenderFunctionIsWrapped} from "react-vextensions";
 import {HandleError} from "../General/Errors";
