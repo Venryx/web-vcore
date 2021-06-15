@@ -30,6 +30,7 @@ function PathFromWebVCoreRoot(...subpathNodes: string[]) {
 	return pathModule.join(__dirname, "..", "..", ...subpathNodes);
 }
 
+//const deps = CE(wvcPackageJSON.dependencies).VKeys();
 const peerDeps = CE(wvcPackageJSON.peerDependencies).VKeys();
 const ownModules = [
 	"js-vextensions", // js (base)
@@ -39,10 +40,8 @@ const ownModules = [
 	"web-vcore", // +framework
 	"webpack-runtime-require", // misc
 ];
-/*const reExportedModules = [
-	"react-vscrollview",
-];*/
-const reExportedModules = fs.readdirSync(PathFromWebVCoreRoot("Source", "@vcnm"), {withFileTypes: true}).filter(a=>a.isFile()).map(a=>a.name.split(".").slice(0, -1).join("."));
+//const webVCore_nodeModules = fs.readdirSync(PathFromWebVCoreRoot("node_modules"), {withFileTypes: true}).map(a=>a.name);
+//const reExportedModules = fs.readdirSync(PathFromWebVCoreRoot("nm"), {withFileTypes: true}).filter(a=>a.isFile() && !a.name.startsWith("@All")).map(a=>a.name.split(".").slice(0, -1).join("."));
 function GetAliases(opt: CreateWebpackConfig_Options) {
 	const paths = opt.config.utils_paths;
 	const flatList = [
@@ -72,19 +71,13 @@ function GetAliases(opt: CreateWebpackConfig_Options) {
 			result[name] = paths.base("..", "..", "node_modules", name);
 		}
 	}
-	for (const name of reExportedModules) {
-		/*if (fs.existsSync(paths.base("node_modules", name))) {
-			result[`@vcnm/${name}`] = paths.base("node_modules", name);
-		}
-		// for if in monorepo, check root/hoist node_modules folder (if match not found already -- to match NodeJS search-up mechanism)
-		else if (fs.existsSync(paths.base("..", "..", "node_modules", name))) {
-			result[`@vcnm/${name}`] = paths.base("..", "..", "node_modules", name);*/
+	/*for (const name of reExportedModules) {
 		if (fs.existsSync(PathFromWebVCoreRoot("node_modules", name))) {
 			result[`@vcnm/${name}`] = PathFromWebVCoreRoot("node_modules", name);
 		} else {
 			throw new Error(`Could not find module "${name}" to re-export. FirstCheck: ${paths.base("node_modules", name)}`);
 		}
-	}
+	}*/
 	return result;
 }
 

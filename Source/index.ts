@@ -14,6 +14,10 @@ export * from "./@EnableExportOverwrites";
 export * from "./Manager";
 export * from "./UserTypes";
 
+// special auto-import helper
+//export * from "./@vcnm/@All";
+//import "./@vcnm/@All";
+
 //export * from "./Server/Command";
 
 export * from "./Utils/Audio/AudioNodes";
