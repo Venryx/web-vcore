@@ -4,6 +4,7 @@ import "./@apollo/client_deep";
 import "./codemirror";
 import "./graphql-tag";
 import "./graphql";
+import "./immer";
 import "./js-vextensions";
 import "./mobx-graphlink";
 import "./mobx-react";

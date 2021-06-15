@@ -29,6 +29,38 @@ const __dirname = pathModule.dirname(fileURLToPath(import.meta.url));
 function PathFromWebVCoreRoot(...subpathNodes: string[]) {
 	return pathModule.join(__dirname, "..", "..", ...subpathNodes);
 }
+// [comment wrong:] func needed because fs.existsSync errors, if the parent-folder of the folder-path being checked doesn't exist
+function PathExists(path: string, partsPossiblyMissing: number) {
+	/*let parts = path.split("/");
+	let result = "";
+	for (let [index, part] of parts.entries()) {
+		result = pathModule.join(result, part);
+		// if we're to a part that is possibly missing, check it
+		if (index >= parts.length - partsPossiblyMissing) {
+			if (!fs.existsSync(result)) return false;
+		}
+	}
+	return true;*/
+	return fs.existsSync(path);
+}
+function FindNodeModule_FromUserProjectRoot(opt: CreateWebpackConfig_Options, name: string) {
+	const paths = opt.config.utils_paths;
+	if (PathExists(paths.base("node_modules", name), 2)) {
+		return paths.base("node_modules", name);
+	}
+	// for if in monorepo, check root/hoist node_modules folder
+	if (PathExists(paths.base("..", "..", "node_modules", name), 2)) {
+		return paths.base("..", "..", "node_modules", name);
+	}
+	throw new Error(`Cannot find node-module "${name}". FirstCheck: ${paths.base("node_modules", name)}`);
+}
+function FindNodeModule_FromWebVCoreRoot(opt: CreateWebpackConfig_Options, name: string) {
+	const paths = opt.config.utils_paths;
+	if (PathExists(PathFromWebVCoreRoot("node_modules", name), 2)) {
+		return PathFromWebVCoreRoot("node_modules", name);
+	}
+	return FindNodeModule_FromUserProjectRoot(opt, name);
+}
 
 //const deps = CE(wvcPackageJSON.dependencies).VKeys();
 const peerDeps = CE(wvcPackageJSON.peerDependencies).VKeys();
@@ -43,7 +75,6 @@ const ownModules = [
 //const webVCore_nodeModules = fs.readdirSync(PathFromWebVCoreRoot("node_modules"), {withFileTypes: true}).map(a=>a.name);
 //const reExportedModules = fs.readdirSync(PathFromWebVCoreRoot("nm"), {withFileTypes: true}).filter(a=>a.isFile() && !a.name.startsWith("@All")).map(a=>a.name.split(".").slice(0, -1).join("."));
 function GetAliases(opt: CreateWebpackConfig_Options) {
-	const paths = opt.config.utils_paths;
 	const flatList = [
 		...peerDeps,
 
@@ -61,27 +92,10 @@ function GetAliases(opt: CreateWebpackConfig_Options) {
 	];
 	//const map = {};
 
-	function FindNodeModule_FromUserProjectRoot(name: string) {
-		if (fs.existsSync(paths.base("node_modules", name))) {
-			return paths.base("node_modules", name);
-		}
-		// for if in monorepo, check root/hoist node_modules folder
-		if (fs.existsSync(paths.base("..", "..", "node_modules", name))) {
-			return paths.base("..", "..", "node_modules", name);
-		}
-		throw new Error(`Cannot find node-module "${name}". FirstCheck: ${paths.base("node_modules", name)}`);
-	}
-	function FindNodeModule_FromWebVCoreRoot(name: string) {
-		if (fs.existsSync(PathFromWebVCoreRoot("node_modules", name))) {
-			return PathFromWebVCoreRoot("node_modules", name);
-		}
-		return FindNodeModule_FromUserProjectRoot(name);
-	}
-
 	const result = {};
 	for (const name of flatList) {
 		try {
-			result[name] = FindNodeModule_FromUserProjectRoot(name);
+			result[name] = FindNodeModule_FromUserProjectRoot(opt, name);
 		} catch {
 			// if couldn't find node-module, just ignore entry (to match with old behavior; the alias stuff needs a general cleanup)
 		}
@@ -96,7 +110,7 @@ function GetAliases(opt: CreateWebpackConfig_Options) {
 	
 	// keep synced with "tsconfig.base.json/compilerOptions/paths" in user-projects
 	//result["react"] = FindNodeModule_FromUserProjectRoot("react");
-	result["react"] = FindNodeModule_FromWebVCoreRoot("react");
+	result["react"] = FindNodeModule_FromWebVCoreRoot(opt, "react");
 
 	return result;
 }
@@ -126,16 +140,20 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	opt = E(new CreateWebpackConfig_Options(), opt);
 
 	const paths = opt.config.utils_paths;
-	const wvcFolderInfo = fs.lstatSync(paths.base("node_modules/web-vcore"));
-	const wvcSymlinked = wvcFolderInfo.isSymbolicLink();
-	if (wvcSymlinked) console.log("WVC folder detected to be symlinked. Will adjust webpack config to be compatible.");
+	const wvcFolderInfo = fs.existsSync(FindNodeModule_FromUserProjectRoot(opt, "web-vcore")) ? fs.lstatSync(FindNodeModule_FromUserProjectRoot(opt, "web-vcore")) : null;
+	const wvcSymlinked = wvcFolderInfo?.isSymbolicLink() ?? false;
+	//if (wvcSymlinked) console.log("WVC folder detected to be symlinked. Will adjust webpack config to be compatible.");
+	console.log(`web-vcore running in symlink mode?: ${wvcSymlinked}`);
+
 	function SubdepPath(subPath: string) {
 		// if vwaf is symlinked, we have to tunnel into vwaf folder to find its subdeps
-		if (wvcSymlinked) {
+		/*if (wvcSymlinked) {
 			return `web-vcore/node_modules/${subPath}`;
 		}
 		// if vwaf is installed normally (from npm install), then its subdeps will be peers/directly-under-user-project, so don't prepend anything
-		return subPath;
+		//return subPath;
+		return FindNodeModule_FromUserProjectRoot(opt, subPath);*/
+		return FindNodeModule_FromWebVCoreRoot(opt, subPath);
 	}
 
 	debug("Creating configuration.");
@@ -322,30 +340,38 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 			include: [
 				paths.source(),
 				// fs.realpathSync(paths.base('node_modules', 'web-vcore')),
-				fs.realpathSync(paths.base("node_modules", "web-vcore", "Source")),
-			],
+				fs.existsSync(PathFromWebVCoreRoot("Source")) ? fs.realpathSync(PathFromWebVCoreRoot("Source")) : null,
+			].filter(a=>a),
 			loader: SubdepPath("babel-loader"),
 			options: {
 				presets: [
 					[
-						"@babel/env",
+						SubdepPath("@babel/preset-env"),
 						{
 							// use loose transpilation when possible (makes debugging easier)
 							loose: true,
 							// don't transpile async/await in dev-mode (makes debugging easier)
-							exclude: DEV ? ["babel-plugin-transform-async-to-generator", "babel-plugin-transform-regenerator"] : [],
+							exclude: DEV ? [
+								/*"babel-plugin-transform-async-to-generator",
+								"babel-plugin-transform-regenerator",*/
+								// can't use absolute paths atm (see: https://github.com/babel/babel/issues/9182)
+								/*SubdepPath("@babel/plugin-transform-async-to-generator"),
+								SubdepPath("@babel/plugin-transform-regenerator")*/
+								"transform-async-to-generator",
+								"transform-regenerator",
+							] : [],
 							// targets: {esmodules: true}, // target es2015
 							targets: {node: "6.5"}, // target es2015
 						},
 					],
-					"@babel/react",
+					SubdepPath("@babel/preset-react"),
 				],
 				plugins: [
-					"@babel/plugin-proposal-nullish-coalescing-operator",
-					"@babel/plugin-proposal-optional-chaining",
+					SubdepPath("@babel/plugin-proposal-nullish-coalescing-operator"),
+					SubdepPath("@babel/plugin-proposal-optional-chaining"),
 					// for some reason this is needed now (eg. first noticed for GD repo)
 					[
-						"@babel/plugin-proposal-class-properties",
+						SubdepPath("@babel/plugin-proposal-class-properties"),
 						{
 							loose: true,
 						},
