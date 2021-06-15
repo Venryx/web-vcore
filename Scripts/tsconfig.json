@@ -7,7 +7,8 @@
 
 		// modules/paths
 		//"module": "ES2015",
-		"module": "commonjs", // needed, since ts-node does not yet support imports from es2015-modules
+		//"module": "commonjs", // needed, since ts-node does not yet support imports from es2015-modules
+		"module": "ESNext",
 		"moduleResolution": "node",
 		"rootDir": ".",
 		"baseUrl": ".",

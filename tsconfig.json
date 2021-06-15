@@ -18,6 +18,7 @@
 		// general
 		"sourceMap": true,
 		"watch": true,
+		//"module": "ESNext",
 		"moduleResolution": "node",
 		//"maxNodeModulesJsDepth": 1,
 

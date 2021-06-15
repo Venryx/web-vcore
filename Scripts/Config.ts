@@ -5,7 +5,7 @@ import yargs from "yargs";
 
 const {argv} = yargs;
 
-// const __dirname = path.dirname(fileURLToPath(import.meta.url));
+//const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const {NODE_ENV, PORT, USE_TSLOADER, BASENAME} = process.env;
 const debug = debug_base("app:config");
 

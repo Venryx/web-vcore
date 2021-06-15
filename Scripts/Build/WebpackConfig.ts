@@ -3,6 +3,8 @@ import debug_base from "debug";
 // import resolverFactory from 'enhanced-resolve/lib/ResolverFactory';
 import SymlinkPlugin from "enhanced-resolve/lib/SymlinkPlugin";
 import fs from "fs";
+import pathModule from "path";
+import {fileURLToPath} from 'url';
 import HtmlWebpackPlugin from "html-webpack-plugin";
 //import {CE} from "js-vextensions";
 import {CE, E} from "js-vextensions/Source"; // temp; require source, thus ts-node compiles to commonjs (fix for that ts-node doesn't support es2015-modules)
@@ -23,15 +25,24 @@ const debug = debug_base("app:webpack:config");
 
 const {QUICK, USE_TSLOADER, OUTPUT_STATS} = process.env;
 
+const __dirname = pathModule.dirname(fileURLToPath(import.meta.url));
+function PathFromWebVCoreRoot(...subpathNodes: string[]) {
+	return pathModule.join(__dirname, "..", "..", ...subpathNodes);
+}
+
 const peerDeps = CE(wvcPackageJSON.peerDependencies).VKeys();
 const ownModules = [
 	"js-vextensions", // js (base)
-	"react-vextensions", "react-vcomponents", "react-vmenu", "react-vmessagebox", "react-vscrollview", "react-vmarkdown", // +react
+	"react-vextensions", "react-vcomponents", "react-vmenu", "react-vmessagebox", /*"react-vscrollview",*/ "react-vmarkdown", // +react
 	"firebase-feedback", "firebase-forum", // +firebase
 	"mobx-firelink", // +mobx
 	"web-vcore", // +framework
 	"webpack-runtime-require", // misc
 ];
+/*const reExportedModules = [
+	"react-vscrollview",
+];*/
+const reExportedModules = fs.readdirSync(PathFromWebVCoreRoot("Source", "@vcnm"), {withFileTypes: true}).filter(a=>a.isFile()).map(a=>a.name.split(".").slice(0, -1).join("."));
 function GetAliases(opt: CreateWebpackConfig_Options) {
 	const paths = opt.config.utils_paths;
 	const flatList = [
@@ -59,6 +70,19 @@ function GetAliases(opt: CreateWebpackConfig_Options) {
 		// for if in monorepo, check root/hoist node_modules folder
 		if (fs.existsSync(paths.base("..", "..", "node_modules", name))) {
 			result[name] = paths.base("..", "..", "node_modules", name);
+		}
+	}
+	for (const name of reExportedModules) {
+		/*if (fs.existsSync(paths.base("node_modules", name))) {
+			result[`@vcnm/${name}`] = paths.base("node_modules", name);
+		}
+		// for if in monorepo, check root/hoist node_modules folder (if match not found already -- to match NodeJS search-up mechanism)
+		else if (fs.existsSync(paths.base("..", "..", "node_modules", name))) {
+			result[`@vcnm/${name}`] = paths.base("..", "..", "node_modules", name);*/
+		if (fs.existsSync(PathFromWebVCoreRoot("node_modules", name))) {
+			result[`@vcnm/${name}`] = PathFromWebVCoreRoot("node_modules", name);
+		} else {
+			throw new Error(`Could not find module "${name}" to re-export. FirstCheck: ${paths.base("node_modules", name)}`);
 		}
 	}
 	return result;
