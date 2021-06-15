@@ -72,25 +72,25 @@ export const __DisableExportOverwrites__ = true;
 // override system
 // ==========
 
-/*export const VWAF_exports_orig = E(frameworkExportsInterface);
-export const VWAF_exports_final = frameworkExportsInterface;
-export function VWAF_OverrideExport(newValue_withNameProp: any);
-export function VWAF_OverrideExport(exportName: string, newValue: any);
-export function VWAF_OverrideExport(...args) {
+/*export const WVC_exports_orig = E(frameworkExportsInterface);
+export const WVC_exports_final = frameworkExportsInterface;
+export function WVC_OverrideExport(newValue_withNameProp: any);
+export function WVC_OverrideExport(exportName: string, newValue: any);
+export function WVC_OverrideExport(...args) {
 	let exportName: string, newValue: any;
 	if (args.length == 1) [exportName, newValue] = [args[0].name, args[0]];
 	else [exportName, newValue] = args;
-	VWAF_exports_final[exportName] = newValue;
+	WVC_exports_final[exportName] = newValue;
 }*/
 
-export const VWAF_exports_orig = E(CE(frameworkExportsObject).Excluding("VWAF_exports_orig", "VWAF_exports_final", "VWAF_OverrideExport"));
-export const VWAF_exports_final = frameworkExportsObject;
-export function VWAF_OverrideExport(newValue_withNameProp: any);
-export function VWAF_OverrideExport(exportName: string, newValue: any);
-export function VWAF_OverrideExport(...args) {
+export const WVC_exports_orig = E(CE(frameworkExportsObject).Excluding("WVC_exports_orig", "WVC_exports_final", "WVC_OverrideExport"));
+export const WVC_exports_final = frameworkExportsObject;
+export function WVC_OverrideExport(newValue_withNameProp: any);
+export function WVC_OverrideExport(exportName: string, newValue: any);
+export function WVC_OverrideExport(...args) {
 	let exportName: string, newValue: any;
 	if (args.length == 1) [exportName, newValue] = [args[0].name, args[0]];
 	else [exportName, newValue] = args;
-	delete VWAF_exports_final[exportName]; // delete getter-setter
-	VWAF_exports_final[exportName] = newValue;
+	delete WVC_exports_final[exportName]; // delete getter-setter
+	WVC_exports_final[exportName] = newValue;
 }

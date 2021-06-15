@@ -1,5 +1,5 @@
 // Do not include this file directly, since it omits the subdep imports; instead, import the "Entry_Base" in this folder, from user-project.
-// If VWAF is symlinked, VWAF's webpack-config will then detect its own symlinking, and change the import to "Entry_Symlinked", fixing the subdep paths.
+// If WVC is symlinked, WVC's webpack-config will then detect its own symlinking, and change the import to "Entry_Symlinked", fixing the subdep paths.
 
 .sliderHandleAbove .rc-slider > [role=slider] {
 	z-index: 1;

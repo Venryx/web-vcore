@@ -462,15 +462,15 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 						console.log(`Sass-loader preprocessing. @resourcePath:${resourcePath}`);
 						//console.log(`Content:${content}`);
 
-						//if (resourcePath.includes("node_modules/web-vcore") && resourcePath.endsWith("Main.scss") && vwafSymlinked) {
-						/*const startPoint = content.indexOf("// [StartOfVWAFMainSCSS]");
-						const endPoint = content.includes("// [EndOfVWAFMainSCSS]") ? content.indexOf("// [EndOfVWAFMainSCSS]") + "// [EndOfVWAFMainSCSS]".length : -1;
-						// if vwaf Main.scss file is part of this content instance, and vwaf is symlinked, replace its top-level subdep imports with ones under vwaf folder
-						if (startPoint != -1 && endPoint != -1 && vwafSymlinked) {
-							console.log("Found vwaf Main.scss file. Applying fixes, since vwaf is symlinked.");
-							const vwafPart = content.slice(startPoint, endPoint);
-							const vwafPart_fixed = vwafPart.replace(/@import "~/g, "@import \"~web-vcore/node_modules/");
-							return content.slice(0, startPoint) + vwafPart_fixed + content.slice(endPoint);
+						//if (resourcePath.includes("node_modules/web-vcore") && resourcePath.endsWith("Main.scss") && wvcSymlinked) {
+						/*const startPoint = content.indexOf("// [StartOfWVCMainSCSS]");
+						const endPoint = content.includes("// [EndOfWVCMainSCSS]") ? content.indexOf("// [EndOfWVCMainSCSS]") + "// [EndOfWVCMainSCSS]".length : -1;
+						// if wvc Main.scss file is part of this content instance, and wvc is symlinked, replace its top-level subdep imports with ones under wvc folder
+						if (startPoint != -1 && endPoint != -1 && wvcSymlinked) {
+							console.log("Found wvc Main.scss file. Applying fixes, since wvc is symlinked.");
+							const wvcPart = content.slice(startPoint, endPoint);
+							const wvcPart_fixed = wvcPart.replace(/@import "~/g, "@import \"~web-vcore/node_modules/");
+							return content.slice(0, startPoint) + wvcPart_fixed + content.slice(endPoint);
 						}*/
 
 						if (content.includes("web-vcore/Source/Utils/Styles/Entry_Base.scss") && wvcSymlinked) {
