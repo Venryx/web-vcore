@@ -61,14 +61,29 @@ function GetAliases(opt: CreateWebpackConfig_Options) {
 	];
 	//const map = {};
 
-	const result = {};
-	for (const name of flatList) {
+	function FindNodeModule_FromUserProjectRoot(name: string) {
 		if (fs.existsSync(paths.base("node_modules", name))) {
-			result[name] = paths.base("node_modules", name);
+			return paths.base("node_modules", name);
 		}
 		// for if in monorepo, check root/hoist node_modules folder
 		if (fs.existsSync(paths.base("..", "..", "node_modules", name))) {
-			result[name] = paths.base("..", "..", "node_modules", name);
+			return paths.base("..", "..", "node_modules", name);
+		}
+		throw new Error(`Cannot find node-module "${name}". FirstCheck: ${paths.base("node_modules", name)}`);
+	}
+	function FindNodeModule_FromWebVCoreRoot(name: string) {
+		if (fs.existsSync(PathFromWebVCoreRoot("node_modules", name))) {
+			return PathFromWebVCoreRoot("node_modules", name);
+		}
+		return FindNodeModule_FromUserProjectRoot(name);
+	}
+
+	const result = {};
+	for (const name of flatList) {
+		try {
+			result[name] = FindNodeModule_FromUserProjectRoot(name);
+		} catch {
+			// if couldn't find node-module, just ignore entry (to match with old behavior; the alias stuff needs a general cleanup)
 		}
 	}
 	/*for (const name of reExportedModules) {
@@ -78,6 +93,11 @@ function GetAliases(opt: CreateWebpackConfig_Options) {
 			throw new Error(`Could not find module "${name}" to re-export. FirstCheck: ${paths.base("node_modules", name)}`);
 		}
 	}*/
+	
+	// keep synced with "tsconfig.base.json/compilerOptions/paths" in user-projects
+	//result["react"] = FindNodeModule_FromUserProjectRoot("react");
+	result["react"] = FindNodeModule_FromWebVCoreRoot("react");
+
 	return result;
 }
 

@@ -2,6 +2,7 @@
 //export {default} from "react";
 /*import React = require("react");
 export = React;*/
+
 export {
 	default,
 	// hook funcs (these are the only ones worth exporting directly; for the rest, just use React.someFuncName)
@@ -26,3 +27,4 @@ export {
 	lazy,
 	memo,*/
 } from "react";
+//} from "../node_modules/react";
