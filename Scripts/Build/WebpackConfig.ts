@@ -14,6 +14,7 @@ import webpack from "webpack";
 import WebpackStringReplacer from "webpack-string-replacer";
 import wvcPackageJSON from "../../package.json";
 import {MakeSoWebpackConfigOutputsStats} from "./WebpackConfig/OutputStats";
+import ModuleDependencyWarning from "webpack/lib/ModuleDependencyWarning";
 
 declare const ENV, DEV, PROD, TEST;
 declare const {CreateConfig}: typeof import("../Config");
@@ -361,6 +362,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	];*/
 	const tsLoaderEntries_base = [
 		{test: /web-vcore[/\\]Source[/\\].*\.tsx?$/},
+		{test: /web-vcore[/\\]nm[/\\].*\.tsx?$/}, // some of the "nm/X" files use typescript tricks to fix issues, so use ts-loader for them
 		{test: /js-vextensions[/\\]Helpers[/\\]@ApplyCETypes\.d\.ts$/},
 	];
 	const tsLoaderEntries = opt.tsLoaderEntries ?? tsLoaderEntries_base;
@@ -487,9 +489,27 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	// finalize configuration
 	// ==========
 
-	webpackConfig.plugins.push(
-		new SpriteLoaderPlugin(),
-	);
+	// fix for not-useful warnings in wepack 5, eg. "export 'XXX' (imported as 'XXX') was not found in 'XXX_common' (module has no exports)"
+	// (the exports do in fact exist, they're just stripped by ts-loader by the time webpack looks for it)
+	class IgnoreNotFoundExportPlugin {
+		apply(compiler) {
+			const messageRegExp = /export '.*'( \((imported|reexported) as '.*'\))? was not found in/;
+			function doneHook(stats) {
+				stats.compilation.warnings = stats.compilation.warnings.filter(warn=>{
+					if (warn instanceof ModuleDependencyWarning && messageRegExp.test(warn.message)) return false;
+					return true;
+				});
+			}
+			if (compiler.hooks) {
+				compiler.hooks.done.tap("IgnoreNotFoundExportPlugin", doneHook)
+			} else {
+				compiler.plugin("done", doneHook)
+			}
+		}
+	};
+	webpackConfig.plugins.push(new IgnoreNotFoundExportPlugin());
+
+	webpackConfig.plugins.push(new SpriteLoaderPlugin());
 	webpackConfig.module.rules.push({
 		test: /\.svg$/,
 		loader: SubdepPath("svg-sprite-loader"),
