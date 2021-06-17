@@ -9,7 +9,7 @@ declare const ENV, DEV, PROD, TEST;
 declare const {CreateConfig}: typeof import("../Config");
 const debug = debug_base("app:server");
 
-export function Serve(config: ReturnType<typeof CreateConfig>, webpackConfig: webpack.Configuration, extToServe = ["html", "js", "css", "png", "jpg", "wasm"], writeToDisk = null) {
+export function Serve(config: ReturnType<typeof CreateConfig>, webpackConfig: webpack.Configuration, extToServe = ["html", "js", "css", "png", "jpg", "wasm"], writeToDisk = undefined) {
 	const paths = config.utils_paths;
 	const app = express();
 
