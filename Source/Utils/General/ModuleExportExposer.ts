@@ -1,5 +1,6 @@
 import {Assert, IsString} from "js-vextensions";
 import {ParseModuleData, Require, GetModuleNameFromPath} from "webpack-runtime-require";
+//import {ParseModuleData, Require, GetModuleNameFromPath} from "../../../nm/webpack-runtime-require";
 
 export function ExposeModuleExports(addFromVendorDLL = false) {
 	ParseModuleData(true);
