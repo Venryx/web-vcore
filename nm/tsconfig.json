@@ -6,6 +6,7 @@
 		"noImplicitAny": false,
 		"experimentalDecorators": true,*/
 
+		"sourceMap": true,
 		"moduleResolution": "node",
 		"target": "es2018", // need es2018 for ts-loader (it doesn't understand esnext)
 		"allowSyntheticDefaultImports": true,
