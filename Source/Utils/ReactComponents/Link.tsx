@@ -77,6 +77,10 @@ export class Link extends BaseComponentPlus({} as Link_Props, {}) {
 		const isExternal = to && VURL.Parse(to, true).domain != GetCurrentURL().domain;
 		const target_final = isExternal && target === undefined ? "_blank" : target;
 
+		if (text == null && children == null) {
+			text = to;
+		}
+
 		return (
 			<a {...FilterOutUnrecognizedProps(rest, "a")} onClick={this.handleClick.bind(this)} href={to} target={target_final} rel={isExternal ? "noopener noreferrer nofollow" : null}>
 				{text}
