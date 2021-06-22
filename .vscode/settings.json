@@ -8,6 +8,7 @@
 	],
 	// always use relative imports, because our Source files get imported directly from apps
 	"typescript.preferences.importModuleSpecifier": "relative",
+	"javascript.preferences.importModuleSpecifier": "relative",
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": true
 	},
