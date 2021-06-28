@@ -12,5 +12,8 @@
 		"allowSyntheticDefaultImports": true,
 		//"esModuleInterop": true,
 	},
-	"include": ["./*.ts", "js-vextensions_ApplyCETypes.js"]
+	"include": [
+		"./*.ts",
+		"./*.js",
+	]
 }
