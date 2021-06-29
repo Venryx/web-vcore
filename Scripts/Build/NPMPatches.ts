@@ -1,4 +1,5 @@
 import {Options, Rule} from "webpack-string-replacer";
+import webpack from "webpack";
 
 type Options_WithAdditions = Options & {AddRule(rule: Rule): void};
 const npmPatch_replacerConfig_base: Options_WithAdditions = {
@@ -8,28 +9,28 @@ const npmPatch_replacerConfig_base: Options_WithAdditions = {
 	AddRule(rule: Rule) {
 		const self = this as Options ?? npmPatch_replacerConfig_base;
 		self.rules.push(rule);
-	}
+	},
+	webpackModule: webpack,
 };
 const AddRule = npmPatch_replacerConfig_base.AddRule;
 
-AddRule({
-	fileInclude: /\.jsx?$/,
+// example string to match against:			const GetFocusedNodePath = (0,web_vcore_nm_mobx_graphlink__WEBPACK_IMPORTED_MODULE_3__.StoreAccessor)(s => mapViewOrMapID => {
+const wpImport_pre = "\\(0,[a-zA-Z0-9_$]+?\\.";
+const wpImport_post = "\\)";
+const wpImport_pre_opt = "(" + wpImport_pre + ")?";
+const wpImport_post_opt = wpImport_post + "?";
+
+/*AddRule({
+	fileInclude: [
+		/\.jsx?$/,
+		/(dm_common|Packages[/\\]common).+[/\\]Store[/\\]db[/\\].+\.ts$/,
+	],
 	replacements: [
-		// optimization; replace `State(a=>a.some.thing)` with `State("some", "thing")`
-		// (faster for the State function to consume, and supplies primitives instead of a function, meaning State.Watch(...) does not view the call-args as changed each render)
-		{
-			pattern: /(State|State_Base)\(a ?=> ?a\.([a-zA-Z0-9_.]+)\)/g,
-			replacement(match, sub1, sub2: string, offset, string) {
-				const pathStr = sub2.replace(/\./g, "/");
-				// return `${sub1}("${pathStr}")`;
-				const pathSegments = pathStr.split("/");
-				return `${sub1}("${pathSegments.join('", "')}")`;
-			},
-		},
 		// make function-names of store-accessors accessible to watcher debug-info, for react-devtools
 		{
 			pattern: /const ([a-zA-Z0-9_$]+?) = StoreAccessor\(([^'"])/g,
 			replacement(match, sub1, sub2, offset, string) {
+				console.log("Match:", match, "\t\t\tNew:", `const ${sub1} = StoreAccessor("${sub1}", ${sub2}`);
 				return `const ${sub1} = StoreAccessor("${sub1}", ${sub2}`;
 			},
 		},
@@ -40,13 +41,34 @@ AddRule({
 				return `const ${sub1} = StoreAction("${sub1}", ${sub2}`;
 			},
 		},
-		/* {
-			pattern: /State\(function \(a\) {\s+return a.([a-zA-Z0-9_.]+);\s+}\)/g,
-			replacement: function(match, sub1, offset, string) {
-				Log("Replacing...");
-				return `State("${sub1.replace(/\./g, "/")}")`;
-			}
-		}, */
+	],
+});*/
+AddRule({
+	applyStage: "optimizeChunkAssets", // regular "loader" stage causes webpack issues if used on modules from other packages in monorepo
+	replacements: [
+		// make function-names of store-accessors accessible to watcher debug-info, for react-devtools
+		{
+			//pattern: /const ([a-zA-Z0-9_$]+?) = ___StoreAccessor___\(([^'"])/g,
+			// since we're in optimizeChunkAssets stage now, we need to account for webpack's transpilation of imports
+			pattern: new RegExp(`const ([a-zA-Z0-9_$]+?) = (${wpImport_pre}StoreAccessor${wpImport_post})\\(([^'"])`, "g"),
+			replacement(match, sub1, sub2, sub3, offset, string) {
+				//const result = `const ${sub1} = StoreAccessor("${sub1}", ${sub2}`;
+				const result = `const ${sub1} = ${sub2}("${sub1}", ${sub3}`;
+				//console.log("Match:", match, "\t\t\tNew:", result);
+				return result;
+			},
+		},
+		// make function-names of store-actions accessible at runtime
+		{
+			//pattern: /const ([a-zA-Z0-9_$]+?) = StoreAction\(([^'"])/g,
+			pattern: new RegExp(`const ([a-zA-Z0-9_$]+?) = (${wpImport_pre}StoreAction${wpImport_post})\\(([^'"])`, "g"),
+			replacement(match, sub1, sub2, sub3, offset, string) {
+				//const result = `const ${sub1} = StoreAction("${sub1}", ${sub2}`;
+				const result = `const ${sub1} = ${sub2}("${sub1}", ${sub3}`;
+				//console.log("Match:", match, "\t\t\tNew:", result);
+				return result;
+			},
+		},
 	],
 });
 
