@@ -48,11 +48,9 @@ AddRule({
 	replacements: [
 		// make function-names of store-accessors accessible to watcher debug-info, for react-devtools
 		{
-			//pattern: /const ([a-zA-Z0-9_$]+?) = ___StoreAccessor___\(([^'"])/g,
 			// since we're in optimizeChunkAssets stage now, we need to account for webpack's transpilation of imports
 			pattern: new RegExp(`const ([a-zA-Z0-9_$]+?) = (${wpImport_pre}StoreAccessor${wpImport_post})\\(([^'"])`, "g"),
 			replacement(match, sub1, sub2, sub3, offset, string) {
-				//const result = `const ${sub1} = StoreAccessor("${sub1}", ${sub2}`;
 				const result = `const ${sub1} = ${sub2}("${sub1}", ${sub3}`;
 				//console.log("Match:", match, "\t\t\tNew:", result);
 				return result;
@@ -60,10 +58,8 @@ AddRule({
 		},
 		// make function-names of store-actions accessible at runtime
 		{
-			//pattern: /const ([a-zA-Z0-9_$]+?) = StoreAction\(([^'"])/g,
 			pattern: new RegExp(`const ([a-zA-Z0-9_$]+?) = (${wpImport_pre}StoreAction${wpImport_post})\\(([^'"])`, "g"),
 			replacement(match, sub1, sub2, sub3, offset, string) {
-				//const result = `const ${sub1} = StoreAction("${sub1}", ${sub2}`;
 				const result = `const ${sub1} = ${sub2}("${sub1}", ${sub3}`;
 				//console.log("Match:", match, "\t\t\tNew:", result);
 				return result;
