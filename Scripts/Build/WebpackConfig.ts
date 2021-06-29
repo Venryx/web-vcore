@@ -3,18 +3,23 @@ import debug_base from "debug";
 // import resolverFactory from 'enhanced-resolve/lib/ResolverFactory';
 import SymlinkPlugin from "enhanced-resolve/lib/SymlinkPlugin.js";
 import fs from "fs";
-import pathModule from "path";
-import {fileURLToPath} from 'url';
 import HtmlWebpackPlugin from "html-webpack-plugin";
 //import {CE} from "js-vextensions";
 import {CE, E} from "js-vextensions/Source"; // temp; require source, thus ts-node compiles to commonjs (fix for that ts-node doesn't support es2015-modules)
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import {createRequire} from "module";
+import pathModule from "path";
 import SpriteLoaderPlugin from "svg-sprite-loader/plugin";
+import {fileURLToPath} from 'url';
 import webpack from "webpack";
 import WebpackStringReplacer from "webpack-string-replacer";
-import wvcPackageJSON from "../../package.json";
-import {MakeSoWebpackConfigOutputsStats} from "./WebpackConfig/OutputStats.js";
 import ModuleDependencyWarning from "webpack/lib/ModuleDependencyWarning.js";
+import {MakeSoWebpackConfigOutputsStats} from "./WebpackConfig/OutputStats.js";
+
+// we could either add a reference from "./Scripts/tsconfig.json" to "./tsconfig.json", or we could use require; doing latter for now
+//import wvcPackageJSON from "../../package.json";
+const require = createRequire(import.meta.url);
+const wvcPackageJSON = require("../../package.json");
 
 declare const ENV, DEV, PROD, TEST;
 declare const {CreateConfig}: typeof import("../Config");
