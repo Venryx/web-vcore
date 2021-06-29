@@ -1,11 +1,11 @@
 import {VURL} from "js-vextensions";
 import {BaseComponent, BaseComponentPlus} from "react-vextensions";
 import React from "react";
-import {manager} from "../../Manager";
-import {MaybeLog} from "../General/Logging";
-import {loadingURL, NotifyURLLoaded, LoadURL} from "../URL/URLs";
-import {e} from "../../PrivateExports";
-import {Observer} from "../Store/MobX";
+import {manager} from "../../Manager.js";
+import {MaybeLog} from "../General/Logging.js";
+import {loadingURL, NotifyURLLoaded, LoadURL} from "../URL/URLs.js";
+import {e} from "../../PrivateExports.js";
+import {Observer} from "../Store/MobX.js";
 
 // this handles: address-bar-change -> store-changes
 window.addEventListener("popstate", e=>{

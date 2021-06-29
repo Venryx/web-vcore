@@ -2,10 +2,10 @@ import {VURL, Assert, E} from "js-vextensions";
 import React from "react";
 import {BaseComponent, FilterOutUnrecognizedProps, BaseComponentPlus} from "react-vextensions";
 import {runInAction} from "mobx";
-import {GetCurrentURL} from "../URL/URLs";
-import {manager} from "../../Manager";
-import {ActionFunc} from "../Store/MobX";
-import {RootStore} from "../../UserTypes";
+import {GetCurrentURL} from "../URL/URLs.js";
+import {manager} from "../../Manager.js";
+import {ActionFunc} from "../Store/MobX.js";
+import {RootStore} from "web-vcore_UserTypes";
 
 function isModifiedEvent(event) {
 	return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);

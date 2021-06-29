@@ -1,6 +1,6 @@
 import {Timer, Assert, CE, ObjectCE, E, AssertWarn} from "js-vextensions";
-import {manager} from "../../Manager";
-import {g} from "../../PrivateExports";
+import {manager} from "../../Manager.js";
+import {g} from "../../PrivateExports.js";
 
 export let youtubeAPILoadStarted = false;
 export let youtubeAPIReady = false;

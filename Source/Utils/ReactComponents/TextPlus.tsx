@@ -1,7 +1,7 @@
 import React from "react";
 import {ApplyBasicStyles, BaseComponentPlus, BasicStyles} from "react-vextensions";
 import {TextProps, Row, Text} from "react-vcomponents";
-import {InfoButton, InfoButtonProps} from "./InfoButton";
+import {InfoButton, InfoButtonProps} from "./InfoButton.js";
 
 export class TextPlus extends BaseComponentPlus({} as {info?: string, infoProps?: InfoButtonProps, sel?: boolean} & TextProps, {}) {
 	render() {

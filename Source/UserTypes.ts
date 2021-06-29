@@ -23,27 +23,29 @@ Note: If npm linking this module, it's recommended to add this to your tsconfig.
 ==========
 */
 
-export interface RootStore {
-	/*main: {
-		page: string;
-		topLeftOpenPanel: string;
-		topRightOpenPanel: string;
-	};*/
-}
-//export interface DBShape {}
-/*export class LogTypes {
-	dbRequests = false;
-	dbRequests_onlyFirst = false;
-	pageViews = false;
-	urlLoads = false;
-	cacheUpdates = false;
-	commands = false;
-}*/
-export interface LogTypes {
-	dbRequests: boolean;
-	dbRequests_onlyFirst: boolean;
-	pageViews: boolean;
-	urlLoads: boolean;
-	cacheUpdates: boolean;
-	commands: boolean;
+declare module "web-vcore_UserTypes" {
+	export interface RootStore {
+		/*main: {
+			page: string;
+			topLeftOpenPanel: string;
+			topRightOpenPanel: string;
+		};*/
+	}
+	//export interface DBShape {}
+	/*export class LogTypes {
+		dbRequests = false;
+		dbRequests_onlyFirst = false;
+		pageViews = false;
+		urlLoads = false;
+		cacheUpdates = false;
+		commands = false;
+	}*/
+	export interface LogTypes {
+		dbRequests: boolean;
+		dbRequests_onlyFirst: boolean;
+		pageViews: boolean;
+		urlLoads: boolean;
+		cacheUpdates: boolean;
+		commands: boolean;
+	}
 }

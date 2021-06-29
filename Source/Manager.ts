@@ -1,9 +1,9 @@
 import {VURL, Assert} from "js-vextensions";
-import {browserHistory} from "./Utils/URL/History";
-import {LogOptions} from "./Utils/General/Logging";
-import {ActionFunc} from "./Utils/Store/MobX";
-import {RootStore} from "./UserTypes";
-import {Page} from "./Utils/URL/URLs";
+import {browserHistory} from "./Utils/URL/History.js";
+import {LogOptions} from "./Utils/General/Logging.js";
+import {ActionFunc} from "./Utils/Store/MobX.js";
+import {Page} from "./Utils/URL/URLs.js";
+import {RootStore} from "web-vcore_UserTypes";
 
 export class Manager {
 	/*onPopulated = new Promise((resolve, reject)=>this.onPopulated_resolve = resolve);

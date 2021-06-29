@@ -2,7 +2,7 @@ import React from "react";
 import {WrapWithGo} from "js-vextensions";
 import {SimpleShouldUpdate, WarnOfTransientObjectProps, SimpleShouldUpdate_Options, WarnOfTransientObjectProps_Options} from "react-vextensions";
 import ReactDOM from "react-dom";
-import {OnPopulated} from "../../Manager";
+import {OnPopulated} from "../../Manager.js";
 
 export function StandardCompProps() {
 	return ["dispatch", "_user", "_permissions", "_extraInfo"];

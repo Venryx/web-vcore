@@ -1,7 +1,7 @@
 import CSSNano from "cssnano";
 import debug_base from "debug";
 // import resolverFactory from 'enhanced-resolve/lib/ResolverFactory';
-import SymlinkPlugin from "enhanced-resolve/lib/SymlinkPlugin";
+import SymlinkPlugin from "enhanced-resolve/lib/SymlinkPlugin.js";
 import fs from "fs";
 import pathModule from "path";
 import {fileURLToPath} from 'url';
@@ -13,8 +13,8 @@ import SpriteLoaderPlugin from "svg-sprite-loader/plugin";
 import webpack from "webpack";
 import WebpackStringReplacer from "webpack-string-replacer";
 import wvcPackageJSON from "../../package.json";
-import {MakeSoWebpackConfigOutputsStats} from "./WebpackConfig/OutputStats";
-import ModuleDependencyWarning from "webpack/lib/ModuleDependencyWarning";
+import {MakeSoWebpackConfigOutputsStats} from "./WebpackConfig/OutputStats.js";
+import ModuleDependencyWarning from "webpack/lib/ModuleDependencyWarning.js";
 
 declare const ENV, DEV, PROD, TEST;
 declare const {CreateConfig}: typeof import("../Config");
@@ -304,7 +304,8 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 			include: [
 				paths.source(),
 				// fs.realpathSync(paths.base('node_modules', 'web-vcore')),
-				fs.existsSync(PathFromWebVCoreRoot("Source")) ? fs.realpathSync(PathFromWebVCoreRoot("Source")) : null,
+				//fs.existsSync(PathFromWebVCoreRoot("Source")) ? fs.realpathSync(PathFromWebVCoreRoot("Source")) : null,
+				fs.existsSync(PathFromWebVCoreRoot("Dist")) ? fs.realpathSync(PathFromWebVCoreRoot("Dist")) : null,
 			].filter(a=>a),
 			loader: SubdepPath("babel-loader"),
 			options: {
@@ -361,8 +362,8 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 		{context: resolvePath("node_modules", "js-vextensions"), test: /js-vextensions[/\\]Helpers[/\\]@ApplyCETypes\.tsx?$/},
 	];*/
 	const tsLoaderEntries_base = [
-		{test: /web-vcore[/\\]Source[/\\].*\.tsx?$/},
-		{test: /web-vcore[/\\]nm[/\\].*\.tsx?$/}, // some of the "nm/X" files use typescript tricks to fix issues, so use ts-loader for them
+		/*{test: /web-vcore[/\\]Source[/\\].*\.tsx?$/},
+		{test: /web-vcore[/\\]nm[/\\].*\.tsx?$/}, // some of the "nm/X" files use typescript tricks to fix issues, so use ts-loader for them*/
 		{test: /js-vextensions[/\\]Helpers[/\\]@ApplyCETypes\.d\.ts$/},
 	];
 	const tsLoaderEntries = opt.tsLoaderEntries ?? tsLoaderEntries_base;
@@ -382,6 +383,8 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 				// ensures that ts-loader finds the correct context and config-file for the path (not needed atm)
 				/*context: entry.context,
 				configFile: path.resolve(entry.context, "tsconfig.json"),*/
+
+				//onlyCompileBundledFiles: true,
 			},
 		});
 	}

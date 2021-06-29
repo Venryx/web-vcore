@@ -1,4 +1,4 @@
-import {g} from "../../PrivateExports";
+import {g} from "../../PrivateExports.js";
 
 const compsObservingVoices = [];
 export function ObserveVoices(target: Function) {

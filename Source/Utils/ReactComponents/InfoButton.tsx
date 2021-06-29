@@ -4,7 +4,7 @@ import Tooltip from "rc-tooltip";
 import {Button, ButtonProps} from "react-vcomponents";
 import React from "react";
 import {E} from "js-vextensions";
-import {InTooltip, InTooltipProps} from "./Tooltip";
+import {InTooltip, InTooltipProps} from "./Tooltip.js";
 
 type EffectType = "float" | "solid";
 class TooltipInfo {

@@ -1,72 +1,73 @@
 import {CE, E} from "js-vextensions";
 
 // import own exports; thus we gain access to the exports object, letting us modify it
-import * as frameworkExportsObject from ".";
+import * as frameworkExportsObject from "./index.js";
 
 //type __ = typeof import("../node_modules/js-vextensions/Helpers/@ApplyCETypes");
 type __ = typeof import("js-vextensions/Helpers/@ApplyCETypes");
 import "js-vextensions/Helpers/@ApplyCECode.js"; // eslint-disable-line
 
-export * from "./@EnableExportOverwrites";
+export * from "./@EnableExportOverwrites.js";
 // special key, marking this module's exports object, which allows the patch in ExportOverwriteEnabler.ts to make the remaining exports overwriteable
 //export const __EnableExportOverwrites__ = true;
 
-export * from "./Manager";
-export * from "./UserTypes";
+export * from "./Manager.js";
+//export * from "./UserTypes.js";
+import "./UserTypes.js";
 
-//export * from "./Server/Command";
+//export * from "./Server/Command.js";
 
-export * from "./Utils/Audio/AudioNodes";
-export * from "./Utils/Audio/SpeechToText";
-export * from "./Utils/Audio/TextToSpeech";
-export * from "./Utils/Audio/VMediaRecorder";
+export * from "./Utils/Audio/AudioNodes.js";
+export * from "./Utils/Audio/SpeechToText.js";
+export * from "./Utils/Audio/TextToSpeech.js";
+export * from "./Utils/Audio/VMediaRecorder.js";
 
-//export * from "./Utils/Database/DatabaseHelpers";
-//export * from "./Utils/Database/QuickJoin";
-//export * from "./Utils/Database/SchemaHelpers";
-//export * from "./Utils/Database/StringSplitCache";
+//export * from "./Utils/Database/DatabaseHelpers.js";
+//export * from "./Utils/Database/QuickJoin.js";
+//export * from "./Utils/Database/SchemaHelpers.js";
+//export * from "./Utils/Database/StringSplitCache.js";
 
-export * from "./Utils/General/Constants";
-export * from "./Utils/General/Errors";
-export * from "./Utils/General/General";
-export * from "./Utils/General/Geometry";
-//export * from "./Utils/General/KeyGenerator";
-export * from "./Utils/General/KeyNames";
-export * from "./Utils/General/Logging";
-export * from "./Utils/General/ModuleExportExposer";
-export * from "./Utils/General/Others";
-export * from "./Utils/General/RegexHelpers";
-export * from "./Utils/General/YoutubePlayer";
-//export * from "./Utils/General/ClassExtensions/MobX";
+export * from "./Utils/General/Constants.js";
+export * from "./Utils/General/Errors.js";
+export * from "./Utils/General/General.js";
+export * from "./Utils/General/Geometry.js";
+//export * from "./Utils/General/KeyGenerator.js";
+export * from "./Utils/General/KeyNames.js";
+export * from "./Utils/General/Logging.js";
+export * from "./Utils/General/ModuleExportExposer.js";
+export * from "./Utils/General/Others.js";
+export * from "./Utils/General/RegexHelpers.js";
+export * from "./Utils/General/YoutubePlayer.js";
+//export * from "./Utils/General/ClassExtensions/MobX.js";
 
-export * from "./Utils/ReactComponents/AddressBarWrapper";
-export * from "./Utils/ReactComponents/DraggableLabel";
-export * from "./Utils/ReactComponents/ErrorBoundary";
-export * from "./Utils/ReactComponents/Icon";
-export * from "./Utils/ReactComponents/InfoButton";
-export * from "./Utils/ReactComponents/Link";
-export * from "./Utils/ReactComponents/List";
-export * from "./Utils/ReactComponents/PageContainer";
-export * from "./Utils/ReactComponents/Paragraph";
-export * from "./Utils/ReactComponents/Slider";
-export * from "./Utils/ReactComponents/TextPlus";
-export * from "./Utils/ReactComponents/Tooltip";
-export * from "./Utils/ReactComponents/TreeView";
-export * from "./Utils/ReactComponents/VDateTime";
-export * from "./Utils/ReactComponents/VReactMarkdown_Remarkable";
-export * from "./Utils/ReactComponents/VReactMarkdown";
-export * from "./Utils/ReactComponents/YoutubePlayerUI";
+export * from "./Utils/ReactComponents/AddressBarWrapper.js";
+export * from "./Utils/ReactComponents/DraggableLabel.js";
+export * from "./Utils/ReactComponents/ErrorBoundary.js";
+export * from "./Utils/ReactComponents/Icon.js";
+export * from "./Utils/ReactComponents/InfoButton.js";
+export * from "./Utils/ReactComponents/Link.js";
+export * from "./Utils/ReactComponents/List.js";
+export * from "./Utils/ReactComponents/PageContainer.js";
+export * from "./Utils/ReactComponents/Paragraph.js";
+export * from "./Utils/ReactComponents/Slider.js";
+export * from "./Utils/ReactComponents/TextPlus.js";
+export * from "./Utils/ReactComponents/Tooltip.js";
+export * from "./Utils/ReactComponents/TreeView.js";
+export * from "./Utils/ReactComponents/VDateTime.js";
+export * from "./Utils/ReactComponents/VReactMarkdown_Remarkable.js";
+export * from "./Utils/ReactComponents/VReactMarkdown.js";
+export * from "./Utils/ReactComponents/YoutubePlayerUI.js";
 
-export * from "./Utils/Store/MobX";
+export * from "./Utils/Store/MobX.js";
 
-export * from "./Utils/UI/DNDHelpers";
-export * from "./Utils/UI/General";
-export * from "./Utils/UI/NavBar";
-export * from "./Utils/UI/ReactHooks";
-export * from "./Utils/UI/SubNavBar";
+export * from "./Utils/UI/DNDHelpers.js";
+export * from "./Utils/UI/General.js";
+export * from "./Utils/UI/NavBar.js";
+export * from "./Utils/UI/ReactHooks.js";
+export * from "./Utils/UI/SubNavBar.js";
 
-export * from "./Utils/URL/History";
-export * from "./Utils/URL/URLs";
+export * from "./Utils/URL/History.js";
+export * from "./Utils/URL/URLs.js";
 
 //export * from "./__DisableExportOverwrites__";
 export const __DisableExportOverwrites__ = true;

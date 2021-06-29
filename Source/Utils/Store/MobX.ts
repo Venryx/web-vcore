@@ -5,7 +5,7 @@ import {observer} from "mobx-react";
 import {IReactComponent} from "mobx-react";
 import React, {Component, useRef} from "react";
 import {EnsureClassProtoRenderFunctionIsWrapped} from "react-vextensions";
-import {HandleError} from "../General/Errors";
+import {HandleError} from "../General/Errors.js";
 //import {useClassRef} from "react-universal-hooks";
 
 // old: call ConfigureMobX() before any part of mobx tree is created (ie. at start of Store/index.ts); else, immer produce() doesn't work properly

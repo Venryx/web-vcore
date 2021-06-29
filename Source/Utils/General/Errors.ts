@@ -1,5 +1,5 @@
 import Raven from "raven-js";
-import {manager} from "../../Manager";
+import {manager} from "../../Manager.js";
 
 export function ShouldErrorBeIgnored(errorStr: string) {
 	errorStr = typeof errorStr == "string" ? errorStr : ""; // defensive

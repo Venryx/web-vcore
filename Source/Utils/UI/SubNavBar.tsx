@@ -1,11 +1,11 @@
 import {E} from "js-vextensions";
 import {BaseComponent, BaseComponentPlus} from "react-vextensions";
 import React from "react";
-import {Page} from "../../Utils/URL/URLs";
-import {manager} from "../../Manager";
-import {ActionFunc, Observer} from "../Store/MobX";
-import {RootStore} from "../../UserTypes";
-import {Link} from "../ReactComponents/Link";
+import {Page} from "../../Utils/URL/URLs.js";
+import {manager} from "../../Manager.js";
+import {ActionFunc, Observer} from "../Store/MobX.js";
+import {Link} from "../ReactComponents/Link.js";
+import {RootStore} from "web-vcore_UserTypes";
 
 export class SubNavBar_Auto extends BaseComponent<{page: string, fullWidth?: boolean, filter?: (subpage: Page)=>boolean}, {}> {
 	render() {

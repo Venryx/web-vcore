@@ -1,7 +1,7 @@
 import {BaseComponent} from "react-vextensions";
 import React, {SVGFactory, DetailedHTMLFactory} from "react";
 import {Assert, E} from "js-vextensions";
-import {manager} from "../..";
+import {manager} from "../../index.js";
 
 // todo: get this working, despite our now being in the web-vcore module
 

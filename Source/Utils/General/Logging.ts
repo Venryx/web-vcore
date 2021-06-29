@@ -1,5 +1,5 @@
 import {GetStackTraceStr, E} from "js-vextensions";
-import {LogTypes} from "../../UserTypes";
+import {LogTypes} from "web-vcore_UserTypes";
 
 /*var Debug = true;
 

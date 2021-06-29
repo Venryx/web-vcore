@@ -2,10 +2,9 @@ import {E} from "js-vextensions";
 import {runInAction} from "mobx";
 import React, {useCallback} from "react";
 import {BaseComponentPlus} from "react-vextensions";
-import {manager} from "../../Manager";
-import {RootStore} from "../../UserTypes";
-import {Link} from "../ReactComponents/Link";
-import {Observer} from "../Store/MobX";
+import {manager} from "../../Manager.js";
+import {Link} from "../ReactComponents/Link.js";
+import {Observer} from "../Store/MobX.js";
 
 // todo: someday move the NavBar comp itself here (probably)
 

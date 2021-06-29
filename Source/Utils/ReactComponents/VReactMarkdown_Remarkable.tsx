@@ -3,10 +3,10 @@ import {BaseComponent, ShallowChanged, FilterOutUnrecognizedProps} from "react-v
 import {Remarkable} from "remarkable";
 import RemarkableReactRenderer from "remarkable-react";
 import React from "react";
-import {ParseSegmentsForPatterns} from "../General/RegexHelpers";
-import {GetCurrentURL} from "../URL/URLs";
-import {Link} from "./Link";
-import {ReplacementFunc} from "./VReactMarkdown";
+import {ParseSegmentsForPatterns} from "../General/RegexHelpers.js";
+import {GetCurrentURL} from "../URL/URLs.js";
+import {Link} from "./Link.js";
+import {ReplacementFunc} from "./VReactMarkdown.js";
 
 //import Markdown from "react-remarkable";
 

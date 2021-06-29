@@ -2,7 +2,7 @@ import React, {Ref} from "react";
 import {BaseComponent, BaseComponentPlus} from "react-vextensions";
 import {Row} from "react-vcomponents";
 import {E} from "js-vextensions";
-import {YoutubePlayer, PosChangeSource} from "../General/YoutubePlayer";
+import {YoutubePlayer, PosChangeSource} from "../General/YoutubePlayer.js";
 
 export function ParseYoutubeVideoID(url: string) {
 	return url?.match(/v=([A-Za-z0-9_-]{11})/)?.[1];

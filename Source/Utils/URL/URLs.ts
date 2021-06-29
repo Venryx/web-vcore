@@ -1,9 +1,9 @@
 import {GetCurrentURLString, VURL, DeepGet, ModifyString} from "js-vextensions";
 import {runInAction} from "mobx";
-import {manager} from "../../Manager";
-import {e} from "../../PrivateExports";
-import {ActionFunc} from "../Store/MobX";
-import {RootStore} from "../../UserTypes";
+import {RootStore} from "web-vcore_UserTypes";
+import {manager} from "../../Manager.js";
+import {e} from "../../PrivateExports.js";
+import {ActionFunc} from "../Store/MobX.js";
 
 export class Page {
 	constructor(initialData?: Partial<Page>, children?: {[key: string]: Page}) {

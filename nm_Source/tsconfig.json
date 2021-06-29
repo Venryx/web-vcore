@@ -11,9 +11,10 @@
 		"target": "es2018", // need es2018 for ts-loader (it doesn't understand esnext)
 		"allowSyntheticDefaultImports": true,
 		//"esModuleInterop": true,
+		"composite": true,
+		"outDir": "../nm",
 	},
 	"include": [
-		"./*.ts",
-		"./*.js",
+		"**/*.ts",
 	]
 }

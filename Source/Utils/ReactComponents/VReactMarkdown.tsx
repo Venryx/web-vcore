@@ -3,10 +3,10 @@ import {BaseComponent, ShallowChanged, FilterOutUnrecognizedProps} from "react-v
 //import {Component as BaseComponent} from "react";
 import {VURL, E} from "js-vextensions";
 import React from "react";
-import {Segment, ParseSegmentsForPatterns} from "../General/RegexHelpers";
-import {GetCurrentURL} from "../URL/URLs";
-import {Link} from "./Link";
-import {manager} from "../../Manager";
+import {Segment, ParseSegmentsForPatterns} from "../General/RegexHelpers.js";
+import {GetCurrentURL} from "../URL/URLs.js";
+import {Link} from "./Link.js";
+import {manager} from "../../Manager.js";
 
 export type ReplacementFunc = (segment: Segment, index: number, extraInfo)=>JSX.Element;
 
