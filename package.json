@@ -74,7 +74,7 @@
 		"html-webpack-plugin": "^5.3.1",
 		"immer": "^7.0.7",
 		"ip": "^1.1.5",
-		"js-vextensions": "^1.0.56",
+		"js-vextensions": "^1.0.59",
 		"lodash": "^4.17.15",
 		"mini-css-extract-plugin": "^1.6.0",
 		"mobx": "5.15.0",

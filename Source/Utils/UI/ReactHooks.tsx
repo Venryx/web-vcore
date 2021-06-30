@@ -2,6 +2,7 @@ import {UseState, ShallowEquals} from "react-vextensions";
 import {VRect, ToJSON, E} from "js-vextensions";
 import {useRef, useLayoutEffect, MutableRefObject, useState, useCallback, Component} from "react";
 import ReactDOM from "react-dom";
+import {GetSize, GetSize_Method, Size, SizeComp} from "./Sizes.js";
 
 // general
 // ==========
@@ -31,32 +32,9 @@ import ReactDOM from "react-dom";
 	return checkStillHoveredTimer;
 } */
 
-export type Size = {width: number, height: number};
-export enum UseSize_Method {
-	/** How much of the parent's "relative positioning" space is taken up by the element. (ie. it ignores the element's position: absolute descendents) */
-	OffsetSize = 10,
-	/** Same as OffsetSize, except it excludes the element's own border, margin, and the height of its horizontal scroll-bar (if it has one). */
-	ClientSize = 20,
-	/** How much space is needed to see all of the element's content/descendents (including position: absolute ones) without scrolling. */
-	ScrollSize = 30,
-	/** Same as ScrollSize, except that it's calculated after the element's css transforms are applied. */
-	BoundingClientRect = 40,
-}
 export class UseSize_Options {
-	method = UseSize_Method.OffsetSize;
-}
-export function GetSize(el: HTMLElement, method: UseSize_Method) {
-	let size: Size;
-	if (method == UseSize_Method.OffsetSize) {
-		size = {width: el.offsetWidth, height: el.offsetHeight};
-	} else if (method == UseSize_Method.ClientSize) {
-		size = {width: el.clientWidth, height: el.clientHeight};
-	} else if (method == UseSize_Method.ScrollSize) {
-		size = {width: el.scrollWidth, height: el.scrollHeight};
-	} else if (method == UseSize_Method.BoundingClientRect) {
-		size = el.getBoundingClientRect().Including("width", "height") as any;
-	}
-	return size;
+	method = GetSize_Method.OffsetSize;
+	method_custom_sizeComps?: SizeComp[];
 }
 
 /**
@@ -81,13 +59,10 @@ export function UseSize(options?: Partial<UseSize_Options>): [(node: Component |
 		if (nodeRef.current == null) return;
 		window.requestAnimationFrame(()=>{
 			//const el = ref.current as HTMLElement;
-			const newSize = GetSize(nodeRef.current as any, options.method);
+			const newSize = GetSize(nodeRef.current as any, options.method, options.method_custom_sizeComps);
 			setSize(newSize);
 		});
 	//}, [nodeRef.current]);
 	});
 	return [ref, size];
 }
-
-/* export function UseReactListScroller() {
-} */

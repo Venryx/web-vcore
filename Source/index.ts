@@ -64,6 +64,7 @@ export * from "./Utils/UI/DNDHelpers.js";
 export * from "./Utils/UI/General.js";
 export * from "./Utils/UI/NavBar.js";
 export * from "./Utils/UI/ReactHooks.js";
+export * from "./Utils/UI/Sizes.js";
 export * from "./Utils/UI/SubNavBar.js";
 
 export * from "./Utils/URL/History.js";
