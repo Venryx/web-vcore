@@ -50,7 +50,7 @@ export class VReactMarkdown extends BaseComponent
 							}
 							const text = segment.textParts[0].replace(/\r/g, "");
 							return (
-								<div style={E(addMarginsForDanglingNewLines && {
+								<div style={E(!addMarginsForDanglingNewLines ? {} : {
 									marginTop: text.startsWith("\n\n") ? 15 : text.startsWith("\n") ? 5 : 0,
 									marginBottom: text.endsWith("\n\n") ? 15 : text.endsWith("\n") ? 5 : 0,
 								})}>

@@ -40,14 +40,14 @@ export class DraggableLabel extends BaseComponent<{
 	OnMouseMove_Global = (e: MouseEvent)=>{
 		const {onDrag} = this.props;
 		const mousePos = new Vector2(e.pageX, e.pageY);
-		onDrag(mousePos.Minus(this.lastMousePos), mousePos.Minus(this.mouseDownPos), false);
+		onDrag!(mousePos.Minus(this.lastMousePos), mousePos.Minus(this.mouseDownPos), false);
 
 		this.lastMousePos = mousePos;
 	};
 	OnMouseUp_Global = (e: MouseEvent)=>{
 		const {onDrag} = this.props;
 		const mousePos = new Vector2(e.pageX, e.pageY);
-		onDrag(mousePos.Minus(this.lastMousePos), mousePos.Minus(this.mouseDownPos), true);
+		onDrag!(mousePos.Minus(this.lastMousePos), mousePos.Minus(this.mouseDownPos), true);
 
 		this.RemoveListeners();
 	};

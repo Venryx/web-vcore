@@ -12,7 +12,7 @@ export class TreeView extends BaseComponent<Props, {collapsed: boolean}> {
 	constructor(props) {
 		super(props);
 		var {defaultCollapsed} = this.props;
-		this.state = {collapsed: defaultCollapsed};
+		this.state = {collapsed: defaultCollapsed ?? false};
 	}
 
 	onArrowClick(...args) {

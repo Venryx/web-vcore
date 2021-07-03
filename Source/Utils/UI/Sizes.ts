@@ -1,4 +1,4 @@
-import {IsString, ObjectCE} from "js-vextensions";
+import {Assert, IsString, ObjectCE} from "js-vextensions";
 
 export type Size = {width: number, height: number};
 export enum GetSize_Method {
@@ -27,6 +27,7 @@ export function GetSize(el: HTMLElement, method = GetSize_Method.ClientSize, cus
 		const rect = el.getBoundingClientRect();
 		size = {width: rect.width, height: rect.height};
 	} else if (method == GetSize_Method.Custom) {
+		Assert(custom_sizeComps != null, "If method is Custom, custom_sizeProps must be specified.");
 		const style = window.getComputedStyle(el, null);
 		const styleProp = (name: string)=>parseFloat(style.getPropertyValue(name));
 
@@ -44,6 +45,8 @@ export function GetSize(el: HTMLElement, method = GetSize_Method.ClientSize, cus
 			height: sc("content", base.h) + sc("padding", padding.h) + sc("border", border.h)
 					+ sc("margin", margin.h) + sc("scrollBar", scrollBar.h) + sc("posAbsDescendants", posAbsDescendants.h),
 		};
+	} else {
+		Assert(false, "Invalid method.");
 	}
 	return size;
 }

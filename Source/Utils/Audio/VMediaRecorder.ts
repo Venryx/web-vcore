@@ -7,7 +7,7 @@ export class VMediaRecorder {
 	}
 	MediaRecorderClass: MediaRecorderConstructor;
 
-	dataChunks = [];
+	dataChunks = [] as Blob[];
 	//recorder: MediaRecorder;
 	stream: MediaStream;
 	recorder: any;

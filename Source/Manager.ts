@@ -72,7 +72,7 @@ export class Manager {
 }
 export const manager = new Manager();
 
-export let OnPopulated_listeners = [];
+export let OnPopulated_listeners = [] as (()=>any)[];
 export function OnPopulated(listener: ()=>any) { OnPopulated_listeners.push(listener); }
 
 // globals

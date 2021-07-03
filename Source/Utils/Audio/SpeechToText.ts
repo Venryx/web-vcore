@@ -32,12 +32,12 @@ export class SpeechRecognizer {
 	internalRecognizer: any;
 	recognizing = false;
 	private userStopInProgress = false;
-	onStartListeners = [];
+	onStartListeners = [] as (()=>any)[];
 	private OnStart = ()=>{
 		this.recognizing = true;
 		this.onStartListeners.forEach(a=>a());
 	}
-	onEndListeners = [];
+	onEndListeners = [] as (()=>any)[];
 	private OnEnd = ()=>{
 		this.recognizing = false;
 
@@ -100,7 +100,7 @@ export class SpeechRecognizer {
 
 		this.transcriptChangeListeners.forEach(a=>a());
 	}
-	transcriptChangeListeners = [];
+	transcriptChangeListeners = [] as (()=>any)[];
 
 	// Chrome Desktop stops recognizing after ~30s of inactivity; Chrome Android stops after ~5s! So by default, auto-restart.
 	autoRestart = true;
@@ -113,7 +113,7 @@ export class SpeechRecognizer {
 		return this.transcriptSessions.SelectMany(session=>{
 			let validSegments = session.currentSegments;
 			if (this.fixTranscriptBug) {
-				validSegments = [session.currentSegments.filter(a=>a.isFinal).LastOrX(), session.currentSegments.filter(a=>!a.isFinal).LastOrX()].filter(a=>a);
+				validSegments = [session.currentSegments.filter(a=>a.isFinal).LastOrX(), session.currentSegments.filter(a=>!a.isFinal).LastOrX()].filter(a=>a) as TranscriptSegment[];
 			}
 			const filteredSegments = validSegments.filter(segment=>{
 				if (segment.isFinal) {

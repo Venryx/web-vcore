@@ -37,13 +37,14 @@ export class UseSize_Options {
 	method_custom_sizeComps?: SizeComp[];
 }
 
+type Size_Nullable = {width: number|null, height: number|null};
 /**
  * Note that this does not update on window/css-only resizes; to detect a resize, the component calling UseSize must get re-rendered.
  * To detect resizes of any sort, try using/wrapping: https://github.com/ZeeCoder/use-resize-observer (or: https://github.com/jaredLunde/react-hook/tree/master/packages/size, or: https://github.com/rehooks/component-size)
  */
-export function UseSize(options?: Partial<UseSize_Options>): [(node: Component | Element)=>any, Size] {
-	options = E(new UseSize_Options(), options);
-	const [size, setSize] = UseState({width: null, height: null} as Size, ShallowEquals);
+export function UseSize(options?: Partial<UseSize_Options>): [(node: Component | Element)=>any, Size_Nullable] {
+	const opts = E(new UseSize_Options(), options);
+	const [size, setSize] = UseState({width: null, height: null} as Size_Nullable, ShallowEquals);
 
 	//const [node, setNode] = UseState(null);
 	const nodeRef = useRef<Element>(); // use ref, so that we don't trigger render just by storing newNode (setSize runs later than it anyway)
@@ -59,7 +60,7 @@ export function UseSize(options?: Partial<UseSize_Options>): [(node: Component |
 		if (nodeRef.current == null) return;
 		window.requestAnimationFrame(()=>{
 			//const el = ref.current as HTMLElement;
-			const newSize = GetSize(nodeRef.current as any, options.method, options.method_custom_sizeComps);
+			const newSize = GetSize(nodeRef.current as any, opts.method, opts.method_custom_sizeComps);
 			setSize(newSize);
 		});
 	//}, [nodeRef.current]);

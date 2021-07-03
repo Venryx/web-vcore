@@ -28,7 +28,7 @@ export function GetScreenRect(el: Element) {
 }
 export function GetPageRect(el: Element) {
 	var box = el.getBoundingClientRect();
-	const win = el.ownerDocument.defaultView;
+	const win = el.ownerDocument.defaultView!;
 	return new VRect(
 		/*box.left + (window.pageXOffset || document.documentElement.scrollLeft) - (document.documentElement.clientLeft || 0),
 		box.top + (window.pageYOffset || document.documentElement.scrollTop) - (document.documentElement.clientTop  || 0),*/
@@ -76,8 +76,9 @@ export function IsDoubleClick(event: React.MouseEvent<any>, maxTimeGap = 500, co
 	const time = Date.now();
 	// console.log("Clicked...", event.currentTarget, ";", event.target, ";", lastClickInfo, ";", lastClickInfo && event.target == lastClickInfo.event.target);
 
+	let path: string|undefined;
 	if (compareByPath) {
-		var path = GetDOMPath(event.target);
+		path = GetDOMPath(event.target);
 		var isDoubleClick = lastClickInfo && path == lastClickInfo.path && time - lastClickInfo.time <= maxTimeGap;
 	} else {
 		var isDoubleClick = lastClickInfo && event.target == lastClickInfo.event.target && time - lastClickInfo.time <= maxTimeGap;
@@ -88,7 +89,7 @@ export function IsDoubleClick(event: React.MouseEvent<any>, maxTimeGap = 500, co
 }
 
 export function GetDOMPath_JQuery(el) {
-	var stack = [];
+	var stack = [] as string[];
 	while (el.parentNode != null) {
 		var sibCount = 0;
 		var sibIndex = 0;
@@ -112,7 +113,7 @@ export function GetDOMPath_JQuery(el) {
 	return stack.slice(1); // removes the html element
 }
 export function GetDOMPath(el) {
-	var stack = [];
+	var stack = [] as string[];
 	var isShadow = false;
 	while (el.parentNode != null) {
 		var sibCount = 0;

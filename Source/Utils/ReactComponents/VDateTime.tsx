@@ -4,9 +4,11 @@ import React from "react";
 import DateTime, {DatetimepickerProps} from "react-datetime";
 import {BaseComponent, BaseComponentPlus} from "react-vextensions";
 
-function RawValToMoment(val: Moment.Moment | string, dateFormat: string | false, timeFormat: string | false): Moment.Moment {
+function RawValToMoment(val: Moment.Moment | string | null, dateFormat: string | false | n, timeFormat: string | false | n): Moment.Moment|null {
 	//let timeOnly = props.dateFormat == false;
 	//const {dateFormat, timeFormat} = props;
+
+	if (val == null) return null;
 
 	// if string-input did not exactly match dateFormat+timeFormat, this function will try to parse the meaning anyway
 	if (IsString(val)) {
@@ -24,23 +26,23 @@ function RawValToMoment(val: Moment.Moment | string, dateFormat: string | false,
 
 	return val;
 }
-function KeepInRange(val: Moment.Moment, min: Moment.Moment, max: Moment.Moment) {
+function KeepInRange(val: Moment.Moment, min: Moment.Moment|n, max: Moment.Moment|n) {
 	let result = val;
-	if (min && result < min) result = min;
-	if (max && result > max) result = max;
+	if (min != null && result < min) result = min;
+	if (max != null && result > max) result = max;
 	return result;
 }
-function MomentOrString_Normalize(momentOrStr_raw: Moment.Moment | string, dateFormat: string | false, timeFormat: string | false, min: Moment.Moment, max: Moment.Moment) {
-	let result: Moment.Moment = null;
+function MomentOrString_Normalize(momentOrStr_raw: Moment.Moment | string, dateFormat: string | false | n, timeFormat: string | false | n, min: Moment.Moment|n, max: Moment.Moment|n) {
+	let result: Moment.Moment|null = null;
 	if (momentOrStr_raw) {
 		result = RawValToMoment(momentOrStr_raw, dateFormat, timeFormat);
-		result = KeepInRange(result, min, max);
+		result = KeepInRange(result!, min, max);
 	}
 	return result;
 }
 
 export type VDateTime_Props = {
-	enabled?: boolean, instant?: boolean, min?: Moment.Moment, max?: Moment.Moment, onChange: (val: Moment.Moment)=>void,
+	enabled?: boolean, instant?: boolean, min?: Moment.Moment, max?: Moment.Moment, onChange: (val: Moment.Moment|null)=>void,
 	//dateFormatExtras?: string[], timeFormatExtras?: string[],
 	// fixes for DatetimepickerProps
 	dateFormat?: string | false, timeFormat?: string | false,
@@ -51,7 +53,7 @@ export class VDateTime extends BaseComponentPlus(
 		/*dateFormatExtras: [""],
 		timeFormatExtras: [""],*/
 	} as VDateTime_Props,
-	{editedValue_raw: null as Moment.Moment | string},
+	{editedValue_raw: null as Moment.Moment | string | null},
 ) {
 	render() {
 		let {enabled, value, onChange, instant, dateFormat, timeFormat, inputProps, min, max, ...rest} = this.props;
@@ -69,7 +71,7 @@ export class VDateTime extends BaseComponentPlus(
 					if (`${newVal}` == `${RawValToMoment(editedValue_raw, dateFormat, timeFormat)}`) return; // if no change, ignore event
 
 					if (!instant) {
-						this.SetState({editedValue_raw: newVal_raw}, null, false);
+						this.SetState({editedValue_raw: newVal_raw}, undefined, false);
 					} else {
 						onChange(newVal);
 						this.SetState({editedValue_raw: null});

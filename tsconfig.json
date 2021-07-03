@@ -19,7 +19,6 @@
 		],*/
 		//"allowJs": true,
 		"jsx": "react",
-		"noImplicitAny": false,
 		"experimentalDecorators": true,
 		"allowSyntheticDefaultImports": true,
 		//"declaration": true,
@@ -27,6 +26,17 @@
 		"resolveJsonModule": true,
 		// needed to fix "cannot find [wvc file] under rootDir [of some other linked package]" compile error that occurs sometimes
 		//"composite": true
+		// strictness settings
+		//"strict": true, // enables all of the below (other than noImplicitReturns)
+		//"noImplicitAny": true,
+		"noImplicitAny": false,
+		//"noImplicitThis": true,
+		//"noImplicitReturns": true,
+		"alwaysStrict": true,
+		//"strictBindCallApply": true,
+		"strictNullChecks": true,
+		//"strictFunctionTypes": true,
+		//"strictPropertyInitialization": true,
 
 		// modules/paths
 		"composite": true,

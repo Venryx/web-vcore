@@ -34,7 +34,7 @@ export class InfoButton extends BaseComponent<InfoButtonProps, {}> {
 		this.DestroyTooltip();
 	}
 
-	tooltip: TooltipInfo;
+	tooltip: TooltipInfo|null;
 	DestroyTooltip() {
 		tooltips.Remove(this.tooltip);
 		this.tooltip = null;
@@ -63,7 +63,7 @@ export class InfoButton extends BaseComponent<InfoButtonProps, {}> {
 				<Button {...rest as any} size={13} iconSize={13} iconPath="/Images/Buttons/Info.png"
 						useOpacityForHover={true} style={{position: `relative`, zIndex: 1, marginLeft: 1, backgroundColor: null, boxShadow: null, border: null}}
 						//title={text}
-						data-tip data-for={this.tooltip.IDStr}>
+						data-tip data-for={this.tooltip?.IDStr}>
 					{/*<ReactTooltip id={tipID} effect={effect}>
 						<Pre>{text}</Pre>
 					</ReactTooltip>*/}

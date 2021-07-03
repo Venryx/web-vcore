@@ -88,7 +88,7 @@ export function ClassHooks(targetClass: Function) {
 		return render_orig.apply(this, arguments);
 	};
 }
-let magicStackSymbol_cached: Symbol;
+let magicStackSymbol_cached: Symbol|undefined;
 export function GetMagicStackSymbol(comp: Component) {
 	if (magicStackSymbol_cached == null) {
 		const instanceKey = React.version.indexOf("15") === 0 ? "_instance" : "stateNode";
@@ -151,7 +151,7 @@ export const O = observable;
 export function RunInAction_Set(setterFunc: ()=>any);
 export function RunInAction_Set(classInstance: Object, setterFunc: ()=>any);
 export function RunInAction_Set(...args) {
-	let classInstance: Object, setterFunc: ()=>any;
+	let classInstance: Object|n, setterFunc: ()=>any;
 	if (args.length == 1) [setterFunc] = args;
 	else [classInstance, setterFunc] = args;
 
@@ -186,7 +186,7 @@ Creates a deep copy of the object-tree passed in; for source nodes that are mobx
 Purpose: Enables use of MobX object-trees as the source/base object for immer.produce(). (see: https://github.com/immerjs/immer/issues/515)
 */
 export function GetMirrorOfMobXTree<T>(mobxTree: T, opt = new GetMirrorOfMobXTree_Options()): T {
-	if (mobxTree == null) return null;
+	if (mobxTree == null) return null as any;
 	try {
 		mobxTree["$mirror"];
 	} catch (ex) {

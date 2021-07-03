@@ -23,7 +23,7 @@ export function HSL(
 	/** [0-360] RefPoints: {red: 0, orange: 38, yellow: 60, green: 120, blue: 240, violet: 300, indigo: 274[?]} */ hue: number,
 	/** [0-1] */ saturation: number, /** [0-1] */ brightness: number,
 ) {
-	return CSSColor(hue, saturation, brightness, null, "hsl");
+	return CSSColor(hue, saturation, brightness, undefined, "hsl");
 }
 export function HSLA(
 	/** [0-360] RefPoints: {red: 0, orange: 38, yellow: 60, green: 120, blue: 240, violet: 300, indigo: 274[?]} */ hue: number,
@@ -33,10 +33,10 @@ export function HSLA(
 }
 
 export function ElementAcceptsTextInput(element: Element) {
-	const elementType = document.activeElement.tagName.toLowerCase();
+	const elementType = element.tagName.toLowerCase();
 	return (
 		elementType == "textarea" ||
-		(elementType == "input" && document.activeElement.getAttribute("type") == "text")
+		(elementType == "input" && element.getAttribute("type") == "text")
 	);
 }
 

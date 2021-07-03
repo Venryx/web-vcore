@@ -15,9 +15,9 @@ function isModifiedEvent(event) {
 
 export type Link_Props = {
 	onClick?, style?,
-	text?: string, to?: string, target?: string, replace?: boolean, // url-based
+	text?: string|n, to?: string|n, target?: string|n, replace?: boolean|n, // url-based
 	//actions?: (dispatch: Function)=>void,
-	actionFunc?: ActionFunc<RootStore>, // new approach, for mobx/mst store
+	actionFunc?: ActionFunc<RootStore>|n, // new approach, for mobx/mst store
 	//updateURLOnActions?: boolean, // action-based
 } & Omit<React.HTMLProps<HTMLAnchorElement>, "href">;
 export class Link extends BaseComponentPlus({} as Link_Props, {}) {
@@ -45,9 +45,9 @@ export class Link extends BaseComponentPlus({} as Link_Props, {}) {
 			event.preventDefault();
 			//manager.store.dispatch(replaceURL ? replace(to) : push(to));
 			if (replaceURL) {
-				history.replaceState(null, null, to);
+				history.replaceState(null, null as any, to);
 			} else {
-				history.pushState(null, null, to);
+				history.pushState(null, null as any, to);
 			}
 		}
 	}
@@ -82,7 +82,7 @@ export class Link extends BaseComponentPlus({} as Link_Props, {}) {
 		}
 
 		return (
-			<a {...FilterOutUnrecognizedProps(rest, "a")} onClick={this.handleClick.bind(this)} href={to} target={target_final} rel={isExternal ? "noopener noreferrer nofollow" : null}>
+			<a {...FilterOutUnrecognizedProps(rest, "a")} onClick={this.handleClick.bind(this)} href={to ?? undefined} target={target_final} rel={isExternal ? "noopener noreferrer nofollow" : undefined}>
 				{text}
 				{children}
 			</a>

@@ -23,8 +23,8 @@ export const defaultErrorUI = (props: ErrorUIProps)=>{
 };
 
 // todo: maybe remove this; better to just use componentDidError + "EB_" functions below directly
-export class ErrorBoundary extends BaseComponentPlus({errorUI: defaultErrorUI} as {errorUI?: ErrorUIFunc, errorUIStyle?}, {error: null as ReactError}) {
-	componentDidCatch(message, info) { EB_StoreError(this, message, info); }
+export class ErrorBoundary extends BaseComponentPlus({} as {errorUI?: ErrorUIFunc, errorUIStyle?}, {error: null as ReactError|null}) {
+	componentDidCatch(message, info) { EB_StoreError(this as BaseComponent, message, info); }
 	ClearError() { this.SetState({error: null}); }
 
 	render() {
@@ -32,7 +32,7 @@ export class ErrorBoundary extends BaseComponentPlus({errorUI: defaultErrorUI} a
 		const {error} = this.state;
 		if (error) {
 			const errorUIProps = {error, style: errorUIStyle, defaultUI: defaultErrorUI};
-			return errorUI(errorUIProps, this);
+			return (errorUI ?? defaultErrorUI)(errorUIProps, this);
 		}
 
 		return children;
@@ -49,5 +49,5 @@ export function EB_StoreError(comp: BaseComponent, errorMessage: string, errorIn
 	//logErrorToMyService(error, info);
 }
 export function EB_ShowError(error: ReactError, style?) {
-	return defaultErrorUI({error, style, defaultUI: null});
+	return defaultErrorUI({error, style, defaultUI: defaultErrorUI});
 }

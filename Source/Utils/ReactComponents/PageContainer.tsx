@@ -51,8 +51,8 @@ export function ReactTextToPixelVal(reactText: React.ReactText) {
 	if (IsNumber(reactText)) return reactText;
 	if (reactText.trim() == "0") return 0;
 	const pxMatch = reactText.match(/(\d+)px/);
-	if (!pxMatch) return null;
-	return ToInt(pxMatch[1]);
+	if (pxMatch) ToInt(pxMatch[1]);
+	return null;
 }
 
 export type PageContainerPreset = "text" | "full";
@@ -83,7 +83,7 @@ export class PageContainer extends BaseComponentPlus(
 		if (preset) {
 			const marginValuesFromMarginProp = GetExpandedCSSPropValuesFromString("margin", ES(outerStyle_base, outerStyle).margin);
 			const marginValues = ES(marginValuesFromMarginProp, outerStyle);
-			const verticalMargin = ReactTextToPixelVal(marginValues.marginTop) + ReactTextToPixelVal(marginValues.marginBottom);
+			const verticalMargin = (ReactTextToPixelVal(marginValues.marginTop) ?? 0) + (ReactTextToPixelVal(marginValues.marginBottom) ?? 0);
 			outerStyle_base[preset == "full" ? "height" : "maxHeight"] = `calc(100% - ${verticalMargin}px)`;
 		}
 

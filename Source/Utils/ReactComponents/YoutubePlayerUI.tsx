@@ -19,7 +19,7 @@ export class YoutubePlayerUI extends BaseComponentPlus(
 	},
 ) {
 	player: YoutubePlayer;
-	root: HTMLDivElement;
+	root: HTMLDivElement|null;
 	render() {
 		const {heightVSWidthPercent, style} = this.props;
 		return (
@@ -33,7 +33,7 @@ export class YoutubePlayerUI extends BaseComponentPlus(
 		if (initPlayer) initPlayer(player);
 		this.player = player;
 
-		player.containerUI = this.root;
+		player.containerUI = this.root!;
 		await player.EnsureReady();
 		if (!this.mounted) return;
 

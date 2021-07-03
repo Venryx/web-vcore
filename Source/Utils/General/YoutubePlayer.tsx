@@ -78,7 +78,7 @@ export class YoutubePlayer {
 	}
 
 	id: number;
-	name: string;
+	name: string|n;
 	hasOwner = true;
 	//Disown() { this.hasOwner = false; }
 	internalPlayer: any;
@@ -105,7 +105,7 @@ export class YoutubePlayer {
 				await EnsureYoutubeAPIReady();
 
 				//const playersHolder = document.querySelector("#youtube-players");
-				this.containerUI = this.containerUI || manager.GetYoutubePlayerPoolContainer();
+				this.containerUI = this.containerUI ?? manager.GetYoutubePlayerPoolContainer!(); // if func needed, but user left null, they'll see error here
 				const newPlayerDiv = document.createElement("div");
 				newPlayerDiv.id = `youtube-player-${this.id}`;
 				this.containerUI.appendChild(newPlayerDiv);
@@ -172,8 +172,11 @@ export class YoutubePlayer {
 
 	loop = false; // must be manually set, after LoadVideo() is called, but before Play() is called (well, if you want it to work reliably)
 	OnEndReached() {
+		// if null, clip must have ended while we were trying to stop/switch the video; just do nothing
+		if (this.loadedClipInfo == null) return;
+		
 		if (this.loop) {
-			this.SetPosition(this.loadedClipInfo.startTime);
+			this.SetPosition(this.loadedClipInfo.startTime ?? 0);
 			this.Play();
 		} else {
 			this.PauseOrStop();
@@ -211,7 +214,7 @@ export class YoutubePlayer {
 		});
 	}*/
 
-	loadedClipInfo: YoutubeClipInfo;
+	loadedClipInfo: YoutubeClipInfo|null;
 	/** Promise is resolved once video has completed loading/buffering. */
 	async LoadVideo(info: YoutubeClipInfo, autoplay = false, markOwned = true) {
 		this.AssertReady();

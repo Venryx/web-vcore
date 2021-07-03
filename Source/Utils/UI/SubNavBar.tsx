@@ -51,7 +51,7 @@ export class SubNavBarButton extends BaseComponentPlus({} as {page: string, subp
 		const currentSubpage = manager.store.main[page].subpage ?? manager.pageTree.children[page]?.DefaultChild;
 		const active = subpage == currentSubpage;
 
-		let actionFunc: ActionFunc<RootStore>;
+		let actionFunc: ActionFunc<RootStore>|undefined;
 		if (!active) {
 			actionFunc = s=>s["main"][page].subpage = subpage;
 		} else if (actionFuncIfAlreadyActive) {

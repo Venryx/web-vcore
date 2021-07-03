@@ -27,7 +27,7 @@ export class Icon extends BaseComponent<Props, {}> {
 	render() {
 		const {divContainer, icon, iconData, size, color, style, ...rest} = this.props;
 
-		let svgComp: JSX.Element;
+		let svgComp: JSX.Element|undefined;
 		if (icon) {
 			//let info = require(`../../../../../Resources/SVGs/${icon}.svg`).default;
 			//let info = files[`./${icon}.svg`];

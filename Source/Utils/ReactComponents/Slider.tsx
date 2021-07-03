@@ -10,7 +10,7 @@ export class Slider extends BaseComponent
 			min: number, max: number, step: number, value: number, enabled?: boolean, instant?: boolean, onChange: (val: number)=>void,
 			minimumTrackStyle?, trackStyle?, handleStyle?,
 		},
-		{editedValue: number}> {
+		{editedValue: number|null}> {
 	static defaultProps = {enabled: true};
 	slider: RCSlider;
 	render() {

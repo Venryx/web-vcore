@@ -1,6 +1,7 @@
+import {BaseComponent} from "react-vextensions";
 import {g} from "../../PrivateExports.js";
 
-const compsObservingVoices = [];
+const compsObservingVoices = [] as BaseComponent[];
 export function ObserveVoices(target: Function) {
 	const oldCompWillMount = target.prototype.ComponentWillMount;
 	target.prototype.ComponentWillMount = function() {
@@ -52,7 +53,7 @@ export class TextSpeaker {
 
 			var speech = new SpeechSynthesisUtterance();
 			speech.text = info.text;
-			speech.voice = voice;
+			speech.voice = voice ?? null;
 			speech.volume = info.volume || 1; // for me, this can range from 0% to 100%
 			speech.rate = info.rate || 1; // for me, this can range from 10% to 1000%
 			speech.pitch = info.pitch || 1; // for me, this can range from ~1% to 200%

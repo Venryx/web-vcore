@@ -29,9 +29,9 @@ export class AddressBarWrapper extends BaseComponentPlus({}, {}) {
 
 		if (lastProcessedURL) {
 			if (pushURL) {
-				history.pushState(null, null, newURL.toString({domain: false}));
+				history.pushState(null, null as any, newURL.toString({domain: false}));
 			} else {
-				history.replaceState(null, null, newURL.toString({domain: false}));
+				history.replaceState(null, null as any, newURL.toString({domain: false}));
 			}
 			MaybeLog(a=>a.urlLoads, ()=>`Dispatching new-url: ${newURL} @push:${pushURL}`);
 		} else {
