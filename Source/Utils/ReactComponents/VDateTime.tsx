@@ -4,7 +4,7 @@ import React from "react";
 import DateTime, {DatetimepickerProps} from "react-datetime";
 import {BaseComponent, BaseComponentPlus} from "react-vextensions";
 
-function RawValToMoment(val: Moment.Moment | string | null, dateFormat: string | false | n, timeFormat: string | false | n): Moment.Moment|null {
+function RawValToMoment(val: Moment.Moment | string | n, dateFormat: string | false | n, timeFormat: string | false | n): Moment.Moment|null {
 	//let timeOnly = props.dateFormat == false;
 	//const {dateFormat, timeFormat} = props;
 
@@ -42,18 +42,18 @@ function MomentOrString_Normalize(momentOrStr_raw: Moment.Moment | string, dateF
 }
 
 export type VDateTime_Props = {
-	enabled?: boolean, instant?: boolean, min?: Moment.Moment, max?: Moment.Moment, onChange: (val: Moment.Moment|null)=>void,
+	enabled?: boolean, instant?: boolean, min?: Moment.Moment|n, max?: Moment.Moment|n, onChange: (val: Moment.Moment|n)=>void,
 	//dateFormatExtras?: string[], timeFormatExtras?: string[],
 	// fixes for DatetimepickerProps
-	dateFormat?: string | false, timeFormat?: string | false,
-} & Omit<DatetimepickerProps, "onChange" | "dateFormat" | "timeFormat">;
+	value?: Date | string | Moment.Moment | n, dateFormat?: string | false, timeFormat?: string | false,
+} & Omit<DatetimepickerProps, "value" | "onChange" | "dateFormat" | "timeFormat">;
 export class VDateTime extends BaseComponentPlus(
 	{
 		enabled: true,
 		/*dateFormatExtras: [""],
 		timeFormatExtras: [""],*/
 	} as VDateTime_Props,
-	{editedValue_raw: null as Moment.Moment | string | null},
+	{editedValue_raw: null as Moment.Moment | string | n},
 ) {
 	render() {
 		let {enabled, value, onChange, instant, dateFormat, timeFormat, inputProps, min, max, ...rest} = this.props;
@@ -64,7 +64,7 @@ export class VDateTime extends BaseComponentPlus(
 		}
 
 		return (
-			<DateTime {...rest} value={editedValue_raw != null ? editedValue_raw : value}
+			<DateTime {...rest} value={editedValue_raw != null ? editedValue_raw : (value ?? undefined)}
 				dateFormat={dateFormat} timeFormat={timeFormat}
 				onChange={newVal_raw=>{
 					const newVal = MomentOrString_Normalize(newVal_raw, dateFormat, timeFormat, min, max);

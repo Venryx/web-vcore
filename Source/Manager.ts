@@ -57,7 +57,7 @@ export class Manager {
 	//GetStore: ()=>RootStore;
 	GetStore: ()=>any; // due to RootStore's interface-extend approach, we can't add fields from framework code; so might as well leave as "any"
 	GetAuth: ()=>any;
-	GetUserID: ()=>string;
+	GetUserID: ()=>string|n;
 	// If provided, Command.ts will apply each Command's db-updates to a local copy of the db-data, then send this modified data to the ValidateDBData function (for assertions). Should probably disable in production.
 	ValidateDBData?: (newData: Object)=>void;
 

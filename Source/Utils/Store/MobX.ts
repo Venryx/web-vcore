@@ -6,6 +6,7 @@ import {IReactComponent} from "mobx-react";
 import React, {Component, useRef} from "react";
 import {EnsureClassProtoRenderFunctionIsWrapped} from "react-vextensions";
 import {HandleError} from "../General/Errors.js";
+import {BailHandler, BailHandler_Options} from "mobx-graphlink";
 //import {useClassRef} from "react-universal-hooks";
 
 // old: call ConfigureMobX() before any part of mobx tree is created (ie. at start of Store/index.ts); else, immer produce() doesn't work properly
@@ -42,20 +43,23 @@ export function observer_simple<T extends IReactComponent>(target: T): T {
 // variant of @observer decorator, which also adds (and is compatible with) class-hooks
 export class Observer_Options {
 	classHooks = true;
+	bailHandler = true;
+	bailHandler_opts?: BailHandler_Options;
 }
 export function Observer(targetClass: Function);
 export function Observer(options: Partial<Observer_Options>);
 export function Observer(...args) {
-	let options = new Observer_Options();
+	let opts = new Observer_Options();
 	if (typeof args[0] == "function") {
 		ApplyToClass(args[0]);
 	} else {
-		options = E(options, args[0]);
+		opts = E(opts, args[0]);
 		return ApplyToClass;
 	}
 
 	function ApplyToClass(targetClass: Function) {
-		if (options.classHooks) ClassHooks(targetClass);
+		if (opts.classHooks) ClassHooks(targetClass);
+		if (opts.bailHandler) BailHandler(opts.bailHandler_opts)(targetClass);
 		//if (targetClass instanceof (BaseComponent.prototype as any)) {
 		if (targetClass.prototype.PreRender) {
 			EnsureClassProtoRenderFunctionIsWrapped(targetClass.prototype);
