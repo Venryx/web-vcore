@@ -188,6 +188,7 @@ export class GetMirrorOfMobXTree_Options {
 /**
 Creates a deep copy of the object-tree passed in; for source nodes that are mobx objects, creates dynamically-updating "mirrors".
 Purpose: Enables use of MobX object-trees as the source/base object for immer.produce(). (see: https://github.com/immerjs/immer/issues/515)
+Important note: Due to technical reasons, the mobx-tree's "mirror" will be empty for the first call, *if* call-stack already in mobx mutate-batch (ie. globalState.inBatch > 0). Mirror will be populated just after call-stack completes.
 */
 export function GetMirrorOfMobXTree<T>(mobxTree: T, opt = new GetMirrorOfMobXTree_Options()): T {
 	if (mobxTree == null) return null as any;
@@ -245,5 +246,29 @@ export function StartUpdatingMirrorOfMobXTree(mobxTree: any, tree_plainMirror: a
 			//if (typeof valueForTarget_old == "object" && valueForTarget_old["$mirror_stopUpdating"]) { [...]
 		}
 	});
+	
+	// attempted fix for first autorun call not immediately populating the mobx-mirror, if already in mobx mutate-batch (ie. when globalState.inBatch > 0) [canceled; too involved]
+	/*{
+		// args copied from: https://github.com/mobxjs/mobx/blob/0d28db8a0ba99f5cce744bb83b5bd88ec45a7e41/packages/mobx/src/api/autorun.ts#L50
+		scheduler: new Reaction_AlwaysDoImmediately(
+			name: "Autorun [using Reaction_AlwaysDoImmediately]", //name,
+			function (this: Reaction) {
+				 this.track(reactionRunner)
+			},
+			null, //opts.onError,
+			opts.requiresObservable
+	  ),
+	});*/
+
 	//Object.defineProperty(mobxTree, "$mirror_stopUpdating", stopUpdating);
 }
+
+/*export class Reaction_AlwaysDoImmediately extends Reaction {
+	schedule_() {
+		if (!this["isScheduled_"]) {
+			this["isScheduled_"] = true
+			globalState.pendingReactions.push(this)
+			runReactions()
+		}
+  	}
+}*/

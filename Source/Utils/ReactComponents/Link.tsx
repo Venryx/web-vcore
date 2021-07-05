@@ -4,8 +4,9 @@ import {BaseComponent, FilterOutUnrecognizedProps, BaseComponentPlus} from "reac
 import {runInAction} from "mobx";
 import {GetCurrentURL} from "../URL/URLs.js";
 import {manager} from "../../Manager.js";
-import {ActionFunc} from "../Store/MobX.js";
+import {ActionFunc, Observer} from "../Store/MobX.js";
 import {RootStore} from "web-vcore_UserTypes";
+import {BailMessage} from "mobx-graphlink";
 
 function isModifiedEvent(event) {
 	return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
@@ -20,6 +21,8 @@ export type Link_Props = {
 	actionFunc?: ActionFunc<RootStore>|n, // new approach, for mobx/mst store
 	//updateURLOnActions?: boolean, // action-based
 } & Omit<React.HTMLProps<HTMLAnchorElement>, "href">;
+
+@Observer
 export class Link extends BaseComponentPlus({} as Link_Props, {}) {
 	static ValidateProps(props: Link_Props) {
 		/*const {actionFunc, to} = props;
@@ -66,7 +69,12 @@ export class Link extends BaseComponentPlus({} as Link_Props, {}) {
 			try {
 				to = manager.GetNewURLForStoreChanges(actionFunc);
 			} catch (ex) {
-				console.error(`Error while calculating Link's "to" prop:`, ex);
+				if (ex instanceof BailMessage) {
+					// if "error" was just a bail, do nothing (data for the "to" prop is just still loading)
+					// (we still catch the bail-error though, because we don't want the "default loading ui" for bails to be shown)
+				} else {
+					console.error(`Error while calculating Link's "to" prop:`, ex);
+				}
 			}
 		}
 

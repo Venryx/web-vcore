@@ -41,11 +41,16 @@ export class ErrorBoundary extends BaseComponentPlus({} as {errorUI?: ErrorUIFun
 
 // function-based approach
 // todo: maybe add this functionality to the BaseComponentPlus function/class
-export function EB_StoreError(comp: BaseComponent, errorMessage: string, errorInfo: ReactErrorInfo) {
-	const error = {message: errorMessage, info: errorInfo};
-	comp.SetState({error});
+export function EB_StoreError(comp: BaseComponent, error: Error | string, errorInfo: ReactErrorInfo) {
+	const errorMessage = typeof error == "object" ? error.message : error;
+	if (errorMessage.startsWith("[generic bail error")) {
+		throw new Error(`A bail-error was caught by react (${comp.constructor.name}.componentDidCatch); this should not occur. Did you forget to add "@Observer" to your component class?`);
+	}
+	
+	const error_final = {message: errorMessage, origError: error, info: errorInfo};
+	comp.SetState({error: error_final});
 	Log(`%c In ErrorBoundary/componentDidCatch. error:`, "color: #222; background: #dfd");
-	Log(error);
+	Log(error_final);
 	//logErrorToMyService(error, info);
 }
 export function EB_ShowError(error: ReactError, style?) {

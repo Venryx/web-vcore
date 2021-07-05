@@ -49,7 +49,7 @@ export class Manager {
 	GetNewURL: ()=>VURL;
 	DoesURLChangeCountAsPageChange: (oldURL: VURL, newURL: VURL)=>boolean;
 	// new
-	GetNewURLForStoreChanges: (actionFunc: ActionFunc<RootStore>)=>string;
+	GetNewURLForStoreChanges: (actionFunc: ActionFunc<RootStore>)=>string|n;
 
 	// store+db
 	// ==========
