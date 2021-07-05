@@ -70,7 +70,6 @@ function GetAliases(opt: CreateWebpackConfig_Options) {
 		// convenience consolidations, since they have npm-patches applied (and we don't want to have to adjust the match-counts)
 		"react-beautiful-dnd",
 		"immer",
-		"mobx-utils",
 
 		// convenience consolidations (for any own-modules not in peer-deps), to keep things tidy (fine since we know the different versions will be compatible anyway)
 		...ownModules,

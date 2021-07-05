@@ -234,29 +234,6 @@ module.exports =
 	],
 });*/
 
-// mobx-utils
-// ==========
-
-AddRule({
-	fileInclude: /mobx-utils.module.js$/,
-	fileMatchCount: 1,
-	replacements: [
-		// makes-so computedFn allows the number of passed arguments to change each time (I don't know why that restriction is even there; there seems to be no actual problem with varying lengths)
-		/* {
-			pattern: 'if (this.argsLength === -1)',
-			patternMatchCount: 1,
-			replacement: 'if (this.argsLength === -1 || true)',
-		}, */
-		// makes-so computedFn sets the computed-value name to `${fn.name}(...args) [#${++i}]`, rather than just `...${fn.name}#${++i}`
-		{
-			// pattern: 'name: `computedFn(${fn.name}#${++i})`', // eslint-disable-line
-			pattern: 'name: "computedFn(" + fn.name + "#" + ++i + ")"',
-			patternMatchCount: 1,
-			replacement: 'name: `${fn.name}(${args.map(a=>(a != null ? JSON.stringify(a) : "null")).join(", ")}) [#${++i}]`', // eslint-disable-line
-		},
-	],
-});
-
 export function CreateNPMPatchesConfig(ext: Partial<Options>): Options_WithAdditions {
 	const config = {
 		...npmPatch_replacerConfig_base,

@@ -29,3 +29,23 @@ export class DefaultLoadingUI extends BaseComponentPlus({} as {comp: BaseCompone
 		);
 	}
 }
+
+// ugly fix for useXXX call-count sometimes increasing, due to mobx-graphlink's bail-system being used (eg. first render bails, so 0 useXXX calls, followed by successful render, with X calls)
+Object.defineProperty(Object.prototype, "prevInputs", {
+	//configurable: true, // already defaults to true
+	get() {
+		if (this.inputs instanceof Array) {
+			return this.inputs;
+		}
+		return undefined;
+	},
+	set(value: any) {
+		/*delete this["prevInputs"];
+		this.prevInputs = value;*/
+		// property on instance overrides propery on prototype
+		Object.defineProperty(this, "prevInputs", {
+			writable: true,
+			value,
+		});
+	},
+});
