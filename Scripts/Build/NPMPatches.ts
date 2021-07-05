@@ -46,10 +46,10 @@ const wpImport_post_opt = wpImport_post + "?";
 AddRule({
 	applyStage: "optimizeChunkAssets", // regular "loader" stage causes webpack issues if used on modules from other packages in monorepo
 	replacements: [
-		// make function-names of store-accessors accessible to watcher debug-info, for react-devtools
+		// make function-names of accessors accessible, eg. for watcher debug-info, through react-devtools
 		{
 			// since we're in optimizeChunkAssets stage now, we need to account for webpack's transpilation of imports
-			pattern: new RegExp(`const ([a-zA-Z0-9_$]+?) = (${wpImport_pre}StoreAccessor${wpImport_post})\\(([^'"])`, "g"),
+			pattern: new RegExp(`const ([a-zA-Z0-9_$]+?) = (${wpImport_pre}CreateAccessor${wpImport_post})\\(([^'"])`, "g"),
 			replacement(match, sub1, sub2, sub3, offset, string) {
 				const result = `const ${sub1} = ${sub2}("${sub1}", ${sub3}`;
 				//console.log("Match:", match, "\t\t\tNew:", result);
