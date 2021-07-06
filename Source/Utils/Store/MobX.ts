@@ -1,12 +1,11 @@
 import {enableES5, setAutoFreeze, setUseProxies} from "immer";
 import {E, emptyArray, RemoveCircularLinks, ToJSON} from "js-vextensions";
 import {$mobx, autorun, configure, observable, ObservableMap, ObservableSet, onReactionError, runInAction, _getGlobalState} from "mobx";
-import {observer} from "mobx-react";
-import {IReactComponent} from "mobx-react";
+import {BailHandler, BailHandler_Options} from "mobx-graphlink";
+import {IReactComponent, observer} from "mobx-react";
 import React, {Component, useRef} from "react";
 import {EnsureClassProtoRenderFunctionIsWrapped} from "react-vextensions";
 import {HandleError} from "../General/Errors.js";
-import {BailHandler, BailHandler_Options} from "mobx-graphlink";
 //import {useClassRef} from "react-universal-hooks";
 
 // old: call ConfigureMobX() before any part of mobx tree is created (ie. at start of Store/index.ts); else, immer produce() doesn't work properly
@@ -246,7 +245,7 @@ export function StartUpdatingMirrorOfMobXTree(mobxTree: any, tree_plainMirror: a
 			//if (typeof valueForTarget_old == "object" && valueForTarget_old["$mirror_stopUpdating"]) { [...]
 		}
 	});
-	
+
 	// attempted fix for first autorun call not immediately populating the mobx-mirror, if already in mobx mutate-batch (ie. when globalState.inBatch > 0) [canceled; too involved]
 	/*{
 		// args copied from: https://github.com/mobxjs/mobx/blob/0d28db8a0ba99f5cce744bb83b5bd88ec45a7e41/packages/mobx/src/api/autorun.ts#L50
