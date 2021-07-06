@@ -1,9 +1,9 @@
 import {VURL, Assert} from "js-vextensions";
+import {RootStore} from "web-vcore_UserTypes";
 import {browserHistory} from "./Utils/URL/History.js";
 import {LogOptions} from "./Utils/General/Logging.js";
 import {ActionFunc} from "./Utils/Store/MobX.js";
 import {Page} from "./Utils/URL/URLs.js";
-import {RootStore} from "web-vcore_UserTypes";
 
 export class Manager {
 	/*onPopulated = new Promise((resolve, reject)=>this.onPopulated_resolve = resolve);
@@ -72,7 +72,7 @@ export class Manager {
 }
 export const manager = new Manager();
 
-export let OnPopulated_listeners = [] as (()=>any)[];
+export const OnPopulated_listeners = [] as (()=>any)[];
 export function OnPopulated(listener: ()=>any) { OnPopulated_listeners.push(listener); }
 
 // globals
