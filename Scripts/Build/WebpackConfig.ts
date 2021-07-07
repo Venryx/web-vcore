@@ -10,7 +10,7 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import {createRequire} from "module";
 import pathModule from "path";
 import SpriteLoaderPlugin from "svg-sprite-loader/plugin";
-import {fileURLToPath} from 'url';
+import {fileURLToPath} from "url";
 import webpack from "webpack";
 import WebpackStringReplacer from "webpack-string-replacer";
 import ModuleDependencyWarning from "webpack/lib/ModuleDependencyWarning.js";
@@ -83,7 +83,7 @@ function GetAliases(opt: CreateWebpackConfig_Options) {
 			// if couldn't find node-module, just ignore entry (to match with old behavior; the alias stuff needs a general cleanup)
 		}
 	}
-	
+
 	// keep synced with "tsconfig.base.json/compilerOptions/paths" in user-projects
 	//result["react"] = FindNodeModule_FromUserProjectRoot("react");
 	result["react"] = FindNodeModule_FromWebVCoreRoot(opt, "react");
@@ -242,7 +242,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 				//throw new Error(errors)
 			});
 		},
-		new webpack.DefinePlugin(opt.config.globals),
+		new webpack.DefinePlugin(opt.config.codeVarReplacements),
 		new HtmlWebpackPlugin({
 			template: "./Source/index.html",
 			hash: false,
@@ -508,12 +508,12 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 				});
 			}
 			if (compiler.hooks) {
-				compiler.hooks.done.tap("IgnoreNotFoundExportPlugin", doneHook)
+				compiler.hooks.done.tap("IgnoreNotFoundExportPlugin", doneHook);
 			} else {
-				compiler.plugin("done", doneHook)
+				compiler.plugin("done", doneHook);
 			}
 		}
-	};
+	}
 	webpackConfig.plugins.push(new IgnoreNotFoundExportPlugin());
 
 	webpackConfig.plugins.push(new SpriteLoaderPlugin());

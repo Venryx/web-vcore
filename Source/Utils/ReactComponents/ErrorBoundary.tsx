@@ -46,7 +46,7 @@ export function EB_StoreError(comp: BaseComponent, error: Error | string, errorI
 	if (errorMessage.startsWith("[generic bail error")) {
 		throw new Error(`A bail-error was caught by react (${comp.constructor.name}.componentDidCatch); this should not occur. Did you forget to add "@Observer" to your component class?`);
 	}
-	
+
 	const error_final = {message: errorMessage, origError: error, info: errorInfo};
 	comp.SetState({error: error_final});
 	Log(`%c In ErrorBoundary/componentDidCatch. error:`, "color: #222; background: #dfd");

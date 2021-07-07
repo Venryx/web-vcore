@@ -72,17 +72,36 @@ const config_base = {
 	compiler_hash_type: PROD ? "chunkhash" : null,
 	// compiler_css_modules: true, // enable/disable css modules
 
-	globals: {
+	/* eslint-disable */
+	codeVarReplacements: {
 		// this is always a compile-time define/insertion
-		ENV_COMPILE_TIME: S(ENV),
+		"ENV_COMPILE_TIME": S(ENV),
 		// if building for production, lock all the env-variables as compile-time defines (meaning eg. `if (DEV)` blocks are compiled out)
-		...(PROD && {ENV: S(ENV), DEV: S(DEV), PROD: S(PROD), TEST: S(TEST)}),
-		// DON'T EVER USE THESE; we only include them in case libraries use them (such as redux)
-		NODE_ENV: S(ENV), "process.env": {NODE_ENV: S(ENV)},
-		__DEV__: S(DEV), __PROD__: S(PROD), __TEST__: S(TEST),
-		__COVERAGE__: !argv.watch ? S(TEST) : null,
-		__BASENAME__: S(BASENAME),
+		...(PROD && {
+			"ENV": S(ENV),
+			"DEV": S(DEV),
+			"PROD": S(PROD),
+			"TEST": S(TEST)
+		}),
+
+		// DON'T EVER USE THESE (use ones above instead -- to be consistent); we only include them in case libraries use them (such as redux)
+		// ==========
+
+		"NODE_ENV": S(ENV),
+		// this version is needed, for "process.env.XXX" refs from libs we don't care about (else runtime error)
+		"process.env": {
+			NODE_ENV: S(ENV),
+		},
+		//"process.env.NODE_ENV": S(ENV),
+		...{
+			"__DEV__": S(DEV),
+			"__PROD__": S(PROD),
+			"__TEST__": S(TEST),
+		},
+		"__COVERAGE__": !argv.watch ? S(TEST) : null,
+		"__BASENAME__": S(BASENAME),
 	},
+	/* eslint-enable */
 
 	// disabled for now; I've found I like the control of being able to skip reloads during change sets
 	useHotReloading: false,
