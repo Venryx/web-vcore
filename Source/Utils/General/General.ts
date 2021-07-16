@@ -24,7 +24,7 @@ export function Grab(grabFunc) {
 //var quickIncrementValues = {};
 //export function QuickIncrement(name = new Error().stack.split("\n")[2]) { // this doesn't always work, fsr
 export function QuickIncrement(name = "default") {
-	QuickIncrement["values"][name] = (QuickIncrement["values"][name] | 0) + 1;
+	QuickIncrement["values"][name] = (QuickIncrement["values"][name] ?? 0) + 1;
 	return QuickIncrement["values"][name];
 }
 QuickIncrement["values"] = [];
@@ -41,6 +41,11 @@ export var inFirefox = navigator.userAgent.toLowerCase().includes("firefox");
 export var loadTime = Date.now();
 export function GetTimeSinceLoad() {
 	return (Date.now() - loadTime) / 1000;
+}
+
+export function GetCookie(name: string) {
+	var match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
+	if (match) return match[2];
 }
 
 export function CopyText(text) {
