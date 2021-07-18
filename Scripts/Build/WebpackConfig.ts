@@ -28,11 +28,11 @@ const debug = debug_base("app:webpack:config");
 const {QUICK, USE_TSLOADER, OUTPUT_STATS} = process.env;
 
 const __dirname = pathModule.dirname(fileURLToPath(import.meta.url));
-function PathFromWebVCoreRoot(...subpathNodes: string[]) {
+export function PathFromWebVCoreRoot(...subpathNodes: string[]) {
 	return pathModule.join(__dirname, "..", "..", ...subpathNodes);
 }
-function FindNodeModule_FromUserProjectRoot(opt: CreateWebpackConfig_Options, name: string) {
-	const paths = opt.config.utils_paths;
+export function FindNodeModule_FromUserProjectRoot(config: ReturnType<typeof CreateConfig>, name: string) {
+	const paths = config.utils_paths;
 	if (fs.existsSync(paths.base("node_modules", name))) {
 		return paths.base("node_modules", name);
 	}
@@ -42,12 +42,11 @@ function FindNodeModule_FromUserProjectRoot(opt: CreateWebpackConfig_Options, na
 	}
 	throw new Error(`Cannot find node-module "${name}". FirstCheck: ${paths.base("node_modules", name)}`);
 }
-function FindNodeModule_FromWebVCoreRoot(opt: CreateWebpackConfig_Options, name: string) {
-	const paths = opt.config.utils_paths;
+export function FindNodeModule_FromWebVCoreRoot(config: ReturnType<typeof CreateConfig>, name: string) {
 	if (fs.existsSync(PathFromWebVCoreRoot("node_modules", name))) {
 		return PathFromWebVCoreRoot("node_modules", name);
 	}
-	return FindNodeModule_FromUserProjectRoot(opt, name);
+	return FindNodeModule_FromUserProjectRoot(config, name);
 }
 
 const peerDeps = CE(wvcPackageJSON.peerDependencies).VKeys();
@@ -78,7 +77,7 @@ function GetAliases(opt: CreateWebpackConfig_Options) {
 	const result = {};
 	for (const name of flatList) {
 		try {
-			result[name] = FindNodeModule_FromUserProjectRoot(opt, name);
+			result[name] = FindNodeModule_FromUserProjectRoot(opt.config, name);
 		} catch {
 			// if couldn't find node-module, just ignore entry (to match with old behavior; the alias stuff needs a general cleanup)
 		}
@@ -86,7 +85,7 @@ function GetAliases(opt: CreateWebpackConfig_Options) {
 
 	// keep synced with "tsconfig.base.json/compilerOptions/paths" in user-projects
 	//result["react"] = FindNodeModule_FromUserProjectRoot("react");
-	result["react"] = FindNodeModule_FromWebVCoreRoot(opt, "react");
+	result["react"] = FindNodeModule_FromWebVCoreRoot(opt.config, "react");
 
 	return result;
 }
@@ -116,12 +115,12 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	opt = E(new CreateWebpackConfig_Options(), opt);
 
 	const paths = opt.config.utils_paths;
-	const wvcFolderInfo = fs.existsSync(FindNodeModule_FromUserProjectRoot(opt, "web-vcore")) ? fs.lstatSync(FindNodeModule_FromUserProjectRoot(opt, "web-vcore")) : null;
+	const wvcFolderInfo = fs.existsSync(FindNodeModule_FromUserProjectRoot(opt.config, "web-vcore")) ? fs.lstatSync(FindNodeModule_FromUserProjectRoot(opt.config, "web-vcore")) : null;
 	const wvcSymlinked = wvcFolderInfo?.isSymbolicLink() ?? false;
 	console.log(`web-vcore running in symlink mode?: ${wvcSymlinked}`);
 
 	function SubdepPath(subPath: string) {
-		return FindNodeModule_FromWebVCoreRoot(opt, subPath);
+		return FindNodeModule_FromWebVCoreRoot(opt.config, subPath);
 	}
 
 	debug("Creating configuration.");
