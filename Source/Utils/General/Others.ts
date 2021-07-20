@@ -1,4 +1,5 @@
 import {VRect, Vector2, GetPropChanges} from "js-vextensions";
+import {schemaEntryJSONs} from "mobx-graphlink";
 
 // like js-vextensions GetPropChanges(), except also applies RemoveHelpers on the result (since intended to be used for db-objects)
 export function GetUpdates(oldData, newData, useJSONCompare = false, useNullInsteadOfUndefined = true) {
@@ -37,37 +38,6 @@ export function GetPageRect(el: Element) {
 		box.width,
 		box.height,
 	);
-}
-
-//import {AddSchema, GetSchemaJSON} from "mobx-firelink";
-export function AddVectorSchemas(AddSchema: (schemaName: string, schema: any)=>any) {
-	AddSchema("Vector2", {
-		properties: {
-			x: {type: "number"},
-			y: {type: "number"},
-		},
-	});
-	AddSchema("Vector3", {
-		properties: {
-			x: {type: "number"},
-			y: {type: "number"},
-			z: {type: "number"},
-		},
-	});
-	AddSchema("VRect", {
-		properties: {
-			x: {type: "number"},
-			y: {type: "number"},
-			width: {type: "number"},
-			height: {type: "number"},
-		},
-	});
-	AddSchema("VBounds", {
-		properties: {
-			position: {$ref: "Vector3"},
-			size: {$ref: "Vector3"},
-		},
-	});
 }
 
 const click_lastInfoForElement = {};

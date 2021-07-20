@@ -2,18 +2,18 @@ import {CE, E} from "js-vextensions";
 
 // import own exports; thus we gain access to the exports object, letting us modify it
 import * as frameworkExportsObject from "./index.js";
+import "js-vextensions/Helpers/@ApplyCECode.js";
+//export * from "./UserTypes.js";
+import "./UserTypes.js";
 
 //type __ = typeof import("../node_modules/js-vextensions/Helpers/@ApplyCETypes");
-type __ = typeof import("js-vextensions/Helpers/@ApplyCETypes");
-import "js-vextensions/Helpers/@ApplyCECode.js"; // eslint-disable-line
+type __ = typeof import("js-vextensions/Helpers/@ApplyCETypes"); // eslint-disable-line
 
 export * from "./@EnableExportOverwrites.js";
 // special key, marking this module's exports object, which allows the patch in ExportOverwriteEnabler.ts to make the remaining exports overwriteable
 //export const __EnableExportOverwrites__ = true;
 
 export * from "./Manager.js";
-//export * from "./UserTypes.js";
-import "./UserTypes.js";
 
 //export * from "./Server/Command.js";
 
@@ -37,6 +37,7 @@ export * from "./Utils/General/Logging.js";
 export * from "./Utils/General/ModuleExportExposer.js";
 export * from "./Utils/General/Others.js";
 export * from "./Utils/General/RegexHelpers.js";
+export * from "./Utils/General/WVCSchemas.js";
 export * from "./Utils/General/YoutubePlayer.js";
 //export * from "./Utils/General/ClassExtensions/MobX.js";
 
