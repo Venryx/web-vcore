@@ -243,7 +243,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 		},
 		new webpack.DefinePlugin(opt.config.codeVarReplacements),
 		new HtmlWebpackPlugin({
-			template: "./Source/index.html",
+			template: opt.config.utils_paths.base("./Source/index.html"),
 			hash: false,
 			filename: "index.html",
 			inject: "body",
