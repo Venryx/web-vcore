@@ -160,6 +160,10 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 				".mjs", // needed for mobx-sync
 			],
 			alias: GetAliases(opt),
+			// for nodejs polyfills
+			fallback: {
+				//buffer: require.resolve("buffer/"),
+			},
 		},
 		module: {
 			rules: [
