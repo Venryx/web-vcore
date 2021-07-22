@@ -38,7 +38,7 @@ export function GetSize(el: HTMLElement, method = GetSize_Method.ClientSize, cus
 		const scrollBar = {w: (el.offsetWidth - el.clientWidth) - border.w - margin.w, h: (el.offsetHeight - el.clientHeight) - border.h - margin.h};
 		const posAbsDescendants = {w: el.scrollWidth - el.offsetWidth, h: el.scrollHeight - el.offsetHeight};
 
-		const sc = (name: SizeComp, valIfEnabled: number)=>custom_sizeComps.includes(name) ? valIfEnabled : 0;
+		const sc = (name: SizeComp, valIfEnabled: number)=>(custom_sizeComps.includes(name) ? valIfEnabled : 0);
 		size = {
 			width: sc("content", base.w) + sc("padding", padding.w) + sc("border", border.w)
 					+ sc("margin", margin.w) + sc("scrollBar", scrollBar.w) + sc("posAbsDescendants", posAbsDescendants.w),
@@ -81,7 +81,7 @@ export function GetContentSize(content: string | Element, options?: Partial<GetC
 
 	const currentHTML = IsString(content) ? content : content.outerHTML;
 	const cacheStore = IsString(content) ? GetContentSize_cache : (content["GetContentSize_cache"] = content["GetContentSize_cache"] || {});
-	const cacheKey = JSON.stringify({html: currentHTML, opts: opts.Including("method", "method_custom_sizeComps")});
+	const cacheKey = JSON.stringify({html: currentHTML, opts: opts.IncludeKeys("method", "method_custom_sizeComps")});
 
 	let result = opts.allowCache ? cacheStore[cacheKey] : null;
 	if (result == null) {
@@ -97,7 +97,7 @@ export function GetContentSize(content: string | Element, options?: Partial<GetC
 				tempHolder = content as HTMLElement;
 			}
 		}
-		
+
 		result = GetSize(tempHolder, opts.method, opts.method_custom_sizeComps);
 		tempHolder.remove();
 
@@ -112,7 +112,7 @@ export const autoElements = {} as {[key: string]: Element};
 export function GetAutoElement(startHTML: string) {
 	if (autoElements[startHTML] == null) {
 		const holder = GetHiddenHolder();
-		let tempHolder = document.createElement("div") as HTMLElement;
+		const tempHolder = document.createElement("div") as HTMLElement;
 		holder.appendChild(tempHolder);
 
 		tempHolder.innerHTML = startHTML;

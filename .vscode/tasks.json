@@ -4,8 +4,13 @@
 		{
 			"label": "tsc (global problem-checking)",
 			"type": "shell",
-			"command": "./node_modules/.bin/tsc",
-			"args": ["--watch", "--noEmit", "--project", "."],
+
+			// tsc is not reliably getting placed in "./node_modules/.bin", fsr
+			/*"command": "./node_modules/.bin/tsc",
+			"args": ["--watch", "--noEmit", "--project", "."],*/
+			"command": "node",
+			"args": ["./node_modules/typescript/bin/tsc", "--watch", "--noEmit", "--project", "."],
+
 			"problemMatcher": "$tsc-watch",
 			"isBackground": true,
 			"group": {

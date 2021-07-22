@@ -90,7 +90,7 @@ export function WVC_OverrideExport(...args) {
 	WVC_exports_final[exportName] = newValue;
 }*/
 
-export const WVC_exports_orig = E(CE(frameworkExportsObject).Excluding("WVC_exports_orig", "WVC_exports_final", "WVC_OverrideExport"));
+export const WVC_exports_orig = E(CE(frameworkExportsObject).ExcludeKeys("WVC_exports_orig", "WVC_exports_final", "WVC_OverrideExport"));
 export const WVC_exports_final = frameworkExportsObject;
 export function WVC_OverrideExport(newValue_withNameProp: any);
 export function WVC_OverrideExport(exportName: string, newValue: any);
