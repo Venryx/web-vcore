@@ -1,22 +1,17 @@
-import {Draggable} from "react-beautiful-dnd";
+import {Draggable, DraggableProvided, DraggableStateSnapshot, DroppableProvided, DroppableStateSnapshot} from "react-beautiful-dnd";
 import {GetDOM, ShallowChanged} from "react-vextensions";
 import {ToJSON} from "js-vextensions";
 import React from "react";
 
 // So why do we have a MakeDraggable decorator but not a MakeDroppable one?
 // Basically, it's just that <Droppable> sections are usually not the root of a component, whereas <Draggable> sections almost always are.
-// Thus, a MakeDroppable decorator just wouldn't be very useful. (ie. it would have few components using)
+// Thus, a MakeDroppable decorator just wouldn't be very useful. (ie. it would have few components using it)
 
 //type DraggableCompProps = {type: string, draggableInfo: DraggableInfo, index: number, enabled: boolean};
 type DraggableCompProps = {draggableInfo: DraggableInfo, index: number};
 
-export type DropProvided = {innerRef: (element: HTMLElement)=>any, placeholder?: React.ReactElement<any>, droppableProps: any}; // todo: get from @types/react-beautiful-dnd
-export type DropSnapshot = {isDraggingOver: boolean, draggingOverWith?: string}; // todo: get from @types/react-beautiful-dnd
-export type DropInfo = {provided: DropProvided, snapshot: DropSnapshot};
-
-export type DragProvided = {draggableProps: any, dragHandleProps: any}; // todo: get from @types/react-beautiful-dnd
-export type DragSnapshot = {isDragging: boolean}; // todo: get from @types/react-beautiful-dnd
-export type DragInfo = {provided: DragProvided, snapshot: DragSnapshot};
+export type DropInfo = {provided: DroppableProvided, snapshot: DroppableStateSnapshot};
+export type DragInfo = {provided: DraggableProvided, snapshot: DraggableStateSnapshot};
 
 type DraggableInfo = any; // this is up to the parent project
 

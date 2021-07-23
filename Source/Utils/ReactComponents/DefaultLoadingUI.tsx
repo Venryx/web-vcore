@@ -11,9 +11,15 @@ BailHandler_loadingUI_default_Set(info=>{
 
 export class DefaultLoadingUI extends BaseComponentPlus({} as {comp: BaseComponent<any>, bailMessage: BailMessage}, {}) {
 	render() {
-		let {comp, bailMessage} = this.props;
+		const {comp, bailMessage} = this.props;
+		const compProps_neededPropsOnly = comp.props.Pairs().filter(a=>{
+			// allow attachment of react-beautiful-dnd's drag-handle props, otherwise a prominent warning is generated (in dev mode)
+			if (a.key.startsWith("data-rbd-drag-handle-")) return true;
+			return false;
+		}).ToMapObj(a=>a.key, a=>a.value);
+		//console.log(`Comp:${comp.constructor.name} @CompProps:`, compProps_neededPropsOnly);
 		return (
-			<div style={ES({
+			<div {...compProps_neededPropsOnly} style={ES({
 				display: "flex", alignItems: "center", justifyContent: "center", flex: 1, //fontSize: 25,
 				//textShadow: "#000 0px 0px 1px,   #000 0px 0px 1px,   #000 0px 0px 1px, #000 0px 0px 1px,   #000 0px 0px 1px,   #000 0px 0px 1px",
 				color: "white",
@@ -31,6 +37,7 @@ export class DefaultLoadingUI extends BaseComponentPlus({} as {comp: BaseCompone
 }
 
 // ugly fix for useXXX call-count sometimes increasing, due to mobx-graphlink's bail-system being used (eg. first render bails, so 0 useXXX calls, followed by successful render, with X calls)
+// eslint-disable-next-line
 Object.defineProperty(Object.prototype, "prevInputs", {
 	//configurable: true, // already defaults to true
 	get() {
