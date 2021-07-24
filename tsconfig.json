@@ -26,6 +26,7 @@
 		"resolveJsonModule": true,
 		// needed to fix "cannot find [wvc file] under rootDir [of some other linked package]" compile error that occurs sometimes
 		//"composite": true
+		"useDefineForClassFields": true, // needed for mobx @observable
 		// strictness settings
 		//"strict": true, // enables all of the below (other than noImplicitReturns)
 		//"noImplicitAny": true,

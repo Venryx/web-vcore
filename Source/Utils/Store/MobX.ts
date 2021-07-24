@@ -1,5 +1,5 @@
 import {enableES5, setAutoFreeze, setUseProxies} from "immer";
-import {Assert, AssertWarn, E, emptyArray, RemoveCircularLinks, ToJSON} from "js-vextensions";
+import {Assert, AssertWarn, CE, E, emptyArray, RemoveCircularLinks, ToJSON} from "js-vextensions";
 import {$mobx, autorun, configure, observable, ObservableMap, ObservableSet, onReactionError, runInAction, _getGlobalState} from "mobx";
 import {BailHandler, BailHandler_Options} from "mobx-graphlink"; // eslint-disable-line
 import {observer} from "mobx-react";
@@ -228,7 +228,7 @@ export function GetMirrorOfMobXTree<T>(mobxTree: T, opt = new GetMirrorOfMobXTre
 			mobxTree instanceof Map || mobxTree instanceof ObservableMap ? new Map() :
 			mobxTree instanceof Set || mobxTree instanceof ObservableSet ? new Set() :
 			{};
-		if (opt.prototypesToKeep.Any(a=>mobxTree instanceof a)) {
+		if (CE(opt.prototypesToKeep).Any(a=>mobxTree instanceof a)) {
 			Object.setPrototypeOf(tree_plainMirror, Object.getPrototypeOf(mobxTree));
 		}
 

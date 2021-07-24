@@ -367,10 +367,17 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 					[
 						SubdepPath("@babel/plugin-proposal-class-properties"),
 						{
-							loose: true,
+							//loose: true,
+							loose: false, // needed for mobx @observable (probably)
 						},
 					],
+					// needed to match with "{loose: false}" for "@babel/plugin-proposal-class-properties"
+					["@babel/plugin-proposal-private-methods", {loose: false}],
 				],
+				// needed for mobx @observable (probably) (requires Babel >= 7.13.0: https://babeljs.io/docs/en/assumptions)
+				assumptions: {
+					setPublicClassFields: false,
+				},
 			},
 		},
 	];
