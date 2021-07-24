@@ -559,6 +559,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 		MakeSoWebpackConfigOutputsStats(webpackConfig);
 	}
 
+	// this doesn't seem to detect all duplicates btw (still worth having, though should make a bug report at some point)
 	webpackConfig.plugins.push(new DuplicatePackageCheckerPlugin({
 		// Also show module that is requiring each duplicate package (default: false)
 		verbose: true,
