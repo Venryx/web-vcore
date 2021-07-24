@@ -4,7 +4,7 @@ import {BaseComponent, FilterOutUnrecognizedProps, BaseComponentPlus} from "reac
 import {runInAction} from "mobx";
 import {GetCurrentURL} from "../URL/URLs.js";
 import {manager} from "../../Manager.js";
-import {ActionFunc, Observer} from "../Store/MobX.js";
+import {ActionFunc, Observer, RunInAction} from "../Store/MobX.js";
 import {RootStore} from "web-vcore_UserTypes";
 import {BailMessage} from "mobx-graphlink";
 
@@ -40,7 +40,7 @@ export class Link extends BaseComponentPlus({} as Link_Props, {}) {
 
 		if (actionFunc != null) {
 			event.preventDefault();
-			runInAction("Link.handleClick", ()=>actionFunc(manager.store));
+			RunInAction("Link.handleClick", ()=>actionFunc(manager.store));
 		} else if (to != null) {
 			const isExternalOrNewTab = VURL.Parse(to, true).domain != GetCurrentURL().domain;
 			if (isExternalOrNewTab || target) return; // let browser handle external or new-tab links

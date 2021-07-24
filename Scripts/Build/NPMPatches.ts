@@ -17,8 +17,8 @@ const AddRule = npmPatch_replacerConfig_base.AddRule;
 // example string to match against:			const GetFocusedNodePath = (0,web_vcore_nm_mobx_graphlink__WEBPACK_IMPORTED_MODULE_3__.StoreAccessor)(s => mapViewOrMapID => {
 const wpImport_pre = "\\(0,[a-zA-Z0-9_$]+?\\.";
 const wpImport_post = "\\)";
-const wpImport_pre_opt = "(" + wpImport_pre + ")?";
-const wpImport_post_opt = wpImport_post + "?";
+const wpImport_pre_opt = `(${wpImport_pre})?`;
+const wpImport_post_opt = `${wpImport_post}?`;
 
 /*AddRule({
 	fileInclude: [

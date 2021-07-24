@@ -3,7 +3,7 @@ import {runInAction} from "mobx";
 import {RootStore} from "web-vcore_UserTypes";
 import {manager} from "../../Manager.js";
 import {e} from "../../PrivateExports.js";
-import {ActionFunc} from "../Store/MobX.js";
+import {ActionFunc, RunInAction} from "../Store/MobX.js";
 
 export class Page {
 	constructor(initialData?: Partial<Page>, children?: {[key: string]: Page}) {
@@ -48,7 +48,7 @@ export function LoadURL(url: VURL) {
 	manager.store.dispatch(new e.ActionSet(...syncActions));*/
 
 	const actionFunc = manager.GetLoadActionFuncForURL(url);
-	runInAction("LoadURL", ()=>actionFunc(manager.store));
+	RunInAction("LoadURL", ()=>actionFunc(manager.store));
 
 	//loadingURL = false;
 }

@@ -14,6 +14,7 @@ import {fileURLToPath} from "url";
 import webpack from "webpack";
 import WebpackStringReplacer from "webpack-string-replacer";
 import ModuleDependencyWarning from "webpack/lib/ModuleDependencyWarning.js";
+import DuplicatePackageCheckerPlugin from "@cerner/duplicate-package-checker-webpack-plugin";
 import {MakeSoWebpackConfigOutputsStats} from "./WebpackConfig/OutputStats.js";
 
 // we could either add a reference from "./Scripts/tsconfig.json" to "./tsconfig.json", or we could use require; doing latter for now
@@ -49,33 +50,13 @@ export function FindNodeModule_FromWebVCoreRoot(config: ReturnType<typeof Create
 	return FindNodeModule_FromUserProjectRoot(config, name);
 }
 
-const peerDeps = CE(wvcPackageJSON.peerDependencies).VKeys();
-const ownModules = [
-	"js-vextensions", // js (base)
-	"react-vextensions", "react-vcomponents", "react-vmenu", "react-vmessagebox", /*"react-vscrollview",*/ "react-vmarkdown", // +react
-	"firebase-feedback", "firebase-forum", // +firebase
-	"mobx-firelink", // +mobx
-	"web-vcore", // +framework
-	"webpack-runtime-require", // misc
-];
-function GetAliases(opt: CreateWebpackConfig_Options) {
-	const flatList = [
-		...peerDeps,
-
-		// necessary consolidations, to fix issues
-		//"mobx-firelink/node_modules/mobx": paths.base("node_modules", "mobx"), // fsr, needed to prevent 2nd mobx, when mobx-firelink is npm-linked [has this always been true?]
-		"mobx",
-
-		// convenience consolidations, since they have npm-patches applied (and we don't want to have to adjust the match-counts)
-		"react-beautiful-dnd",
-		"immer",
-
-		// convenience consolidations (for any own-modules not in peer-deps), to keep things tidy (fine since we know the different versions will be compatible anyway)
-		...ownModules,
-	];
-
+// Note: These consolidations are only for webpack/runtime. If you need typescript/compile-time consolidations, adds entries to the "paths" field in tsconfig.json.
+function GetModuleConsolidations(opt: CreateWebpackConfig_Options) {
 	const result = {};
-	for (const name of flatList) {
+
+	// these consolidations are done in case web-vcore is symlinked; we don't want web-vcore's dev-dep versions of these being used over the user-project's versions
+	const depsToConsolidate_fromParent = CE(wvcPackageJSON.peerDependencies).VKeys(); // eg: mobx-firelink, firebase-feedback, firebase-forum
+	for (const name of depsToConsolidate_fromParent) {
 		try {
 			result[name] = FindNodeModule_FromUserProjectRoot(opt.config, name);
 		} catch {
@@ -83,9 +64,50 @@ function GetAliases(opt: CreateWebpackConfig_Options) {
 		}
 	}
 
-	// keep synced with "tsconfig.base.json/compilerOptions/paths" in user-projects
-	//result["react"] = FindNodeModule_FromUserProjectRoot("react");
-	result["react"] = FindNodeModule_FromWebVCoreRoot(opt.config, "react");
+	// these consolidations are done for a variety of reasons (see notes below)
+	const depsToConsolidate_fromWVCFirst = [
+		// standard/long-term (ie. under "/nm" folder) consolidations provided by web-vcore (there's a risk of issues either way, but the risk of consolidation is lower than the risk of multiple versions)
+		// ==========
+
+		// written by others
+		...[
+			"react", // doesn't like multiple
+			"react-dom", // doesn't like multiple
+			"mobx", // doesn't like multiple
+			"mobx-react", // doesn't like multiple
+		],
+		// written by self (separate category, because consolidations for these should always be fine/good,since we know the different versions will be compatible anyway -- or at least easily modifiable to be so)
+		...[
+			"js-vextensions", // js (base)
+			"react-vextensions", "react-vcomponents", "react-vmenu", "react-vmessagebox", /*"react-vscrollview",*/ "react-vmarkdown", // +react
+			"graphql-feedback", "graphql-forum", // +graphql
+			"mobx-graphlink", // +mobx
+			"web-vcore", // +framework
+			"webpack-runtime-require", // misc
+		],
+
+		// specialized/temporary consolidations
+		// ==========
+
+		...[
+			// necessary consolidations, to fix issues
+			//"mobx-firelink/node_modules/mobx": paths.base("node_modules", "mobx"), // fsr, needed to prevent 2nd mobx, when mobx-firelink is npm-linked [has this always been true?]
+
+			// convenience consolidations, since they have npm-patches applied (and we don't want to have to adjust the match-counts)
+			"react-beautiful-dnd",
+			"immer",
+		],
+	];
+	for (const name of depsToConsolidate_fromWVCFirst) {
+		try {
+			//result[name] = FindNodeModule_FromUserProjectRoot(opt.config, name);
+			result[name] = FindNodeModule_FromWebVCoreRoot(opt.config, name);
+		} catch {
+			// if couldn't find node-module, just ignore entry (to match with old behavior; the alias stuff needs a general cleanup)
+		}
+	}
+
+	console.log("Found aliases/consolidations for:", Object.keys(result));
 
 	return result;
 }
@@ -105,7 +127,7 @@ export class CreateWebpackConfig_Options {
 	};
 
 	// custom options
-	sourcesFromRoot?= false;
+	sourcesFromRoot? = false;
 	//tsLoaderPaths?: webpack.RuleSetConditions;
 	//tsLoaderPaths?: string[];
 	tsLoaderEntries?: TSLoaderEntry[];
@@ -159,11 +181,11 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 				".ts", ".tsx", // always accept ts[x], because there might be some in node_modules (eg. web-vcore)
 				".mjs", // needed for mobx-sync
 			],
-			alias: GetAliases(opt),
+			alias: GetModuleConsolidations(opt),
 			// for nodejs polyfills
-			fallback: {
+			/*fallback: {
 				//buffer: require.resolve("buffer/"),
-			},
+			},*/
 		},
 		module: {
 			rules: [
@@ -529,6 +551,39 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	if (OUTPUT_STATS) {
 		MakeSoWebpackConfigOutputsStats(webpackConfig);
 	}
+
+	webpackConfig.plugins.push(new DuplicatePackageCheckerPlugin({
+		// Also show module that is requiring each duplicate package (default: false)
+		verbose: true,
+		// Emit errors instead of warnings (default: false)
+		//emitError: true,
+		// Show help message if duplicate packages are found (default: true)
+		//showHelp: false,
+		// Warn also if major versions differ (default: true)
+		//strict: false,
+		/**
+		 * Exclude instances of packages from the results. 
+		 * If all instances of a package are excluded, or all instances except one,
+		 * then the package is no longer considered duplicated and won't be emitted as a warning/error.
+		 * @param {Object} instance
+		 * @param {string} instance.name The name of the package
+		 * @param {string} instance.version The version of the package
+		 * @param {string} instance.path Absolute path to the package
+		 * @param {?string} instance.issuer Absolute path to the module that requested the package
+		 * @returns {boolean} true to exclude the instance, false otherwise
+		 */
+		exclude: instance=>{
+			const ignoreList = [
+				// definitely seem safe (to have duplicates of)
+				"classnames", "fast-json-stable-stringify", "object-assign", "prop-types", "react-is", "symbol-observable", "tslib",
+				// probably safe
+				"@babel/runtime", "codemirror", "graphql-tag", "lodash",
+			];
+			return ignoreList.includes(instance.name);
+		},
+		// Emit errors (regardless of emitError value) when the specified packages are duplicated (default: [])
+		alwaysEmitErrorsFor: ["react", "react-router"],
+	}));
 
 	return Object.assign(webpackConfig, opt.ext);
 }

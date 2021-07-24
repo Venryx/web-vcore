@@ -1,8 +1,8 @@
 import {enableES5, setAutoFreeze, setUseProxies} from "immer";
-import {E, emptyArray, RemoveCircularLinks, ToJSON} from "js-vextensions";
+import {Assert, AssertWarn, E, emptyArray, RemoveCircularLinks, ToJSON} from "js-vextensions";
 import {$mobx, autorun, configure, observable, ObservableMap, ObservableSet, onReactionError, runInAction, _getGlobalState} from "mobx";
-import {BailHandler, BailHandler_Options} from "mobx-graphlink";
-import {IReactComponent, observer} from "mobx-react";
+import {BailHandler, BailHandler_Options} from "mobx-graphlink"; // eslint-disable-line
+import {observer} from "mobx-react";
 import React, {Component, useRef} from "react";
 import {EnsureClassProtoRenderFunctionIsWrapped} from "react-vextensions";
 import {HandleError} from "../General/Errors.js";
@@ -28,15 +28,16 @@ export function ConfigureMobX() {
 }
 
 /** Useful for checking if the current call-stack is within a mobx computed value/function. (where mobx changes/side-effects are disallowed, eg. runInAction) */
-export function MobXComputationDepth() {
+/*export function MobXComputationDepth() {
 	return _getGlobalState().computationDepth;
-}
+}*/
 
 export type ActionFunc<StoreType> = (store: StoreType)=>void;
 
 // variant of observer(...) wrapper-func, which returns a simple function result, instead of a ReactJS element-info entry (needed for ShowMessageBox.message)
+type IReactComponent = any; // temp
 export function observer_simple<T extends IReactComponent>(target: T): T {
-	return observer(target)["type"];
+	return observer(target as any)["type"];
 }
 
 // variant of @observer decorator, which also adds (and is compatible with) class-hooks
@@ -143,13 +144,36 @@ export function StoreAction(...args) {
 	const result = (...callArgs)=>{
 		let name_withArgs = name;
 		name_withArgs += `(${callArgs.map(a=>(a != null ? ToJSON(a) : "null")).join(", ")})`;
-		return runInAction(name_withArgs, ()=>actionFunc(...callArgs));
+		return RunInAction(name_withArgs, ()=>actionFunc(...callArgs));
 	};
 	// result["isStoreAction"] = true; // mark export as store-action (for copying into mobx-state-tree actions collection)
 	return result;
 }
 
-export const O = observable;
+const observableWarningGivenFor = new WeakSet<Function>();
+export const O = ((target: Object, propertyKey: string | symbol)=>{
+	//if (target.constructor instanceof Function && !target.constructor.toString().includes("makeObservable(")) {
+	if (target.constructor instanceof Function && !target.constructor.toString().includes("makeObservable")) { // transpilation makes only the raw name safe to look for
+		if (!observableWarningGivenFor.has(target.constructor)) {
+			console.warn(`The @O decorator was used on "${target.constructor.name}.${String(propertyKey)
+				}", but the class is missing the "makeObservable(this);" call. See here for more info: https://mobx.js.org/enabling-decorators.html`);
+			observableWarningGivenFor.add(target.constructor);
+		}
+	}
+	return observable(target, propertyKey);
+}) as typeof observable;
+// copy ".ref", etc. fields from "observable" (not wrapped)
+for (const [key, descriptor] of Object.entries(Object.getOwnPropertyDescriptors(observable))) {
+	Object.defineProperty(O, key, descriptor);
+}
+
+/*export function RunInAction(name: string, action: ()=>any) {
+	Object.defineProperty(action, "name", {value: name});
+	return runInAction(action);
+}*/
+import {RunInAction} from "mobx-graphlink"; // eslint-disable-line
+//export {RunInAction} from "mobx-graphlink";
+export {RunInAction};
 
 export function RunInAction_Set(setterFunc: ()=>any);
 export function RunInAction_Set(classInstance: Object, setterFunc: ()=>any);
@@ -161,7 +185,7 @@ export function RunInAction_Set(...args) {
 	const funcStr = setterFunc.toString();
 	const funcStr_namePartMatch = funcStr.match(/(store.+?) /);
 	const actionName = `Set${classInstance ? `@${classInstance.constructor.name}` : ""}:${funcStr_namePartMatch?.[1] ?? funcStr}`;
-	runInAction(actionName, setterFunc);
+	RunInAction(actionName, setterFunc);
 }
 
 // mobx-mirror

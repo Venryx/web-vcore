@@ -4,7 +4,7 @@ import React, {useCallback} from "react";
 import {BaseComponentPlus} from "react-vextensions";
 import {manager} from "../../Manager.js";
 import {Link} from "../ReactComponents/Link.js";
-import {Observer} from "../Store/MobX.js";
+import {Observer, RunInAction} from "../Store/MobX.js";
 
 // todo: someday move the NavBar comp itself here (probably)
 
@@ -100,7 +100,7 @@ export class NavBarPanelButton extends BaseComponentPlus({} as {text: string, pa
 	OnClick = (e: MouseEvent)=>{
 		e.preventDefault();
 		const {corner, panel, active} = this.PropsStateStash;
-		runInAction("NavBarPanelButton_OnClick", ()=>{
+		RunInAction("NavBarPanelButton_OnClick", ()=>{
 			if (corner == "top-left") {
 				manager.store.main.topLeftOpenPanel = active ? null : panel;
 			} else {
