@@ -1,7 +1,7 @@
 import {enableES5, setAutoFreeze, setUseProxies} from "immer";
 import {Assert, AssertWarn, CE, E, emptyArray, RemoveCircularLinks, ToJSON} from "js-vextensions";
 import {$mobx, autorun, configure, observable, ObservableMap, ObservableSet, onReactionError, runInAction, _getGlobalState} from "mobx";
-import {BailHandler, BailHandler_Options} from "mobx-graphlink"; // eslint-disable-line
+import {BailHandler, BailHandler_Options, MGLObserver, MGLObserver_Options} from "mobx-graphlink"; // eslint-disable-line
 import {observer} from "mobx-react";
 import React, {Component, useRef} from "react";
 import {EnsureClassProtoRenderFunctionIsWrapped} from "react-vextensions";
@@ -40,9 +40,13 @@ export function observer_simple<T extends IReactComponent>(target: T): T {
 	return observer(target as any)["type"];
 }
 
-// variant of @observer decorator, which also adds (and is compatible with) class-hooks
+// variant of @observer decorator, which also adds (and is compatible with) class-hooks (similar to mobx-graphlink's @MGLObserver, but with more options)
 export class Observer_Options {
 	classHooks = true;
+
+	/*mglObserver = true;
+	mglObserver_opts?: MGLObserver_Options;*/
+	// from mobx-graphlink's @MGLObserver
 	bailHandler = true;
 	bailHandler_opts?: BailHandler_Options;
 }
@@ -59,11 +63,16 @@ export function Observer(...args) {
 
 	function ApplyToClass(targetClass: Function) {
 		if (opts.classHooks) ClassHooks(targetClass);
-		if (opts.bailHandler) BailHandler(opts.bailHandler_opts)(targetClass);
 		//if (targetClass instanceof (BaseComponent.prototype as any)) {
 		if (targetClass.prototype.PreRender) {
 			EnsureClassProtoRenderFunctionIsWrapped(targetClass.prototype);
 		}
+		/*if (opts.mglObserver) {
+			MGLObserver(opts.mglObserver_opts)(targetClass);
+		} else {
+			observer(targetClass as any);
+		}*/
+		if (opts.bailHandler) BailHandler(opts.bailHandler_opts)(targetClass);
 		observer(targetClass as any);
 	}
 }
