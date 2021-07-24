@@ -154,7 +154,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 			//namedModules: true, // commented; not needed, since "output.pathinfo=true" (and, before at least, would cause problems when inconsistent between bundles)
 			//namedModules: true,
 			moduleIds: "named",
-			noEmitOnErrors: true,
+			emitOnErrors: false,
 		},
 		target: "web",
 		devtool: opt.config.compiler_devtool as any,
@@ -241,12 +241,21 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	// fix for symlinks
 	// ==========
 
-	// don't resolve sym-links to their absolute path (behavior should be the same whether a module is sym-linked or not)
-	webpackConfig.resolve.symlinks = false;
+	/*
+	Pros of disabling symlink-resolution:
+	1) Principle: behavior should be the same whether a module is symlinked or not.
+	2) Specific reason: [I forget what it was]
+	Cons:
+	1) It made-so webpack-dev-server wasn't actually updating/reacting-to-changes-in symlinked-deps' output files. (maybe solvable, but I don't know how)
+	2) It makes-so webpack doesn't detect "duplicates", eg. "nm/mobx-graphlink" and "nm/graphql-feedback/nm/mobx-graphlink" are both part of bundle [by default] when graphql-feedback is symlinked.
+	3) It substantially reduced incremental-compilation performance. I'd estimate it slowed recompiles (from save to page-loaded) from ~5s to ~10s.
+	The cons outweigh the pros at the moment, thus I'm re-enabling symlink-resolution for now.
+	*/
+	/*webpackConfig.resolve.symlinks = false;
 	// not sure if this is needed (given flag-set above), but keeping, since it apparently does still get called once
 	SymlinkPlugin.prototype.apply = function() {
 		console.log("Symlink-plugin disabled...");
-	};
+	};*/
 
 	// plugins
 	// ==========
