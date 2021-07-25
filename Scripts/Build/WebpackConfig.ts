@@ -79,7 +79,7 @@ function GetModuleConsolidations(opt: CreateWebpackConfig_Options) {
 		// written by self (separate category, because consolidations for these should always be fine/good,since we know the different versions will be compatible anyway -- or at least easily modifiable to be so)
 		...[
 			"js-vextensions", // js (base)
-			"react-vextensions", "react-vcomponents", "react-vmenu", "react-vmessagebox", /*"react-vscrollview",*/ "react-vmarkdown", // +react
+			"react-vextensions", "react-vcomponents", "react-vmenu", "react-vmessagebox", "react-vscrollview", "react-vmarkdown", // +react
 			"graphql-feedback", "graphql-forum", // +graphql
 			"mobx-graphlink", // +mobx
 			"web-vcore", // +framework
