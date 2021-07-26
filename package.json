@@ -71,7 +71,7 @@
 		"file-loader": "^6.2.0",
 		"fs-extra": "^8.1.0",
 		"graphql": "^15.5.0",
-		"graphql-feedback": "^0.0.2",
+		"graphql-feedback": "^0.0.3",
 		"history": "^4.10.1",
 		"html-webpack-plugin": "^5.3.1",
 		"immer": "^7.0.7",
