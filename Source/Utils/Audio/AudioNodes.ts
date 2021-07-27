@@ -1,5 +1,13 @@
+//export const GeneralAudioProcessor_codeBlob = new Blob([GeneralAudioProcessor_code], {type: "application/javascript"});
+let GeneralAudioProcessor_codeBlob: Blob;
 export async function InitAudioNodes(audioContext: AudioContext) {
+	if (GeneralAudioProcessor_codeBlob == null) {
+		GeneralAudioProcessor_codeBlob = new Blob([GeneralAudioProcessor_code], {type: "application/javascript"});
+	}
 	await audioContext.audioWorklet.addModule(URL.createObjectURL(GeneralAudioProcessor_codeBlob));
+}
+export function CreateGeneralAudioProcessor(audioContext: AudioContext) {
+	return new AudioWorkletNode(audioContext, "GeneralAudioProcessor");
 }
 
 // RetrieveAudioProcessor
@@ -68,7 +76,3 @@ const GeneralAudioProcessor_code = `
 	}
 	registerProcessor("GeneralAudioProcessor", GeneralAudioProcessor);
 `.AsMultiline(0);
-var GeneralAudioProcessor_codeBlob = new Blob([GeneralAudioProcessor_code], {type: "application/javascript"});
-export function CreateGeneralAudioProcessor(audioContext: AudioContext) {
-	return new AudioWorkletNode(audioContext, "GeneralAudioProcessor");
-}
