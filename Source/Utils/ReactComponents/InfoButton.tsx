@@ -49,7 +49,7 @@ export class InfoButton extends BaseComponent<InfoButtonProps, {}> {
 	}
 
 	render() {
-		const {text, effect, tooltipProps, sel, ...rest} = this.props;
+		const {text, effect, tooltipProps, sel, style, ...rest} = this.props;
 		const tooltip = (
 			<InTooltip {...E(
 				tooltipProps,
@@ -61,7 +61,7 @@ export class InfoButton extends BaseComponent<InfoButtonProps, {}> {
 		return (
 			<Tooltip placement="top" overlay={tooltip}>
 				<Button {...rest as any} size={13} iconSize={13} iconPath="/Images/Buttons/Info.png"
-						useOpacityForHover={true} style={{position: `relative`, zIndex: 1, marginLeft: 1, backgroundColor: null, boxShadow: null, border: null}}
+						useOpacityForHover={true} style={E({position: `relative`, zIndex: 1, marginLeft: 1, backgroundColor: null, boxShadow: null, border: null}, style)}
 						//title={text}
 						data-tip data-for={this.tooltip?.IDStr}>
 					{/*<ReactTooltip id={tipID} effect={effect}>
