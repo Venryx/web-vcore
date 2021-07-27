@@ -1,10 +1,17 @@
 import {enableES5, setAutoFreeze, setUseProxies} from "immer";
 import {Assert, AssertWarn, CE, E, emptyArray, RemoveCircularLinks, ToJSON} from "js-vextensions";
-import {$mobx, autorun, configure, observable, ObservableMap, ObservableSet, onReactionError, runInAction, _getGlobalState} from "mobx";
+import {$mobx, autorun, configure, observable, ObservableMap, ObservableSet, onReactionError, runInAction, _getGlobalState, _getAdministration} from "mobx";
 import {BailHandler, BailHandler_Options, MGLObserver, MGLObserver_Options} from "mobx-graphlink"; // eslint-disable-line
 import {observer} from "mobx-react";
 import React, {Component, useRef} from "react";
 import {EnsureClassProtoRenderFunctionIsWrapped} from "react-vextensions";
+import {RunInAction} from "mobx-graphlink";
+import {getAdministration, ObservableObjectAdministration} from "mobx/dist/internal";
+
+/*export function RunInAction(name: string, action: ()=>any) {
+	Object.defineProperty(action, "name", {value: name});
+	return runInAction(action);
+}*/
 import {HandleError} from "../General/Errors.js";
 //import {useClassRef} from "react-universal-hooks";
 
@@ -176,11 +183,6 @@ for (const [key, descriptor] of Object.entries(Object.getOwnPropertyDescriptors(
 	Object.defineProperty(O, key, descriptor);
 }
 
-/*export function RunInAction(name: string, action: ()=>any) {
-	Object.defineProperty(action, "name", {value: name});
-	return runInAction(action);
-}*/
-import {RunInAction} from "mobx-graphlink"; // eslint-disable-line
 //export {RunInAction} from "mobx-graphlink";
 export {RunInAction};
 
@@ -256,7 +258,10 @@ export function StartUpdatingMirrorOfMobXTree(mobxTree: any, tree_plainMirror: a
 	autorun(()=>{
 		const sourceIsMap = mobxTree instanceof Map || mobxTree instanceof ObservableMap;
 		const targetIsMap = tree_plainMirror instanceof Map || tree_plainMirror instanceof ObservableMap;
-		const mobxKeys = opt.onlyCopyMobXProps ? (mobxTree[$mobx]?.getKeys ? mobxTree[$mobx].getKeys() : emptyArray) : null;
+		//const mobxKeys = opt.onlyCopyMobXProps ? (mobxTree[$mobx]?.getKeys ? mobxTree[$mobx].getKeys() : emptyArray) : null;
+		//const mobxInfo = mobxTree[$mobx];
+		const mobxInfo = _getAdministration(mobxTree) as ObservableObjectAdministration;
+		const mobxKeys = opt.onlyCopyMobXProps ? (mobxInfo?.values_?.keys() ?? emptyArray) : null;
 
 		for (const key of mobxKeys ?? (sourceIsMap ? mobxTree.keys() : Object.keys(mobxTree))) {
 			const valueFromSource = sourceIsMap ? mobxTree.get(key) : mobxTree[key]; // this counts as a mobx-get, meaning the autorun subscribes, so this func reruns when the prop-value changes
