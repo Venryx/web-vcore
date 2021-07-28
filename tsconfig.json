@@ -10,7 +10,7 @@
 		// compilation
 		//"target": "es2015",
 		//"target": "esnext", // babel targets es2015 (ie. transpiles our code to it), so it's fine for TS to target es-next
-		"target": "es2018", // need es2018 for ts-loader (it doesn't understand esnext)
+		"target": "ES2018", // need es2018 for ts-loader (it doesn't understand esnext)
 		/*"lib": [
 			"es5",
 			"es6",
