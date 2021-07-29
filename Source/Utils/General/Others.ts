@@ -20,13 +20,17 @@ export function GetUpdates(oldData, newData, useJSONCompare = false, useNullInst
 	return result;
 }
 
-export function GetOffsetRect(el: Element) {
-	return new VRect(el.clientLeft, el.clientTop, el.clientWidth, el.clientHeight, false);
-}
+/** Element's bounding-rect relative to the screen/monitor. *#/
 export function GetScreenRect(el: Element) {
 	var clientRect = el.getBoundingClientRect();
 	return new VRect(clientRect.left, clientRect.top, clientRect.width, clientRect.height, false);
+}*/
+/** Element's bounding-rect relative to the viewport, ie. the rectangle on the screen whose pixels are all controllable by the page. */
+export function GetViewportRect(el: Element) {
+	var clientRect = el.getBoundingClientRect();
+	return new VRect(clientRect.left, clientRect.top, clientRect.width, clientRect.height, false);
 }
+/** Element's bounding-rect relative to the page, ie. the top-left pixel when scrolled to the very top of the page. (so y = GetViewportRect().y + window.pageYOffset) */
 export function GetPageRect(el: Element) {
 	var box = el.getBoundingClientRect();
 	const win = el.ownerDocument.defaultView!;
@@ -38,6 +42,10 @@ export function GetPageRect(el: Element) {
 		box.width,
 		box.height,
 	);
+}
+/** Element's bounding-rect relative to its "offsetParent", ie. the top-left pixel of the closest (nearest in hierarchy) "positioned" ancestor element. */
+export function GetOffsetRect(el: Element) {
+	return new VRect(el.clientLeft, el.clientTop, el.clientWidth, el.clientHeight, false);
 }
 
 const click_lastInfoForElement = {};
