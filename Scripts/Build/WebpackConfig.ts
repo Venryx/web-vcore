@@ -112,7 +112,6 @@ function GetModuleConsolidations(opt: CreateWebpackConfig_Options) {
 	return result;
 }
 
-
 export class TSLoaderEntry {
 	//context: string;
 	test: webpack.RuleSetCondition;
