@@ -20,6 +20,7 @@ export {getMainDefinition};*/
 // fix for pickier ts-node (v2)
 // ==========
 
-export * from "@apollo/client/link/ws/ws.cjs"; // eslint-disable-line
-export * from "@apollo/client/link/error/error.cjs"; // eslint-disable-line
+// @ts-ignore
+export * from "@apollo/client/link/ws/ws.cjs"; // @ts-ignore // eslint-disable-line 
+export * from "@apollo/client/link/error/error.cjs"; // @ts-ignore // eslint-disable-line
 export * from "@apollo/client/utilities/utilities.cjs"; // eslint-disable-line
