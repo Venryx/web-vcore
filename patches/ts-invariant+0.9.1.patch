@@ -1,0 +1,11 @@
+diff --git a/node_modules/ts-invariant/process/package.json b/node_modules/ts-invariant/process/package.json
+index 0f2cc43..6c8737b 100644
+--- a/node_modules/ts-invariant/process/package.json
++++ b/node_modules/ts-invariant/process/package.json
+@@ -1,5 +1,6 @@
+ {
+   "name": "ts-invariant/process",
++  "type": "module",
+   "main": "./main.js",
+   "module": "./index.js",
+   "types": "./index.d.ts",

@@ -18,6 +18,9 @@
 		"LICENSE",
 		"package.json"
 	],
+	"scripts": {
+	  "postinstall": "patch-package"
+	},
 	"@peerDependencies": "Keep peerDeps and devDeps synced. (having own modules, which use explicit-versioning, at end)",
 	"peerDependencies": {
 		"firebase": "^7.7.0",
@@ -96,6 +99,7 @@
 		"mobx-sync": "3.0.0",
 		"moment": "2.24.0",
 		"node-sass": "^6.0.0",
+		"patch-package": "^6.4.7",
 		"postcss-loader": "^6.1.0",
 		"raven-js": "^3.27.0",
 		"rc-slider": "^8.7.1",
