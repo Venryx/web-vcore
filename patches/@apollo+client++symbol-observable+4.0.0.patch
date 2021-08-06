@@ -1,0 +1,10 @@
+diff --git a/node_modules/@apollo/client/node_modules/symbol-observable/package.json b/node_modules/@apollo/client/node_modules/symbol-observable/package.json
+index 36b5398..1cde37c 100644
+--- a/node_modules/@apollo/client/node_modules/symbol-observable/package.json
++++ b/node_modules/@apollo/client/node_modules/symbol-observable/package.json
+@@ -1,26 +1,32 @@
+   "license": "MIT",
++  "type": "module",
+   "main": "lib/index.js",
+   "module": "es/index.js",
+   "name": "symbol-observable",

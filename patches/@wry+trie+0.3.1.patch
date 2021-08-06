@@ -1,0 +1,12 @@
+diff --git a/node_modules/@wry/trie/package.json b/node_modules/@wry/trie/package.json
+index 950d387..96c8851 100644
+--- a/node_modules/@wry/trie/package.json
++++ b/node_modules/@wry/trie/package.json
+@@ -1,27 +1,29 @@
+   "license": "MIT",
+-  "main": "lib/trie.js",
++  "type": "module",
++  "main": "lib/trie.esm.js",
+   "module": "lib/trie.esm.js",
+   "name": "@wry/trie",
+   "repository": {

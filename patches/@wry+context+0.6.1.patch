@@ -1,0 +1,12 @@
+diff --git a/node_modules/@wry/context/package.json b/node_modules/@wry/context/package.json
+index 6a7749a..d543d7d 100644
+--- a/node_modules/@wry/context/package.json
++++ b/node_modules/@wry/context/package.json
+@@ -1,27 +1,29 @@
+   "license": "MIT",
+-  "main": "lib/context.js",
++  "type": "module",
++  "main": "lib/context.esm.js",
+   "module": "lib/context.esm.js",
+   "name": "@wry/context",
+   "repository": {

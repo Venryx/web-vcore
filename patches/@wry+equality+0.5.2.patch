@@ -1,0 +1,12 @@
+diff --git a/node_modules/@wry/equality/package.json b/node_modules/@wry/equality/package.json
+index 162bf76..20f327f 100644
+--- a/node_modules/@wry/equality/package.json
++++ b/node_modules/@wry/equality/package.json
+@@ -1,27 +1,28 @@
+   "license": "MIT",
+-  "main": "lib/equality.js",
++  "type": "module",
++  "main": "lib/equality.esm.js",
+   "module": "lib/equality.esm.js",
+   "name": "@wry/equality",
+   "repository": {

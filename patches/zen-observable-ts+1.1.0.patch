@@ -1,0 +1,9 @@
+diff --git a/node_modules/zen-observable-ts/package.json b/node_modules/zen-observable-ts/package.json
+index bad4f6d..8a7196c 100644
+--- a/node_modules/zen-observable-ts/package.json
++++ b/node_modules/zen-observable-ts/package.json
+@@ -1,26 +1,27 @@
+   "types": "index.d.ts",
++  "type": "module",
+   "version": "1.1.0"
+ }

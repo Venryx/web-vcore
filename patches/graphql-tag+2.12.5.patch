@@ -1,0 +1,10 @@
+diff --git a/node_modules/graphql-tag/package.json b/node_modules/graphql-tag/package.json
+index 18716c1..60750ce 100644
+--- a/node_modules/graphql-tag/package.json
++++ b/node_modules/graphql-tag/package.json
+@@ -1,26 +1,27 @@
+   "license": "MIT",
++  "type": "module",
+   "main": "./main.js",
+   "module": "./lib/index.js",
+   "name": "graphql-tag",
