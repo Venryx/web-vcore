@@ -1,7 +1,7 @@
 {
 	"name": "web-vcore",
 	"description": "Core code shared between my projects, for web-app frontends.",
-	"version": "0.0.9",
+	"version": "0.0.10",
 	"license": "MIT",
 	"author": "Venryx (https://venryx.com)",
 	"repository": "https://github.com/Venryx/web-vcore",
@@ -19,7 +19,7 @@
 		"package.json"
 	],
 	"scripts": {
-	  "postinstall": "patch-package"
+		"postinstall": "patch-package"
 	},
 	"@peerDependencies": "Keep peerDeps and devDeps synced. (having own modules, which use explicit-versioning, at end)",
 	"peerDependencies": {
