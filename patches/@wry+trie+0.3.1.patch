@@ -1,10 +1,13 @@
 diff --git a/node_modules/@wry/trie/package.json b/node_modules/@wry/trie/package.json
-index ee0e009..2a52395 100644
+index ee0e009..d8ddf5a 100644
 --- a/node_modules/@wry/trie/package.json
 +++ b/node_modules/@wry/trie/package.json
-@@ -6,6 +6,7 @@
+@@ -4,8 +4,9 @@
+   "author": "Ben Newman <ben@eloper.dev>",
+   "description": "https://en.wikipedia.org/wiki/Trie",
    "license": "MIT",
-   "main": "lib/trie.js",
+-  "main": "lib/trie.js",
++  "main": "lib/trie.esm.js",
    "module": "lib/trie.esm.js",
 +  "type": "module",
    "types": "lib/trie.d.ts",

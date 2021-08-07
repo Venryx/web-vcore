@@ -1,10 +1,13 @@
 diff --git a/node_modules/@wry/context/package.json b/node_modules/@wry/context/package.json
-index b66fd24..c2a597a 100644
+index b66fd24..8805814 100644
 --- a/node_modules/@wry/context/package.json
 +++ b/node_modules/@wry/context/package.json
-@@ -6,6 +6,7 @@
+@@ -4,8 +4,9 @@
+   "author": "Ben Newman <ben@eloper.dev>",
+   "description": "Manage contextual information needed by (a)synchronous tasks without explicitly passing objects around",
    "license": "MIT",
-   "main": "lib/context.js",
+-  "main": "lib/context.js",
++  "main": "lib/context.esm.js",
    "module": "lib/context.esm.js",
 +  "type": "module",
    "types": "lib/context.d.ts",

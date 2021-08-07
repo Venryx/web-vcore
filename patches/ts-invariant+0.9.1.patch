@@ -1,12 +1,109 @@
+diff --git a/node_modules/ts-invariant/lib_cjs/invariant.js b/node_modules/ts-invariant/lib_cjs/invariant.js
+new file mode 100644
+index 0000000..a0750f4
+--- /dev/null
++++ b/node_modules/ts-invariant/lib_cjs/invariant.js
+@@ -0,0 +1,60 @@
++'use strict';
++
++Object.defineProperty(exports, '__esModule', { value: true });
++
++var tslib = require('tslib');
++
++var genericMessage = "Invariant Violation";
++var _a = Object.setPrototypeOf, setPrototypeOf = _a === void 0 ? function (obj, proto) {
++    obj.__proto__ = proto;
++    return obj;
++} : _a;
++var InvariantError = /** @class */ (function (_super) {
++    tslib.__extends(InvariantError, _super);
++    function InvariantError(message) {
++        if (message === void 0) { message = genericMessage; }
++        var _this = _super.call(this, typeof message === "number"
++            ? genericMessage + ": " + message + " (see https://github.com/apollographql/invariant-packages)"
++            : message) || this;
++        _this.framesToPop = 1;
++        _this.name = genericMessage;
++        setPrototypeOf(_this, InvariantError.prototype);
++        return _this;
++    }
++    return InvariantError;
++}(Error));
++function invariant(condition, message) {
++    if (!condition) {
++        throw new InvariantError(message);
++    }
++}
++var verbosityLevels = ["debug", "log", "warn", "error", "silent"];
++var verbosityLevel = verbosityLevels.indexOf("log");
++function wrapConsoleMethod(name) {
++    return function () {
++        if (verbosityLevels.indexOf(name) >= verbosityLevel) {
++            // Default to console.log if this host environment happens not to provide
++            // all the console.* methods we need.
++            var method = console[name] || console.log;
++            return method.apply(console, arguments);
++        }
++    };
++}
++(function (invariant) {
++    invariant.debug = wrapConsoleMethod("debug");
++    invariant.log = wrapConsoleMethod("log");
++    invariant.warn = wrapConsoleMethod("warn");
++    invariant.error = wrapConsoleMethod("error");
++})(invariant || (invariant = {}));
++function setVerbosity(level) {
++    var old = verbosityLevels[verbosityLevel];
++    verbosityLevel = Math.max(0, verbosityLevels.indexOf(level));
++    return old;
++}
++var invariant$1 = invariant;
++
++exports.InvariantError = InvariantError;
++exports['default'] = invariant$1;
++exports.invariant = invariant;
++exports.setVerbosity = setVerbosity;
++//# sourceMappingURL=invariant.js.map
+diff --git a/node_modules/ts-invariant/lib_cjs/package.json b/node_modules/ts-invariant/lib_cjs/package.json
+new file mode 100644
+index 0000000..7156107
+--- /dev/null
++++ b/node_modules/ts-invariant/lib_cjs/package.json
+@@ -0,0 +1 @@
++{"type": "commonjs"}
+\ No newline at end of file
 diff --git a/node_modules/ts-invariant/package.json b/node_modules/ts-invariant/package.json
-index 5c297d7..493d886 100644
+index 5c297d7..c10623d 100644
 --- a/node_modules/ts-invariant/package.json
 +++ b/node_modules/ts-invariant/package.json
-@@ -6,6 +6,7 @@
+@@ -4,8 +4,17 @@
+   "author": "Ben Newman <ben@apollographql.com>",
+   "description": "TypeScript implementation of invariant(condition, message)",
    "license": "MIT",
-   "main": "lib/invariant.js",
+-  "main": "lib/invariant.js",
++  "main": "lib_cjs/invariant.js",
    "module": "lib/invariant.esm.js",
 +  "type": "module",
++  "exports": {
++      ".": {
++          "module": "./lib/invariant.esm.js",
++          "import": "./lib/invariant.esm.js",
++          "default": "./lib_cjs/invariant.js"
++      },
++      "./": "./"
++  },
    "types": "lib/invariant.d.ts",
    "keywords": [
      "invariant",
+diff --git a/node_modules/ts-invariant/process/package.json b/node_modules/ts-invariant/process/package.json
+index 0f2cc43..6ddf746 100644
+--- a/node_modules/ts-invariant/process/package.json
++++ b/node_modules/ts-invariant/process/package.json
+@@ -2,6 +2,7 @@
+   "name": "ts-invariant/process",
+   "main": "./main.js",
+   "module": "./index.js",
++  "type": "module",
+   "types": "./index.d.ts",
+   "sideEffects": [
+     "./main.js",
