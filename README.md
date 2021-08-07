@@ -39,6 +39,15 @@ import type {} from "web-vcore/nm/@All"; // helps vscode's auto-importer notice 
 ```
 5) Various other things, like populating the RootStore interface. (for now, just reference an existing project that uses web-vcore, as seen below)
 
+### Creating package patches
+
+Regular: `patch-package patch MY_PACKAGE`
+With package.json: `patch-package patch MY_PACKAGE --exclude 'nothing'`
+
+If including package.json, modify the diff file afterward to omit the npm-install-related noise.
+
+For details on how the patch files are parsed, see here: https://github.com/ds300/patch-package/blob/5c2c92bf504885fba4840870a23fc8999c00e572/src/patch/parse.ts
+
 ### Documentation
 
 For the most part, web-vcore is meant to be learned/used based on referencing the codebase of existing projects using it (eg. [Debate Map](https://github.com/debate-map/app)). This is because the package is only intended/expected to be used for projects I'm building, so there's not that much benefit to creating full-fledged documentation.
