@@ -37,6 +37,11 @@ import type {} from "web-vcore/nm/@All"; // helps vscode's auto-importer notice 
 ```
 "postinstall": "patch-package --patch-dir ./node_modules/web-vcore/patches"
 ```
+And this to your `.yarnrc.yml` file:
+```
+plugins:
+  - node_modules/web-vcore/.yarn/plugins/yarn-vtools-plugin/index.js
+```
 5) Various other things, like populating the RootStore interface. (for now, just reference an existing project that uses web-vcore, as seen below)
 
 ### Creating package patches

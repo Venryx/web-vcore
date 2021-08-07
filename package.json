@@ -15,6 +15,7 @@
 		"nm_Source",
 		"Scripts",
 		"patches",
+		".yarn/plugins/yarn-vtools-plugin",
 		"README.md",
 		"LICENSE",
 		"package.json"
