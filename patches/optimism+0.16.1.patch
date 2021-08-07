@@ -2,6 +2,6 @@ diff --git a/node_modules/optimism/package.json b/node_modules/optimism/package.
 index f3ff064..ecb3f6a 100644
 --- a/node_modules/optimism/package.json
 +++ b/node_modules/optimism/package.json
-@@ -1,54 +1,8 @@
+@@ -1,1 +1,2 @@
  {
 +  "type": "module",

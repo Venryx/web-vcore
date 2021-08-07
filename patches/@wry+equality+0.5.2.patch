@@ -2,7 +2,7 @@ diff --git a/node_modules/@wry/equality/package.json b/node_modules/@wry/equalit
 index 162bf76..20f327f 100644
 --- a/node_modules/@wry/equality/package.json
 +++ b/node_modules/@wry/equality/package.json
-@@ -1,27 +1,28 @@
+@@ -1,5 +1,7 @@
    "license": "MIT",
 -  "main": "lib/equality.js",
 +  "type": "module",

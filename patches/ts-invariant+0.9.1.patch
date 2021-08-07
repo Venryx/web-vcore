@@ -2,7 +2,7 @@ diff --git a/node_modules/ts-invariant/package.json b/node_modules/ts-invariant/
 index 91f4e03..df29d32 100644
 --- a/node_modules/ts-invariant/package.json
 +++ b/node_modules/ts-invariant/package.json
-@@ -1,26 +1,27 @@
+@@ -1,5 +1,6 @@
    "gitHead": "a88a6701d6a65bfd46dad7be3e07be85fc0c60f2",
    "homepage": "https://github.com/apollographql/invariant-packages",
 +  "type": "module",

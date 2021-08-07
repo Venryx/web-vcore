@@ -10,7 +10,7 @@ npm install web-vcore
 ```
 2) [opt] Add the following to your code entry-file (or anywhere really):
 ```
-import "web-vcore/nm/@All"; // helps vscode's auto-importer notice the "web-vcore/nm/*" package re-exports
+import type {} from "web-vcore/nm/@All"; // helps vscode's auto-importer notice the "web-vcore/nm/*" package re-exports
 ```
 3) Add the following to your `tsconfig.json`: (these entries are only needed for packages that are peer-dependencies of a user-project node-module)
 ```
@@ -33,7 +33,11 @@ import "web-vcore/nm/@All"; // helps vscode's auto-importer notice the "web-vcor
 	//{"path": "../../node_modules/web-vcore"},
 ]
 ```
-4) Various other things, like populating the RootStore interface. (for now, just reference an existing project that uses web-vcore, as seen below)
+4) Make-so web-vcore's package-patches get applied, by adding this to your project's package.json `scripts` field:
+```
+"postinstall": "patch-package --patch-dir ./node_modules/web-vcore/patches"
+```
+5) Various other things, like populating the RootStore interface. (for now, just reference an existing project that uses web-vcore, as seen below)
 
 ### Documentation
 

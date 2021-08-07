@@ -2,7 +2,7 @@ diff --git a/node_modules/@wry/trie/package.json b/node_modules/@wry/trie/packag
 index 950d387..96c8851 100644
 --- a/node_modules/@wry/trie/package.json
 +++ b/node_modules/@wry/trie/package.json
-@@ -1,27 +1,29 @@
+@@ -1,5 +1,7 @@
    "license": "MIT",
 -  "main": "lib/trie.js",
 +  "type": "module",

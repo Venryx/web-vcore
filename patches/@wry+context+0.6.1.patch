@@ -2,7 +2,7 @@ diff --git a/node_modules/@wry/context/package.json b/node_modules/@wry/context/
 index 6a7749a..d543d7d 100644
 --- a/node_modules/@wry/context/package.json
 +++ b/node_modules/@wry/context/package.json
-@@ -1,27 +1,29 @@
+@@ -1,5 +1,7 @@
    "license": "MIT",
 -  "main": "lib/context.js",
 +  "type": "module",
