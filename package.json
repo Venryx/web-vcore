@@ -14,6 +14,7 @@
 		"nm",
 		"nm_Source",
 		"Scripts",
+		"patches",
 		"README.md",
 		"LICENSE",
 		"package.json"
