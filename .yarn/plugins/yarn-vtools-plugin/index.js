@@ -1,21 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const module_1 = require("module");
 const config = {};
-function ConditionsMatch(conditions) {
-    return conditions.every(cond => ConditionMatches(cond));
-}
-function ConditionMatches(condition) {
-    let result = true;
-    if (condition.envVarEquals) {
-        const envVarVal = process.env[condition.envVarEquals.name];
-        //console.log("Val:", envVarVal, "@env:", process.env);
-        if (envVarVal != condition.envVarEquals.value)
-            result = false;
-    }
-    if (condition.invert)
-        result = !result;
-    return result;
-}
 //const plugin: Plugin<CoreHooks & PatchHooks> = {...};
 //export {plugin as default};
 //export default plugin;
@@ -35,7 +21,7 @@ module.exports = {
                   scriptEnv.HELLO_WORLD = `my first plugin!`;
                 },*/
                 registerPackageExtensions: async (configuration, registerPackageExtension) => {
-                    var _a, _b, _c, _d, _e;
+                    var _a, _b, _c, _d;
                     const paths = require("path");
                     const fs = require("fs");
                     const { structUtils } = require("@yarnpkg/core");
@@ -49,22 +35,42 @@ module.exports = {
                             return `[could not find name for ident-hash: ${identHash}]`;
                         return entry[1].name;
                     }
-                    console.log("Yarn-vtools-plugin starting...");
-                    const projectFolder = configuration.projectCwd;
-                    const packageJSONPath = paths.join(projectFolder, "package.json").replace("\\C:\\", "C:\\");
+                    //console.log("Yarn-vtools-plugin starting...");
+                    const projectFolder = configuration.projectCwd.replace(/\\/g, "/").replace("/C:/", "C:/");
+                    const packageJSONPath = paths.join(projectFolder, "package.json");
                     const packageJSONText = fs.readFileSync(packageJSONPath).toString();
                     const packageJSONObj = JSON.parse(packageJSONText);
-                    const groups = packageJSONObj.dependencyOverrideGroups;
-                    if (groups == null)
+                    let groups;
+                    const yvtConfigPaths = [
+                        paths.join(projectFolder, "YVTConfig.js"),
+                        paths.join(projectFolder, "YVTConfig.mjs"),
+                        paths.join(projectFolder, "YVTConfig.cjs"),
+                    ];
+                    const yvtConfigPath = yvtConfigPaths.find(a => fs.existsSync(a));
+                    if (yvtConfigPath) {
+                        console.log("Yarn-vtools-plugin starting. Config found at:", yvtConfigPath);
+                        /*const yvtConfigJSON = fs.readFileSync(yvtConfigPath).toString();
+                        const yvtConfigObj = JSON.parse(yvtConfigJSON);*/
+                        const require_node = module_1.createRequire(projectFolder);
+                        const yvtConfigFileExports = require_node(yvtConfigPath);
+                        //console.log("yvtConfigFileExports:", yvtConfigFileExports);
+                        const yvtConfigObj = yvtConfigFileExports.config;
+                        groups = yvtConfigObj.dependencyOverrideGroups;
+                    }
+                    else if (packageJSONObj.dependencyOverrideGroups != null) {
+                        console.log("Yarn-vtools-plugin starting. Config found in:", packageJSONPath);
+                        groups = packageJSONObj.dependencyOverrideGroups;
+                    }
+                    else {
+                        console.log("Yarn-vtools-plugin could not find config info, in project folder:", projectFolder);
                         return;
+                    }
                     const regularDepsToOmit_byParentPackIdentHash = new Map();
                     for (const group of groups) {
+                        if (!group)
+                            continue;
                         // set default field values
                         group.omitPriorDeps_auto = (_a = group.omitPriorDeps_auto) !== null && _a !== void 0 ? _a : true;
-                        if (!ConditionsMatch((_b = group.conditions) !== null && _b !== void 0 ? _b : [])) {
-                            console.log(`Ignoring overrides group "${group.name}"...`);
-                            continue;
-                        }
                         console.log(`Preparing overrides group "${group.name}"...`);
                         // helper for most common case, of overriding the versions/protocols of project direct-dependencies (note: lacks some options that overrides_forDeps provides, like overrides for peer-deps)
                         if (group.overrides_forSelf) {
@@ -81,12 +87,12 @@ module.exports = {
                             ];
                             regularDepsToOmit_byParentPackIdentHash.set(selfPackage_descriptor.identHash, selfPackage_extensionData_identHashes);
                         }
-                        for (const [packageDescriptor, packageOverrides] of Object.entries((_c = group.overrides_forDeps) !== null && _c !== void 0 ? _c : [])) {
+                        for (const [packageDescriptor, packageOverrides] of Object.entries((_b = group.overrides_forDeps) !== null && _b !== void 0 ? _b : [])) {
                             const descriptor = structUtils.parseDescriptor(packageDescriptor, true);
                             registerPackageExtension(descriptor, packageOverrides);
                             const allPackageOverrides_identHashes = [
-                                ...group.omitPriorDeps_auto ? Object.keys((_d = packageOverrides.dependencies) !== null && _d !== void 0 ? _d : {}).map(DepNameToIdentHash) : [],
-                                ...group.omitPriorDeps_auto ? Object.keys((_e = packageOverrides.peerDependencies) !== null && _e !== void 0 ? _e : {}).map(DepNameToIdentHash) : [],
+                                ...group.omitPriorDeps_auto ? Object.keys((_c = packageOverrides.dependencies) !== null && _c !== void 0 ? _c : {}).map(DepNameToIdentHash) : [],
+                                ...group.omitPriorDeps_auto ? Object.keys((_d = packageOverrides.peerDependencies) !== null && _d !== void 0 ? _d : {}).map(DepNameToIdentHash) : [],
                                 ...group.omitPriorDeps_manual ? Object.keys(group.omitPriorDeps_manual).map(DepNameToIdentHash) : [],
                             ];
                             regularDepsToOmit_byParentPackIdentHash.set(descriptor.identHash, allPackageOverrides_identHashes);

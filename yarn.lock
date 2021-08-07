@@ -4724,9 +4724,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-vbase@link:../../../@Modules/eslint-config-vbase/Main::locator=web-vcore%40workspace%3A.":
+"eslint-config-vbase@link:../../..//@Modules/eslint-config-vbase/Main::locator=web-vcore%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "eslint-config-vbase@link:../../../@Modules/eslint-config-vbase/Main::locator=web-vcore%40workspace%3A."
+  resolution: "eslint-config-vbase@link:../../..//@Modules/eslint-config-vbase/Main::locator=web-vcore%40workspace%3A."
   languageName: node
   linkType: soft
 
@@ -5786,9 +5786,9 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"graphql-feedback@link:../../../@Modules/graphql-feedback/Main::locator=web-vcore%40workspace%3A.":
+"graphql-feedback@link:../../..//@Modules/graphql-feedback/Main::locator=web-vcore%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "graphql-feedback@link:../../../@Modules/graphql-feedback/Main::locator=web-vcore%40workspace%3A."
+  resolution: "graphql-feedback@link:../../..//@Modules/graphql-feedback/Main::locator=web-vcore%40workspace%3A."
   languageName: node
   linkType: soft
 
@@ -6997,9 +6997,9 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"js-vextensions@link:../../../@Modules/js-vextensions/Main::locator=web-vcore%40workspace%3A.":
+"js-vextensions@link:../../..//@Modules/js-vextensions/Main::locator=web-vcore%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "js-vextensions@link:../../../@Modules/js-vextensions/Main::locator=web-vcore%40workspace%3A."
+  resolution: "js-vextensions@link:../../..//@Modules/js-vextensions/Main::locator=web-vcore%40workspace%3A."
   languageName: node
   linkType: soft
 
@@ -7991,9 +7991,9 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"mobx-graphlink@link:../../../@Modules/mobx-graphlink/Main::locator=web-vcore%40workspace%3A.":
+"mobx-graphlink@link:../../..//@Modules/mobx-graphlink/Main::locator=web-vcore%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "mobx-graphlink@link:../../../@Modules/mobx-graphlink/Main::locator=web-vcore%40workspace%3A."
+  resolution: "mobx-graphlink@link:../../..//@Modules/mobx-graphlink/Main::locator=web-vcore%40workspace%3A."
   languageName: node
   linkType: soft
 
@@ -10023,15 +10023,15 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"react-vcomponents@link:../../../@Modules/react-vcomponents/Main::locator=web-vcore%40workspace%3A.":
+"react-vcomponents@link:../../..//@Modules/react-vcomponents/Main::locator=web-vcore%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "react-vcomponents@link:../../../@Modules/react-vcomponents/Main::locator=web-vcore%40workspace%3A."
+  resolution: "react-vcomponents@link:../../..//@Modules/react-vcomponents/Main::locator=web-vcore%40workspace%3A."
   languageName: node
   linkType: soft
 
-"react-vextensions@link:../../../@Modules/react-vextensions/Main::locator=web-vcore%40workspace%3A.":
+"react-vextensions@link:../../..//@Modules/react-vextensions/Main::locator=web-vcore%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "react-vextensions@link:../../../@Modules/react-vextensions/Main::locator=web-vcore%40workspace%3A."
+  resolution: "react-vextensions@link:../../..//@Modules/react-vextensions/Main::locator=web-vcore%40workspace%3A."
   languageName: node
   linkType: soft
 
@@ -10050,15 +10050,15 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"react-vmenu@link:../../../@Modules/react-vmenu/Main::locator=web-vcore%40workspace%3A.":
+"react-vmenu@link:../../..//@Modules/react-vmenu/Main::locator=web-vcore%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "react-vmenu@link:../../../@Modules/react-vmenu/Main::locator=web-vcore%40workspace%3A."
+  resolution: "react-vmenu@link:../../..//@Modules/react-vmenu/Main::locator=web-vcore%40workspace%3A."
   languageName: node
   linkType: soft
 
-"react-vmessagebox@link:../../../@Modules/react-vmessagebox/Main::locator=web-vcore%40workspace%3A.":
+"react-vmessagebox@link:../../..//@Modules/react-vmessagebox/Main::locator=web-vcore%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "react-vmessagebox@link:../../../@Modules/react-vmessagebox/Main::locator=web-vcore%40workspace%3A."
+  resolution: "react-vmessagebox@link:../../..//@Modules/react-vmessagebox/Main::locator=web-vcore%40workspace%3A."
   languageName: node
   linkType: soft
 

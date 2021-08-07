@@ -15,7 +15,6 @@
 		"nm_Source",
 		"Scripts",
 		"patches",
-		".yarn/plugins/yarn-vtools-plugin",
 		"README.md",
 		"LICENSE",
 		"package.json"
@@ -23,29 +22,6 @@
 	"scripts": {
 		"postinstall": "patch-package"
 	},
-	"dependencyOverrideGroups": [
-		{
-			"name": "venryx",
-			"conditions": [
-				{
-					"envVarEquals": {
-						"name": "VLIBS_USER",
-						"value": "venryx"
-					}
-				}
-			],
-			"overrides_forSelf": {
-				"graphql-feedback": "link:../../../@Modules/graphql-feedback/Main",
-				"js-vextensions": "link:../../../@Modules/js-vextensions/Main",
-				"react-vextensions": "link:../../../@Modules/react-vextensions/Main",
-				"react-vcomponents": "link:../../../@Modules/react-vcomponents/Main",
-				"react-vmenu": "link:../../../@Modules/react-vmenu/Main",
-				"react-vmessagebox": "link:../../../@Modules/react-vmessagebox/Main",
-				"mobx-graphlink": "link:../../../@Modules/mobx-graphlink/Main",
-				"eslint-config-vbase": "link:../../../@Modules/eslint-config-vbase/Main"
-			}
-		}
-	],
 	"@peerDependencies": "Keep peerDeps and devDeps synced. (having own modules, which use explicit-versioning, at end)",
 	"peerDependencies": {
 		"firebase": "^7.7.0",
