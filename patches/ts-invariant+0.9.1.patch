@@ -1,22 +1,12 @@
 diff --git a/node_modules/ts-invariant/package.json b/node_modules/ts-invariant/package.json
-index 91f4e03..df29d32 100644
+index 5c297d7..493d886 100644
 --- a/node_modules/ts-invariant/package.json
 +++ b/node_modules/ts-invariant/package.json
-@@ -1,5 +1,6 @@
-   "gitHead": "a88a6701d6a65bfd46dad7be3e07be85fc0c60f2",
-   "homepage": "https://github.com/apollographql/invariant-packages",
+@@ -6,6 +6,7 @@
+   "license": "MIT",
+   "main": "lib/invariant.js",
+   "module": "lib/invariant.esm.js",
 +  "type": "module",
+   "types": "lib/invariant.d.ts",
    "keywords": [
      "invariant",
-     "assertion",
-diff --git a/node_modules/ts-invariant/process/package.json b/node_modules/ts-invariant/process/package.json
-index 0f2cc43..6c8737b 100644
---- a/node_modules/ts-invariant/process/package.json
-+++ b/node_modules/ts-invariant/process/package.json
-@@ -1,5 +1,6 @@
- {
-   "name": "ts-invariant/process",
-+  "type": "module",
-   "main": "./main.js",
-   "module": "./index.js",
-   "types": "./index.d.ts",

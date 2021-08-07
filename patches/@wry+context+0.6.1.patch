@@ -1,12 +1,12 @@
 diff --git a/node_modules/@wry/context/package.json b/node_modules/@wry/context/package.json
-index 6a7749a..d543d7d 100644
+index b66fd24..c2a597a 100644
 --- a/node_modules/@wry/context/package.json
 +++ b/node_modules/@wry/context/package.json
-@@ -1,5 +1,7 @@
+@@ -6,6 +6,7 @@
    "license": "MIT",
--  "main": "lib/context.js",
-+  "type": "module",
-+  "main": "lib/context.esm.js",
+   "main": "lib/context.js",
    "module": "lib/context.esm.js",
-   "name": "@wry/context",
-   "repository": {
++  "type": "module",
+   "types": "lib/context.d.ts",
+   "keywords": [],
+   "homepage": "https://github.com/benjamn/wryware",

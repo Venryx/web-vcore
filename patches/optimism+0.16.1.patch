@@ -1,7 +1,12 @@
 diff --git a/node_modules/optimism/package.json b/node_modules/optimism/package.json
-index f3ff064..ecb3f6a 100644
+index b9e8ac2..91d38fb 100644
 --- a/node_modules/optimism/package.json
 +++ b/node_modules/optimism/package.json
-@@ -1,1 +1,2 @@
- {
+@@ -16,6 +16,7 @@
+   ],
+   "main": "lib/bundle.cjs.js",
+   "module": "lib/bundle.esm.js",
 +  "type": "module",
+   "types": "lib/index.d.ts",
+   "license": "MIT",
+   "homepage": "https://github.com/benjamn/optimism#readme",

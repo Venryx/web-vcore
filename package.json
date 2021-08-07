@@ -20,7 +20,7 @@
 		"package.json"
 	],
 	"scripts": {
-		"#postinstall": "patch-package"
+		"postinstall": "patch-package"
 	},
 	"dependencyOverrideGroups": [
 		{
