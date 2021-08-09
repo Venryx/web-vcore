@@ -1,6 +1,17 @@
 exports.config = {};
 
 console.log("VLIBS_USER:", process.env.VLIBS_USER);
+
+exports.venryx_standardSymlinkedPackages = [
+	"graphql-feedback",
+	"js-vextensions",
+	"react-vextensions",
+	"react-vcomponents",
+	"react-vmenu",
+	"react-vmessagebox",
+	"mobx-graphlink",
+	"eslint-config-vbase",
+];
 if (process.env.VLIBS_USER == "venryx") {
 	//const fs = require("fs");
 
@@ -10,28 +21,16 @@ if (process.env.VLIBS_USER == "venryx") {
 	const vReposRoot_stepsUpFromThisDir = thisDir.split("/").length - vReposRoot.split("/").length;
 	const vReposRoot_stepUpStr = "../".repeat(vReposRoot_stepsUpFromThisDir);
 
-	exports.config.dependencyOverrideGroups = [
-		{
+	if (process.env.VLIBS_USE_SYMLINKS != "off") {
+		//const {standardSymlinkedPackages} = require("./Scripts/@ByUser/Venryx.js");
+		const overrideGroup = {
 			name: "venryx",
-			/*conditions: [
-				{
-					envVarEquals: {
-						name: "VLIBS_USER",
-						value: "venryx",
-					},
-				},
-			],*/
-			overrides_forSelf: process.env.VLIBS_USE_SYMLINKS == "off" ? {} : {
-				// use relative paths, since yarn is more reliable with those fsr (last time I tried anyway)
-				"graphql-feedback": `link:${vReposRoot_stepUpStr}/@Modules/graphql-feedback/Main`,
-				"js-vextensions": `link:${vReposRoot_stepUpStr}/@Modules/js-vextensions/Main`,
-				"react-vextensions": `link:${vReposRoot_stepUpStr}/@Modules/react-vextensions/Main`,
-				"react-vcomponents": `link:${vReposRoot_stepUpStr}/@Modules/react-vcomponents/Main`,
-				"react-vmenu": `link:${vReposRoot_stepUpStr}/@Modules/react-vmenu/Main`,
-				"react-vmessagebox": `link:${vReposRoot_stepUpStr}/@Modules/react-vmessagebox/Main`,
-				"mobx-graphlink": `link:${vReposRoot_stepUpStr}/@Modules/mobx-graphlink/Main`,
-				"eslint-config-vbase": `link:${vReposRoot_stepUpStr}/@Modules/eslint-config-vbase/Main`,
-			},
-		},
-	];
+			overrides_forSelf: {},
+		};
+		for (const name of venryx_standardSymlinkedPackages) {
+			// use relative paths, since yarn is more reliable with those fsr (last time I tried anyway)
+			overrideGroup.overrides_forSelf[name] = `link:${vReposRoot_stepUpStr}/@Modules/${name}/Main`;
+		}
+		exports.config.dependencyOverrideGroups = [overrideGroup];
+	}
 }
