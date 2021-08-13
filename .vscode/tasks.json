@@ -2,14 +2,29 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "tsc (global problem-checking)",
+			"label": "tsc (emit)",
 			"type": "shell",
 
+			"command": "./node_modules/.bin/tsc",
+			"args": ["--build", "--watch"],
 			// tsc is not reliably getting placed in "./node_modules/.bin", fsr
-			/*"command": "./node_modules/.bin/tsc",
-			"args": ["--watch", "--noEmit", "--project", "."],*/
-			"command": "node",
-			"args": ["./node_modules/typescript/bin/tsc", "--watch", "--noEmit", "--project", "."],
+			/*"command": "node",
+			"args": ["./node_modules/typescript/bin/tsc", "--build", "--watch"],*/
+
+			"problemMatcher": "$tsc-watch",
+			"isBackground": true,
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "tsc (no emit; if builds already handled by user-project)",
+			"type": "shell",
+
+			"command": "./node_modules/.bin/tsc",
+			//"args": ["--watch", "--noEmit", "--project", "."],
+			"args": ["--watch", "--noEmit"],
 
 			"problemMatcher": "$tsc-watch",
 			"isBackground": true,
