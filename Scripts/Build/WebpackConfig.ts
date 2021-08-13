@@ -5,7 +5,8 @@ import SymlinkPlugin from "enhanced-resolve/lib/SymlinkPlugin.js";
 import fs from "fs";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 //import {CE} from "js-vextensions";
-import {CE, E} from "js-vextensions/Source"; // temp; require source, thus ts-node compiles to commonjs (fix for that ts-node doesn't support es2015-modules)
+//import {CE, E} from "js-vextensions/Source"; // temp; require source, thus ts-node compiles to commonjs (fix for that ts-node doesn't support es2015-modules)
+import {CE, E} from "js-vextensions";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import {createRequire} from "module";
 import pathModule from "path";
@@ -16,6 +17,7 @@ import WebpackStringReplacer from "webpack-string-replacer";
 import ModuleDependencyWarning from "webpack/lib/ModuleDependencyWarning.js";
 import DuplicatePackageCheckerPlugin from "@cerner/duplicate-package-checker-webpack-plugin";
 import {MakeSoWebpackConfigOutputsStats} from "./WebpackConfig/OutputStats.js";
+import type {CreateConfig_ReturnType} from "../Config";
 
 // we could either add a reference from "./Scripts/tsconfig.json" to "./tsconfig.json", or we could use require; doing latter for now
 //import wvcPackageJSON from "../../package.json";
@@ -32,7 +34,7 @@ const __dirname = pathModule.dirname(fileURLToPath(import.meta.url));
 export function PathFromWebVCoreRoot(...subpathNodes: string[]) {
 	return pathModule.join(__dirname, "..", "..", ...subpathNodes);
 }
-export function FindNodeModule_FromUserProjectRoot(config: ReturnType<typeof CreateConfig>, name: string) {
+export function FindNodeModule_FromUserProjectRoot(config: CreateConfig_ReturnType, name: string) {
 	const paths = config.utils_paths;
 	if (fs.existsSync(paths.base("node_modules", name))) {
 		return paths.base("node_modules", name);
@@ -43,7 +45,7 @@ export function FindNodeModule_FromUserProjectRoot(config: ReturnType<typeof Cre
 	}
 	throw new Error(`Cannot find node-module "${name}". FirstCheck: ${paths.base("node_modules", name)}`);
 }
-export function FindNodeModule_FromWebVCoreRoot(config: ReturnType<typeof CreateConfig>, name: string) {
+export function FindNodeModule_FromWebVCoreRoot(config: CreateConfig_ReturnType, name: string) {
 	if (fs.existsSync(PathFromWebVCoreRoot("node_modules", name))) {
 		return PathFromWebVCoreRoot("node_modules", name);
 	}
@@ -117,7 +119,7 @@ export class TSLoaderEntry {
 	test: webpack.RuleSetCondition;
 }
 export class CreateWebpackConfig_Options {
-	config: ReturnType<typeof CreateConfig>;
+	config: CreateConfig_ReturnType;
 	npmPatch_replacerConfig: any;
 
 	/** Raw webpack-config field sets/overrides. */
@@ -262,7 +264,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	webpackConfig.plugins = [
 		// plugin to show any webpack warnings and prevent tests from running
 		function() {
-			const errors = [];
+			const errors = [] as any[];
 			this.hooks.done.tap("ShowWarningsAndStopTests", stats=>{
 				if (!stats.compilation.errors.length) return;
 
@@ -333,7 +335,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	// ==========
 
 	// javascript transpilation (can also run on typescript->javascript results)
-	webpackConfig.module.rules = [
+	webpackConfig.module!.rules = [
 		{
 			test: /\.(jsx?|tsx?)$/,
 			// we have babel ignore most node_modules (ie. include them raw), but we tell it to transpile the web-vcore typescript files
@@ -343,7 +345,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 				// fs.realpathSync(paths.base('node_modules', 'web-vcore')),
 				//fs.existsSync(PathFromWebVCoreRoot("Source")) ? fs.realpathSync(PathFromWebVCoreRoot("Source")) : null,
 				fs.existsSync(PathFromWebVCoreRoot("Dist")) ? fs.realpathSync(PathFromWebVCoreRoot("Dist")) : null,
-			].filter(a=>a),
+			].filter(a=>a) as string[],
 			loader: SubdepPath("babel-loader"),
 			options: {
 				presets: [
@@ -415,7 +417,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	// to reliably run ts-loader on node_modules folders, each must use a separate ts-loader instance
 	// (else it [sometimes] "finds" the tsconfig.json in one, and complains when the other packages' files aren't under its rootDir)
 	for (const [index, entry] of tsLoaderEntries.entries()) {
-		webpackConfig.module.rules.push({
+		webpackConfig.module!.rules.push({
 			// ensures that ts-loader ignores files outside of the path (not needed atm)
 			//include: entry.context,
 			test: entry.test,
@@ -434,7 +436,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	}
 
 	// for mobx-sync
-	webpackConfig.module.rules.push({test: /\.mjs$/, type: "javascript/auto"});
+	webpackConfig.module!.rules.push({test: /\.mjs$/, type: "javascript/auto"});
 
 	// file text-replacements
 	// ==========
@@ -445,7 +447,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	// ==========
 
 	webpackConfig.plugins.push(new MiniCssExtractPlugin());
-	webpackConfig.module.rules.push({
+	webpackConfig.module!.rules.push({
 		test: /\.css$/,
 		use: [
 			MiniCssExtractPlugin.loader,
@@ -458,7 +460,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 			},
 		],
 	});
-	webpackConfig.module.rules.push({
+	webpackConfig.module!.rules.push({
 		test: /\.scss$/,
 		use: [
 			MiniCssExtractPlugin.loader,
@@ -557,7 +559,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 	webpackConfig.plugins.push(new IgnoreNotFoundExportPlugin());
 
 	webpackConfig.plugins.push(new SpriteLoaderPlugin());
-	webpackConfig.module.rules.push({
+	webpackConfig.module!.rules.push({
 		test: /\.svg$/,
 		loader: SubdepPath("svg-sprite-loader"),
 		options: {}, // "options" must be present

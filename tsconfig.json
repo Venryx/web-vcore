@@ -70,6 +70,7 @@
 	],*/
 	"references": [
 		{"path": "./nm_Source"},
+		{"path": "./Scripts"},
 	],
 	"compileOnSave": true
 }

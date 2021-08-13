@@ -13,7 +13,7 @@ const debug = debug_base("app:config");
 declare global {
 	namespace NodeJS {
 		interface Global {
-			ENV: string;
+			ENV: string|undefined;
 			DEV: boolean;
 			PROD: boolean;
 			TEST: boolean;
@@ -128,3 +128,5 @@ export function CreateConfig(ext: Partial<typeof config_base> & {path_base: stri
 	}*/
 	return config;
 }
+
+export type CreateConfig_ReturnType = ReturnType<typeof CreateConfig>;

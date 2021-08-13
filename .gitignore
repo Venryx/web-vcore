@@ -1,8 +1,9 @@
+**/tsconfig.tsbuildinfo
+
 /node_modules
 /Dist
 /nm
-/nm_Source/tsconfig.tsbuildinfo
-/tsconfig.tsbuildinfo
+/Scripts_Dist
 
 # yarn
 .yarn/*

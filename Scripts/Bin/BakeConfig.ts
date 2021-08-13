@@ -1,11 +1,10 @@
 import debug_base from "debug";
 import fs from "fs";
-import path from "path";
+import type {CreateConfig_ReturnType} from "../Config";
 
-declare const {CreateConfig}: typeof import("../Config");
 const debug = debug_base("app:build:config");
 
-export function CreateBakedConfigFile(config: ReturnType<typeof CreateConfig>, environment: "dev" | "prod", configObj) {
+export function CreateBakedConfigFile(config: CreateConfig_ReturnType, environment: "dev" | "prod", configObj) {
 	const newText = Object.keys(configObj).map(key=>`export const ${key} = ${JSON.stringify(configObj[key])};`).join("\n");
 
 	const outputPath = config.utils_paths.base(environment === "dev" ? "Source/BakedConfig_Dev.ts" : "Source/BakedConfig_Prod.ts");

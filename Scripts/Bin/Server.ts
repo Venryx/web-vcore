@@ -4,12 +4,12 @@ import webpack from "webpack";
 import devMiddleware from "webpack-dev-middleware";
 import connectHistoryAPIFallback from "connect-history-api-fallback";
 import pathModule from "path";
+import type {CreateConfig_ReturnType} from "../Config";
 
 declare const ENV, DEV, PROD, TEST;
-declare const {CreateConfig}: typeof import("../Config");
 const debug = debug_base("app:server");
 
-export function Serve(config: ReturnType<typeof CreateConfig>, webpackConfig: webpack.Configuration, extToServe = ["html", "js", "css", "png", "jpg", "wasm"], writeToDisk = undefined) {
+export function Serve(config: CreateConfig_ReturnType, webpackConfig: webpack.Configuration, extToServe = ["html", "js", "css", "png", "jpg", "wasm"], writeToDisk = undefined) {
 	const paths = config.utils_paths;
 	const app = express();
 

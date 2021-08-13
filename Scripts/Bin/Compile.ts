@@ -3,17 +3,17 @@ import debug_base from "debug";
 import webpack from "webpack";
 import pathModule from "path";
 import {StartWebpackCompiler} from "../Build/WebpackCompiler.js";
+import type {CreateConfig_ReturnType} from "../Config";
 
-declare const {CreateConfig}: typeof import("../Config");
 const debug = debug_base("app:bin:compile");
 
-export function Compile(config: ReturnType<typeof CreateConfig>, webpackConfig: webpack.Configuration) {
+export function Compile(config: CreateConfig_ReturnType, webpackConfig: webpack.Configuration) {
 	const paths = config.utils_paths;
 	debug("Starting compiler.");
 	return Promise.resolve()
 		.then(()=>StartWebpackCompiler(config, webpackConfig))
 		.then(stats=>{
-			if (stats.warnings.length && config.compiler_fail_on_warning) {
+			if (stats.warnings!.length && config.compiler_fail_on_warning) {
 				throw new Error("Config set to fail on warning, exiting with status code '1'.");
 			}
 			debug("Copying resources to Dist folder. Resource folders:", config.resourceFolders, "Resource files:", config.resourceFiles);

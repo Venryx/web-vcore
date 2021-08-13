@@ -6,7 +6,7 @@ const {CyclicDependencyChecker} = depTools;
 
 export function MakeSoWebpackConfigOutputsStats(config: webpack.Configuration) {
 	let firstOutput = true;
-	config.plugins.push({
+	config.plugins!.push({
 		apply(compiler) {
 			compiler.hooks.afterEmit.tap("OutputStats", compilation=>{
 				const stats = compilation.getStats().toJson({
@@ -75,7 +75,7 @@ export function MakeSoWebpackConfigOutputsStats(config: webpack.Configuration) {
 		new CircularDependencyPlugin({exclude: /node_modules/})
 	); */
 
-	config.plugins.push(
+	config.plugins!.push(
 		new CyclicDependencyChecker(),
 	);
 
