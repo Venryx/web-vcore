@@ -27,7 +27,7 @@ if (process.env.VLIBS_USER == "venryx") {
 			name: "venryx",
 			overrides_forSelf: {},
 		};
-		for (const name of venryx_standardSymlinkedPackages) {
+		for (const name of exports.venryx_standardSymlinkedPackages) {
 			// use relative paths, since yarn is more reliable with those fsr (last time I tried anyway)
 			overrideGroup.overrides_forSelf[name] = `link:${vReposRoot_stepUpStr}/@Modules/${name}/Main`;
 		}
