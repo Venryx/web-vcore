@@ -21,7 +21,8 @@
 		"package.json"
 	],
 	"scripts": {
-		"postinstall": "patch-package"
+		"@comment_postinstall": "Behavior of postinstall script below: if no './node_modules/.bin' folder exists under web-vcore, web-vcore must be installed as a dependency, so run patch-package.",
+		"postinstall": "node -e \"let wvcAsDep = !require('fs').existsSync('./node_modules/.bin'); if (wvcAsDep) process.exit(1);\" || patch-package"
 	},
 	"@peerDependencies": "Keep peerDeps and devDeps synced. (having own modules, which use explicit-versioning, at end)",
 	"peerDependencies": {
