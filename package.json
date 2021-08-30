@@ -50,6 +50,7 @@
 		}
 	},
 	"devDependencies": {
+		"@types/express": "^4.17.13",
 		"firebase": "^7.23.0"
 	},
 	"dependencies": {

@@ -26,7 +26,7 @@ export function Serve(config: CreateConfig_ReturnType, webpackConfig: webpack.Co
 		],
 	}));
 
-	// Apply Webpack HMR Middleware
+	// apply webpack HMR middleware
 	// ----------
 
 	if (DEV) {
@@ -65,8 +65,7 @@ export function Serve(config: CreateConfig_ReturnType, webpackConfig: webpack.Co
 	} else {
 		debug(
 			`Server is being run outside of live development mode, meaning it will only serve the compiled application bundle in ~/Dist.${""
-			} Generally you do not need an application server for this and can instead use a web server such as nginx to serve your static files. ${""
-			} See the "deployment" section in the README for more information on deployment strategies.`,
+			} Generally you do not need an application server for this and can instead use a web server such as nginx to serve your static files.`,
 		);
 
 		// Serving ~/Dist by default. Ideally these files should be served by the web server and not the app server, but this helps to demo the server in production.
@@ -88,8 +87,6 @@ export function Serve(config: CreateConfig_ReturnType, webpackConfig: webpack.Co
 		const fileName = pathModule.basename(resourceFile.sourcePath);
 		app.use(`/${resourceFile.destSubpath ?? fileName}`, express.static(paths.base(resourceFile.sourcePath)));
 	}
-
-	// module.exports = app;
 
 	const port = config.server_port;
 	app.listen(port);
