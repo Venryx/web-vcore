@@ -12219,11 +12219,11 @@ typescript@^4.3.2:
   linkType: hard
 
 "updeep@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "updeep@npm:1.2.0"
+  version: 1.2.1
+  resolution: "updeep@npm:1.2.1"
   dependencies:
     lodash: ^4.2.0
-  checksum: b35a57c060072f781c87a8a1a40413bd3b600a3f92343f480162004e094fbf1fb56aa8b09fc9e3b7aa8cf095f776d252236ddf772c8b70cd13c3bf694d1213af
+  checksum: 0c03c662bb0a9c0660067c6794ba415d47844e783b57225780ad8e6e8abf67dff95c3efdec2bb2ce14b60d46a1c3ddcceefa15166a6afc39b8ea82051fe7b85f
   languageName: node
   linkType: hard
 
