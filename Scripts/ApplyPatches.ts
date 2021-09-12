@@ -46,6 +46,11 @@ for (const patchFile of fs.readdirSync(PathFromWVC("patches"))) {
 	//console.log("Patch-apply result:", result);
 }
 
+var errorsHit;
+if (errorsHit) {
+	throw new Error("Errors hit applying patches; canceling build.");
+}
+
 function ApplyPatch(patchFile: string, asSubdep: boolean) {
 	//console.log("Test2:", orgPlusPackageSubpath);
 	require_patch("patchFs.js").getPatchFiles = ()=>[patchFile]; // monkey-patch
@@ -58,12 +63,18 @@ function ApplyPatch(patchFile: string, asSubdep: boolean) {
 	//const shouldExitWithError = !!argv["error-on-fail"] || is_ci_1.default || process_1.default.env.NODE_ENV === "test";
 	const shouldExitWithError = false;
 	//console.log("Patch dir:", PathFromWVC("patches"));
-	require_patch("applyPatches.js").applyPatchesForApp({
-		appPath,
-		reverse,
-		//patchDir: "./patches",
-		patchDir: paths.relative(appPath, PathFromWVC("patches")), // patch-package wants this relative to app-path
-		//patchDir: asSubdep ? `./node_modules/web-vcore/patches` : `./patches`,
-		shouldExitWithError,
-	});
+	try {
+		require_patch("applyPatches.js").applyPatchesForApp({
+			appPath,
+			reverse,
+			//patchDir: "./patches",
+			patchDir: paths.relative(appPath, PathFromWVC("patches")), // patch-package wants this relative to app-path
+			//patchDir: asSubdep ? `./node_modules/web-vcore/patches` : `./patches`,
+			shouldExitWithError,
+		});
+		//throw new Error("Test3");
+	} catch (ex) {
+		console.error(ex);
+		errorsHit = true;
+	}
 }
