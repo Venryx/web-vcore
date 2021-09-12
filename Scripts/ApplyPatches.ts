@@ -18,6 +18,7 @@ const patchPackagePath =
 const require_patch = subpath=>require(`${patchPackagePath}/dist/${subpath}`);
 
 const getPatchFiles_orig = require_patch("patchFs.js").getPatchFiles;
+const getPackageDetailsFromPatchFilename_orig = require_patch("PackageDetails.js").getPackageDetailsFromPatchFilename;
 const process_exit_orig = process.exit;
 //console.log("Test1;", process.cwd());
 for (const patchFile of fs.readdirSync(PathFromWVC("patches"))) {
@@ -77,6 +78,17 @@ function ApplyPatch(patchFile: string, asSubdep: boolean) {
 	//console.log("Patch dir:", PathFromWVC("patches"));
 	try {
 		process.exit = (()=>{}) as any; // keep patch-package from quitting as soon as an error occurs
+
+		process["cwd_orig"] = process["cwd_orig"] ?? process.cwd;
+		process.cwd = ()=>appPath; // cwd must match with appPath, because of something in patch-package
+		// monkey-patch
+		/*require_patch("PackageDetails.js").getPackageDetailsFromPatchFilename = (...args)=>{
+			const result = getPackageDetailsFromPatchFilename_orig(...args);
+			result.path = paths.join(appPath, result.path); // fix path
+			console.log("Test:", result.path);
+			return result;
+		};*/
+
 		require_patch("applyPatches.js").applyPatchesForApp({
 			appPath,
 			reverse,
