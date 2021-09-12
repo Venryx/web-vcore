@@ -48,5 +48,5 @@ function ApplyPatch(patchFile: string, asSubdep: boolean) {
 	const reverse = false;
 	//const shouldExitWithError = !!argv["error-on-fail"] || is_ci_1.default || process_1.default.env.NODE_ENV === "test";
 	const shouldExitWithError = false;
-	require_patch("applyPatches.js").applyPatchesForApp({appPath, reverse, patchDir: "./patches", shouldExitWithError});
+	require_patch("applyPatches.js").applyPatchesForApp({appPath, reverse, patchDir: `${process.cwd()}/patches`, shouldExitWithError});
 }
