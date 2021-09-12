@@ -12218,12 +12218,12 @@ typescript@^4.3.2:
   languageName: node
   linkType: hard
 
-"updeep@npm:^1.2.0":
-  version: 1.2.1
-  resolution: "updeep@npm:1.2.1"
+"updeep@npm:1.2.0":
+  version: 1.2.0
+  resolution: "updeep@npm:1.2.0"
   dependencies:
     lodash: ^4.2.0
-  checksum: 0c03c662bb0a9c0660067c6794ba415d47844e783b57225780ad8e6e8abf67dff95c3efdec2bb2ce14b60d46a1c3ddcceefa15166a6afc39b8ea82051fe7b85f
+  checksum: b35a57c060072f781c87a8a1a40413bd3b600a3f92343f480162004e094fbf1fb56aa8b09fc9e3b7aa8cf095f776d252236ddf772c8b70cd13c3bf694d1213af
   languageName: node
   linkType: hard
 
@@ -12516,7 +12516,7 @@ typescript@^4.3.2:
     svg-sprite-loader: ^6.0.7
     ts-loader: ^9.2.3
     typescript: ^4.3.2
-    updeep: ^1.2.0
+    updeep: 1.2.0
     uplot: ^1.6.5
     uplot-vplugins: 0.0.7
     webpack: ^5.41.1

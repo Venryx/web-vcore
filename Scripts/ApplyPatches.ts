@@ -17,6 +17,7 @@ const patchPackagePath =
 	(()=>{ throw new Error(`Could not find patch-package, relative to:${PathFromWVC(".")}`); })();
 const require_patch = subpath=>require(`${patchPackagePath}/dist/${subpath}`);
 
+const process_exit_orig = process.exit;
 //console.log("Test1;", process.cwd());
 for (const patchFile of fs.readdirSync(PathFromWVC("patches"))) {
 	let orgName, packageName;
@@ -48,7 +49,10 @@ for (const patchFile of fs.readdirSync(PathFromWVC("patches"))) {
 
 var errorsHit;
 if (errorsHit) {
-	throw new Error("Errors hit applying patches; canceling build.");
+	//throw new Error("Errors hit applying patches; canceling build.");
+	console.error("Errors hit applying patches; canceling build.");
+	//process_exit_orig(shouldExitWithError ? 1 : 0);
+	process_exit_orig(0);
 }
 
 function ApplyPatch(patchFile: string, asSubdep: boolean) {
@@ -64,6 +68,7 @@ function ApplyPatch(patchFile: string, asSubdep: boolean) {
 	const shouldExitWithError = false;
 	//console.log("Patch dir:", PathFromWVC("patches"));
 	try {
+		process.exit = (()=>{}) as any; // keep patch-package from quitting as soon as an error occurs
 		require_patch("applyPatches.js").applyPatchesForApp({
 			appPath,
 			reverse,
