@@ -37,12 +37,12 @@ for (const patchFile of fs.readdirSync(PathFromWVC("patches"))) {
 	
 	//let result;
 	if (isSubdepUnderWVC) {
-		if (process.argv.includes("level=0")) { console.log("Skipping..."); continue; }
+		if (process.argv.includes("level=0")) { console.log("Skipping patch-file since wrong level..."); continue; }
 		console.log(`Applying patch for ${patchFile}, at subdep path: ${PathFromWVC(`node_modules/${orgPlusPackageSubpath}`)}`);
 		ApplyPatch(patchFile, true);
 		//result = execSync(`git apply --ignore-space-change --ignore-whitespace patches/${patchFile}`);
 	} else if (isSubdepAsPeer) {
-		if (process.argv.includes("level=1")) { console.log("Skipping..."); continue; }
+		if (process.argv.includes("level=1")) { console.log("Skipping patch-file since wrong level..."); continue; }
 		console.log(`Applying patch for ${patchFile}, at peer path: ${PathFromWVC(`../../node_modules/${orgPlusPackageSubpath}`)}`);
 		ApplyPatch(patchFile, false);
 		//result = execSync(`cd ../.. && git apply --ignore-space-change --ignore-whitespace node_modules/web-vcore/patches/${patchFile}`);
@@ -92,11 +92,13 @@ function ApplyPatch(patchFile: string, asSubdep: boolean) {
 			return result;
 		};*/
 
+		const patchDir = paths.relative(appPath, PathFromWVC("patches")); // patch-package wants this relative to app-path
+		console.log("AppPath:", appPath, "PatchDir:", patchDir);
 		require_patch("applyPatches.js").applyPatchesForApp({
 			appPath,
 			reverse,
 			//patchDir: "./patches",
-			patchDir: paths.relative(appPath, PathFromWVC("patches")), // patch-package wants this relative to app-path
+			patchDir,
 			//patchDir: asSubdep ? `./node_modules/web-vcore/patches` : `./patches`,
 			shouldExitWithError,
 		});
