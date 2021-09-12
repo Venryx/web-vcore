@@ -1,7 +1,7 @@
 {
 	"name": "web-vcore",
 	"description": "Core code shared between my projects, for web-app frontends.",
-	"version": "0.0.34",
+	"version": "0.0.33",
 	"license": "MIT",
 	"author": "Venryx (https://venryx.com)",
 	"repository": "https://github.com/Venryx/web-vcore",
@@ -133,7 +133,7 @@
 		"svg-sprite-loader": "^6.0.7",
 		"ts-loader": "^9.2.3",
 		"typescript": "^4.3.2",
-		"updeep": "1.2.0",
+		"updeep": "1.1.0",
 		"uplot": "^1.6.5",
 		"uplot-vplugins": "0.0.7",
 		"webpack": "^5.41.1",

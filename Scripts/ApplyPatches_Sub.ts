@@ -10,7 +10,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 //const PathFromWVC = subPath=>paths.join(__dirname, "..", subPath);
 const PathFromWVC = subPath=>paths.resolve(__dirname, "..", subPath).replace(/\\/g, "/"); // patch-package expects forward-slashes (eg. for finding files in the patches-dir)
 
-console.log("Starting 2");
 const require = createRequire(import.meta.url);
 const patchPackagePath =
 	fs.existsSync(PathFromWVC("node_modules/patch-package")) ? PathFromWVC("node_modules/patch-package") :
@@ -22,6 +21,7 @@ const getPatchFiles_orig = require_patch("patchFs.js").getPatchFiles;
 const getPackageDetailsFromPatchFilename_orig = require_patch("PackageDetails.js").getPackageDetailsFromPatchFilename;
 const process_exit_orig = process.exit;
 //console.log("Test1;", process.cwd());
+const skippedPatches = [] as string[];
 for (const patchFile of fs.readdirSync(PathFromWVC("patches"))) {
 	let orgName, packageName;
 	if (patchFile.startsWith("@")) {
@@ -37,12 +37,12 @@ for (const patchFile of fs.readdirSync(PathFromWVC("patches"))) {
 	
 	//let result;
 	if (isSubdepUnderWVC) {
-		if (process.argv.includes("level=0")) { console.log("Skipping patch-file since wrong level..."); continue; }
+		if (process.argv.includes("level=0")) { skippedPatches.push(patchFile); continue; }
 		console.log(`Applying patch for ${patchFile}, at subdep path: ${PathFromWVC(`node_modules/${orgPlusPackageSubpath}`)}`);
 		ApplyPatch(patchFile, true);
 		//result = execSync(`git apply --ignore-space-change --ignore-whitespace patches/${patchFile}`);
 	} else if (isSubdepAsPeer) {
-		if (process.argv.includes("level=1")) { console.log("Skipping patch-file since wrong level..."); continue; }
+		if (process.argv.includes("level=1")) { skippedPatches.push(patchFile); continue; }
 		console.log(`Applying patch for ${patchFile}, at peer path: ${PathFromWVC(`../../node_modules/${orgPlusPackageSubpath}`)}`);
 		ApplyPatch(patchFile, false);
 		//result = execSync(`cd ../.. && git apply --ignore-space-change --ignore-whitespace node_modules/web-vcore/patches/${patchFile}`);
@@ -50,6 +50,9 @@ for (const patchFile of fs.readdirSync(PathFromWVC("patches"))) {
 		throw new Error(`Cannot find package as either subdep or peer:${orgPlusPackageSubpath}`);
 	}
 	//console.log("Patch-apply result:", result);
+}
+if (skippedPatches) {
+	console.log("Skipped the following patch-files (since found at wrong level):", skippedPatches);
 }
 
 var errorsHit;
@@ -93,7 +96,7 @@ function ApplyPatch(patchFile: string, asSubdep: boolean) {
 		};*/
 
 		const patchDir = paths.relative(appPath, PathFromWVC("patches")); // patch-package wants this relative to app-path
-		console.log("AppPath:", appPath, "PatchDir:", patchDir);
+		//console.log("AppPath:", appPath, "PatchDir:", patchDir);
 		require_patch("applyPatches.js").applyPatchesForApp({
 			appPath,
 			reverse,
