@@ -17,6 +17,7 @@ const patchPackagePath =
 	(()=>{ throw new Error(`Could not find patch-package, relative to:${PathFromWVC(".")}`); })();
 const require_patch = subpath=>require(`${patchPackagePath}/dist/${subpath}`);
 
+const getPatchFiles_orig = require_patch("patchFs.js").getPatchFiles;
 const process_exit_orig = process.exit;
 //console.log("Test1;", process.cwd());
 for (const patchFile of fs.readdirSync(PathFromWVC("patches"))) {
@@ -57,7 +58,14 @@ if (errorsHit) {
 
 function ApplyPatch(patchFile: string, asSubdep: boolean) {
 	//console.log("Test2:", orgPlusPackageSubpath);
-	require_patch("patchFs.js").getPatchFiles = ()=>[patchFile]; // monkey-patch
+	//require_patch("patchFs.js").getPatchFiles = ()=>[patchFile]; // monkey-patch
+	// monkey-patch
+	require_patch("patchFs.js").getPatchFiles = (...args)=>{
+		const fullList = getPatchFiles_orig(...args);
+		const result = fullList.filter(a=>paths.basename(a) == patchFile);
+		if (result.length != 1) throw new Error(`Failed to find match for "${patchFile}" in list:${fullList.join(", ")}`);
+		return result;
+	};
 
 	//const appPath = require_patch("./getAppRootPath").getAppRootPath();
 	//const appPath = orgPlusPackageSubpath.startsWith("..") ? "../.." : ".";
