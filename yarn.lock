@@ -5865,7 +5865,7 @@ fsevents@^1.0.0:
   languageName: node
   linkType: soft
 
-"graphql-tag@npm:^2.12.3":
+"graphql-tag@npm:2.12.5, graphql-tag@npm:^2.12.3":
   version: 2.12.5
   resolution: "graphql-tag@npm:2.12.5"
   dependencies:
@@ -12476,6 +12476,7 @@ typescript@^4.3.2:
     fs-extra: ^8.1.0
     graphql: ^15.5.0
     graphql-feedback: ^0.0.3
+    graphql-tag: 2.12.5
     history: ^4.10.1
     html-webpack-plugin: ^5.3.1
     immer: ^7.0.7
