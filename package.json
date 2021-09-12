@@ -1,7 +1,7 @@
 {
 	"name": "web-vcore",
 	"description": "Core code shared between my projects, for web-app frontends.",
-	"version": "0.0.29",
+	"version": "0.0.28",
 	"license": "MIT",
 	"author": "Venryx (https://venryx.com)",
 	"repository": "https://github.com/Venryx/web-vcore",
@@ -23,7 +23,8 @@
 	"scripts": {
 		"@comment_postinstall": "Behavior of the node-js subscript below: if '.git' doesn't exist under web-vcore, it's installed as a dep, so do nothing -- else, return error-code 1, causing patch-package to run.",
 		"postinstall_old": "node -e \"let wvcAsDep = !require('fs').existsSync('.git'); if (!wvcAsDep) process.exit(1);\" || patch-package",
-		"postinstall": "node ./Scripts_Dist/ApplyPatches.js"
+		"postinstall_old2": "node ./Scripts_Dist/ApplyPatches.js",
+		"postinstall": "node -e \"let wvcAsDep = !require('fs').existsSync('.git'); if (!wvcAsDep) require('./Scripts_Dist/ApplyPatches.js');\""
 	},
 	"@peerDependencies": "Keep peerDeps and devDeps synced. (having own modules, which use explicit-versioning, at end)",
 	"peerDependencies": {

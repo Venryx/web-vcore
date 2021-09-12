@@ -33,7 +33,11 @@ import type {} from "web-vcore/nm/@All"; // helps vscode's auto-importer notice 
 	//{"path": "../../node_modules/web-vcore"},
 ]
 ```
-4) Various other things, like populating the RootStore interface. (for now, just reference an existing project that uses web-vcore, as seen below)
+4) Make-so web-vcore's package-patches get applied, by adding/merging the following command into your project's `postinstall` script:
+```
+"postinstall": "node ./node_modules/web-vcore/Scripts_Dist/ApplyPatches.js"
+```
+5) Various other things, like populating the RootStore interface. (for now, just reference an existing project that uses web-vcore, as seen below)
 
 ### Creating package patches
 
