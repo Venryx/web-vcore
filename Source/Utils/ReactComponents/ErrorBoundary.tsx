@@ -3,6 +3,7 @@ import React, {Component} from "react";
 import {TextArea, Column} from "react-vcomponents";
 import {ScrollView} from "react-vscrollview";
 import {E} from "js-vextensions";
+import {HandleError} from "../General/Errors.js";
 
 type ReactErrorInfo = {componentStack: string};
 export type ReactError = {message: string, info: ReactErrorInfo};
@@ -44,7 +45,8 @@ export class ErrorBoundary extends BaseComponentPlus({} as {errorUI?: ErrorUIFun
 export function EB_StoreError(comp: BaseComponent, error: Error | string, errorInfo: ReactErrorInfo) {
 	const errorMessage = typeof error == "object" ? error.message : error;
 	if (errorMessage.startsWith("[generic bail error")) {
-		throw new Error(`A bail-error was caught by react (${comp.constructor.name}.componentDidCatch); this should not occur. Did you forget to add "@Observer" to your component class?`);
+		//throw new Error(`A bail-error was caught by react (${comp.constructor.name}.componentDidCatch); this should not occur. Did you forget to add "@Observer" to your component class?`);
+		HandleError(new Error(`A bail-error was caught by react (${comp.constructor.name}.componentDidCatch); this should not occur. Did you forget to add "@Observer" to your component class?`));
 	}
 
 	const error_final = {message: errorMessage, origError: error, info: errorInfo};

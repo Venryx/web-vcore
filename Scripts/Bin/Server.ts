@@ -9,7 +9,7 @@ import type {CreateConfig_ReturnType} from "../Config";
 declare const ENV, DEV, PROD, TEST;
 const debug = debug_base("app:server");
 
-export function Serve(config: CreateConfig_ReturnType, webpackConfig: webpack.Configuration, extToServe = ["html", "js", "css", "png", "jpg", "wasm"], writeToDisk = undefined) {
+export function Serve(config: CreateConfig_ReturnType, webpackConfig: webpack.Configuration|null, extToServe = ["html", "js", "css", "png", "jpg", "wasm"], writeToDisk = undefined) {
 	const paths = config.utils_paths;
 	const app = express();
 
@@ -30,6 +30,7 @@ export function Serve(config: CreateConfig_ReturnType, webpackConfig: webpack.Co
 	// ----------
 
 	if (DEV) {
+		if (webpackConfig == null) throw new Error("If DEV, webpackConfig must be non-null.");
 		const compiler = webpack(webpackConfig);
 
 		//compiler.apply(new webpack.ProgressPlugin({ profile: true }));
