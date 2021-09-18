@@ -5,6 +5,7 @@ import devMiddleware from "webpack-dev-middleware";
 import connectHistoryAPIFallback from "connect-history-api-fallback";
 import pathModule from "path";
 import type {CreateConfig_ReturnType} from "../Config";
+//import fs from "fs";
 
 declare const ENV, DEV, PROD, TEST;
 const debug = debug_base("app:server");
@@ -64,13 +65,14 @@ export function Serve(config: CreateConfig_ReturnType, webpackConfig: webpack.Co
 
 		// app.use(express.static(paths.dist())); // enable static loading of files in Dist, for dll.vendor.js
 	} else {
-		debug(
+		console.log(
 			`Server is being run outside of live development mode, meaning it will only serve the compiled application bundle in ~/Dist.${""
 			} Generally you do not need an application server for this and can instead use a web server such as nginx to serve your static files.`,
 		);
 
 		// Serving ~/Dist by default. Ideally these files should be served by the web server and not the app server, but this helps to demo the server in production.
 		app.use(express.static(paths.dist()));
+		//console.log("Path:", paths.dist(), "@files:", fs.readdirSync(paths.dist()));
 	}
 
 	// serve static assets from resource folders, since webpack is unaware of these files (in dev-mode only, since resources are hard-copied into ~/Dist when app is compiled, in Compile.ts)
