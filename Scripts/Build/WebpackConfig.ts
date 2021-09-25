@@ -448,9 +448,12 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 
 	webpackConfig.plugins.push(new MiniCssExtractPlugin());
 	webpackConfig.module!.rules.push({
-		test: /\.css$/,
+		test: /\.(sa|sc|c)ss$/,
+		// yes, all of these are supposed to be used together
 		use: [
+			// extracts CSS into a separate file (with a <link> entry then being inserted into index.html, for runtime loading of it)
 			MiniCssExtractPlugin.loader,
+			// translates CSS into CommonJS
 			{
 				loader: SubdepPath("css-loader"),
 				options: {
@@ -458,19 +461,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 					//minimize: false, // cssnano already minifies
 				},
 			},
-		],
-	});
-	webpackConfig.module!.rules.push({
-		test: /\.scss$/,
-		use: [
-			MiniCssExtractPlugin.loader,
-			{
-				loader: SubdepPath("css-loader"),
-				options: {
-					url: false,
-					//minimize: false, // cssnano already minifies
-				},
-			},
+			// is this needed? (I mean, I think it applies css minification, but that's not so important for a 13kb-over-CDNed-network file)
 			{
 				loader: SubdepPath("postcss-loader"),
 				options: {
@@ -500,6 +491,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 					},
 				},
 			},
+			// compiles Sass to CSS
 			{
 				loader: SubdepPath("sass-loader"),
 				options: {
@@ -523,6 +515,8 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 							const wvcPart_fixed = wvcPart.replace(/@import "~/g, "@import \"~web-vcore/node_modules/");
 							return content.slice(0, startPoint) + wvcPart_fixed + content.slice(endPoint);
 						}*/
+
+						//console.log("Includes uPlot css?:", content.includes(".u-legend th"));
 
 						if (content.includes("web-vcore/Source/Utils/Styles/Entry_Base.scss") && wvcSymlinked) {
 							return content.replace(/Styles\/Entry_Base.scss/g, "Styles/Entry_Symlinked.scss");
