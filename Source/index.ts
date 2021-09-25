@@ -69,6 +69,7 @@ export * from "./Utils/UI/ReactHooks.js";
 export * from "./Utils/UI/Sizes.js";
 export * from "./Utils/UI/Styles.js";
 export * from "./Utils/UI/SubNavBar.js";
+export * from "./Utils/UI/UPlotDefaults.js";
 
 export * from "./Utils/URL/History.js";
 export * from "./Utils/URL/URLs.js";

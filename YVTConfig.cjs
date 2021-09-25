@@ -3,14 +3,15 @@ exports.config = {};
 console.log("VLIBS_USER:", process.env.VLIBS_USER);
 
 exports.venryx_standardSymlinkedPackages = [
+	"eslint-config-vbase",
 	"graphql-feedback",
 	"js-vextensions",
+	"react-uplot",
 	"react-vextensions",
 	"react-vcomponents",
 	"react-vmenu",
 	"react-vmessagebox",
 	"mobx-graphlink",
-	"eslint-config-vbase",
 ];
 if (process.env.VLIBS_USER == "venryx") {
 	//const fs = require("fs");
