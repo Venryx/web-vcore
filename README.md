@@ -54,5 +54,5 @@ For the most part, web-vcore is meant to be learned/used based on referencing th
 
 That said, there are some things (eg. particularly complex components) for which documentation is worth creating, both for collaborators on projects I've made, as well as for my own reference in the future.
 
-* [Abbreviations and Comments](./tree/master/Docs/AbbreviationsAndComments.md)
-* [Database Migrations](./tree/master/Docs/DatabaseMigrations.md)
+* [Abbreviations and Comments](./Docs/AbbreviationsAndComments.md)
+* [Database Migrations](./Docs/DatabaseMigrations.md)
