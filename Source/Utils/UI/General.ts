@@ -3,9 +3,11 @@ import {Assert, WrapWithGo} from "js-vextensions";
 import {SimpleShouldUpdate, WarnOfTransientObjectProps, SimpleShouldUpdate_Options, WarnOfTransientObjectProps_Options} from "react-vextensions";
 import ReactDOM from "react-dom";
 import {OnPopulated} from "../../Manager.js";
+import {FixHTMLProps} from "react-vcomponents/Dist/@Types";
 
 export type HTMLProps<T extends keyof JSX.IntrinsicElements> = JSX.IntrinsicElements[T];
-//export type HTMLProps_Fixed<T extends keyof JSX.IntrinsicElements> = FixHTMLProps<JSX.IntrinsicElements[T]>;
+export {FixHTMLProps};
+export type HTMLProps_Fixed<T extends keyof JSX.IntrinsicElements> = FixHTMLProps<JSX.IntrinsicElements[T]>;
 
 export function StandardCompProps() {
 	return ["dispatch", "_user", "_permissions", "_extraInfo"];
