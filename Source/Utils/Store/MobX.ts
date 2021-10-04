@@ -261,13 +261,19 @@ export function StartUpdatingMirrorOfMobXTree(mobxTree: any, tree_plainMirror: a
 		//const mobxKeys = opt.onlyCopyMobXProps ? (mobxTree[$mobx]?.getKeys ? mobxTree[$mobx].getKeys() : emptyArray) : null;
 		//const mobxInfo = mobxTree[$mobx];
 		const mobxInfo = _getAdministration(mobxTree) as ObservableObjectAdministration;
-		const mobxKeys = opt.onlyCopyMobXProps ? (mobxInfo?.values_?.keys() ?? emptyArray) : null;
+		//const mobxKeys = opt.onlyCopyMobXProps ? (mobxInfo?.values_?.keys() ?? emptyArray) : null;
+		let mobxKeys =
+			opt.onlyCopyMobXProps ? (mobxInfo?.values_?.keys() ?? emptyArray)
+			//opt.onlyCopyMobXProps && mobxInfo?.appliedAnnotations_ ? Object.entries(mobxInfo.appliedAnnotations_).filter(a=>a[1].annotationType_ != "observable.ref").map(a=>a[0])
+			: (sourceIsMap ? mobxTree.keys() : Object.keys(mobxTree));
 
-		for (const key of mobxKeys ?? (sourceIsMap ? mobxTree.keys() : Object.keys(mobxTree))) {
+		for (const key of mobxKeys) {
 			const valueFromSource = sourceIsMap ? mobxTree.get(key) : mobxTree[key]; // this counts as a mobx-get, meaning the autorun subscribes, so this func reruns when the prop-value changes
 			//const valueForTarget_old = tree_plainMirror[key];
+			const fieldObservedAsRefOnly = mobxInfo?.appliedAnnotations_?.[key].annotationType_ == "observable.ref";
+
 			let valueForTarget;
-			if (typeof valueFromSource == "object" && valueFromSource != null) {
+			if (typeof valueFromSource == "object" && valueFromSource != null && !fieldObservedAsRefOnly) {
 				//if (!opt.onlyCopyMobXNodes || valueFromSource[$mobx] != null) {
 				valueForTarget = GetMirrorOfMobXTree(valueFromSource, opt.removeCircularLinks ? E(opt, {removeCircularLinks: false}) : opt);
 			} else {

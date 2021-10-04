@@ -26,7 +26,7 @@ export class Page {
 
 	children = {} as {[key: string]: Page};
 	get ChildKeys() { return Object.keys(this.children); }
-	get DefaultChild() { return this.children.Pairs()[0].key; }
+	get DefaultChild() { return this.children.Pairs()[0]?.key; }
 }
 
 /*export function GetCurrentURL(fromAddressBar = false) {
