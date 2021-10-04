@@ -11,7 +11,7 @@ import "./mobx-react.js";
 import "./mobx-sync.js";
 import "./mobx.js";
 import "./moment.js";
-import "./rc-slider.js";
+//import "./rc-slider.js";
 import "./rc-tooltip.js";
 import "./react.js";
 import "./react-beautiful-dnd.js";
