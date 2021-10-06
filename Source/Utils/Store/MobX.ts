@@ -6,7 +6,8 @@ import {observer} from "mobx-react";
 import React, {Component, useRef} from "react";
 import {EnsureClassProtoRenderFunctionIsWrapped} from "react-vextensions";
 import {RunInAction} from "mobx-graphlink";
-import {getAdministration, ObservableObjectAdministration, storedAnnotationsSymbol} from "mobx/dist/internal";
+//import {getAdministration, ObservableObjectAdministration, storedAnnotationsSymbol} from "mobx/dist/internal";
+import type {ObservableObjectAdministration} from "mobx/dist/internal"; // for some reason, webpack breaks on actual/runtime imports of this (for production builds), so only import types
 
 /*export function RunInAction(name: string, action: ()=>any) {
 	Object.defineProperty(action, "name", {value: name});
@@ -199,8 +200,7 @@ export function RunInAction_Set(...args) {
 	RunInAction(actionName, setterFunc);
 }
 
-
-/*export var GetMobXStoredAnnotationSymbol_cached;
+export var GetMobXStoredAnnotationSymbol_cached;
 export function GetMobXStoredAnnotationSymbol(objectsPossiblyHavingSymbol: Object[]) {
 	if (GetMobXStoredAnnotationSymbol_cached == null) {
 		for (const obj of objectsPossiblyHavingSymbol) {
@@ -215,11 +215,11 @@ export function GetMobXStoredAnnotationSymbol(objectsPossiblyHavingSymbol: Objec
 		}
 	}
 	return GetMobXStoredAnnotationSymbol_cached;
-}*/
+}
 export function GetMobXStoredAnnotations(mobxTree: Object) {
 	const mobxTree_proto = mobxTree != null ? Object.getPrototypeOf(mobxTree) : null;
-	//const symbol = GetMobXStoredAnnotationSymbol([mobxTree_proto, mobxTree]);
-	const symbol = storedAnnotationsSymbol;
+	//const symbol = storedAnnotationsSymbol;
+	const symbol = GetMobXStoredAnnotationSymbol([mobxTree_proto, mobxTree]);
 	// usually the actual annotations are on the class-prototype, so search there first
 	if (mobxTree_proto?.[symbol] != null) return mobxTree_proto?.[symbol];
 	// else, fall back to passed object itself
