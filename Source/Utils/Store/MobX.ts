@@ -1,12 +1,12 @@
 import {enableES5, setAutoFreeze, setUseProxies} from "immer";
-import {Assert, AssertWarn, CE, E, emptyArray, RemoveCircularLinks, ToJSON} from "js-vextensions";
+import {Assert, AssertWarn, CE, E, emptyArray, ObjectCE, RemoveCircularLinks, ToJSON} from "js-vextensions";
 import {$mobx, autorun, configure, observable, ObservableMap, ObservableSet, onReactionError, runInAction, _getGlobalState, _getAdministration} from "mobx";
 import {BailHandler, BailHandler_Options, MGLObserver, MGLObserver_Options} from "mobx-graphlink"; // eslint-disable-line
 import {observer} from "mobx-react";
 import React, {Component, useRef} from "react";
 import {EnsureClassProtoRenderFunctionIsWrapped} from "react-vextensions";
 import {RunInAction} from "mobx-graphlink";
-import {getAdministration, ObservableObjectAdministration} from "mobx/dist/internal";
+import {getAdministration, ObservableObjectAdministration, storedAnnotationsSymbol} from "mobx/dist/internal";
 
 /*export function RunInAction(name: string, action: ()=>any) {
 	Object.defineProperty(action, "name", {value: name});
@@ -199,6 +199,33 @@ export function RunInAction_Set(...args) {
 	RunInAction(actionName, setterFunc);
 }
 
+
+/*export var GetMobXStoredAnnotationSymbol_cached;
+export function GetMobXStoredAnnotationSymbol(objectsPossiblyHavingSymbol: Object[]) {
+	if (GetMobXStoredAnnotationSymbol_cached == null) {
+		for (const obj of objectsPossiblyHavingSymbol) {
+			if (obj == null) continue;
+			//const newSymbol = ObjectCE(obj).FindSym("mobx-stored-annotations");
+			const symbols = Object.getOwnPropertySymbols(obj);
+			const matchingSymbol = symbols.find(a=>a.toString() == `Symbol(mobx-stored-annotations)`)!;
+			if (matchingSymbol) {
+				GetMobXStoredAnnotationSymbol_cached = matchingSymbol;
+				break;
+			}
+		}
+	}
+	return GetMobXStoredAnnotationSymbol_cached;
+}*/
+export function GetMobXStoredAnnotations(mobxTree: Object) {
+	const mobxTree_proto = mobxTree != null ? Object.getPrototypeOf(mobxTree) : null;
+	//const symbol = GetMobXStoredAnnotationSymbol([mobxTree_proto, mobxTree]);
+	const symbol = storedAnnotationsSymbol;
+	// usually the actual annotations are on the class-prototype, so search there first
+	if (mobxTree_proto?.[symbol] != null) return mobxTree_proto?.[symbol];
+	// else, fall back to passed object itself
+	return mobxTree?.[symbol];
+}
+
 // mobx-mirror
 // ==========
 
@@ -253,24 +280,24 @@ export function GetMirrorOfMobXTree<T>(mobxTree: T, opt = new GetMirrorOfMobXTre
 	}
 	return mobxTree["$mirror"];
 }
+
 export function StartUpdatingMirrorOfMobXTree(mobxTree: any, tree_plainMirror: any, opt = new GetMirrorOfMobXTree_Options()) {
 	//const stopUpdating = autorun(()=>{
 	autorun(()=>{
 		const sourceIsMap = mobxTree instanceof Map || mobxTree instanceof ObservableMap;
 		const targetIsMap = tree_plainMirror instanceof Map || tree_plainMirror instanceof ObservableMap;
-		//const mobxKeys = opt.onlyCopyMobXProps ? (mobxTree[$mobx]?.getKeys ? mobxTree[$mobx].getKeys() : emptyArray) : null;
 		//const mobxInfo = mobxTree[$mobx];
 		const mobxInfo = _getAdministration(mobxTree) as ObservableObjectAdministration;
-		//const mobxKeys = opt.onlyCopyMobXProps ? (mobxInfo?.values_?.keys() ?? emptyArray) : null;
 		let mobxKeys =
 			opt.onlyCopyMobXProps ? (mobxInfo?.values_?.keys() ?? emptyArray)
-			//opt.onlyCopyMobXProps && mobxInfo?.appliedAnnotations_ ? Object.entries(mobxInfo.appliedAnnotations_).filter(a=>a[1].annotationType_ != "observable.ref").map(a=>a[0])
 			: (sourceIsMap ? mobxTree.keys() : Object.keys(mobxTree));
+		//const mobxStoredAnnotations = mobxInfo?.appliedAnnotations_; // this only works in dev-mode
+		const mobxStoredAnnotations = GetMobXStoredAnnotations(mobxTree);
 
 		for (const key of mobxKeys) {
 			const valueFromSource = sourceIsMap ? mobxTree.get(key) : mobxTree[key]; // this counts as a mobx-get, meaning the autorun subscribes, so this func reruns when the prop-value changes
 			//const valueForTarget_old = tree_plainMirror[key];
-			const fieldObservedAsRefOnly = mobxInfo?.appliedAnnotations_?.[key].annotationType_ == "observable.ref";
+			const fieldObservedAsRefOnly = mobxStoredAnnotations?.[key].annotationType_ == "observable.ref";
 
 			let valueForTarget;
 			if (typeof valueFromSource == "object" && valueFromSource != null && !fieldObservedAsRefOnly) {
