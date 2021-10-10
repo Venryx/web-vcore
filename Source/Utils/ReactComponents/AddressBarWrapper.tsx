@@ -17,6 +17,7 @@ window.addEventListener("popstate", e=>{
 let lastProcessedURL: VURL;
 @Observer
 export class AddressBarWrapper extends BaseComponentPlus({}, {}) {
+	loadingUI = ()=>null;
 	// the render function handles: store-changes -> address-bar-change
 	render() {
 		const newURL = manager.GetNewURL();
