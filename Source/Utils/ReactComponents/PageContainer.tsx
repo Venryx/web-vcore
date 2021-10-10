@@ -51,7 +51,7 @@ export function ReactTextToPixelVal(reactText: React.ReactText) {
 	if (IsNumber(reactText)) return reactText;
 	if (reactText.trim() == "0") return 0;
 	const pxMatch = reactText.match(/(\d+)px/);
-	if (pxMatch) ToInt(pxMatch[1]);
+	if (pxMatch) return ToInt(pxMatch[1]);
 	return null;
 }
 
