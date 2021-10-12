@@ -1,6 +1,7 @@
 import Moment from "moment";
 import {Assert, emptyArray, emptyArray_forLoading, WaitXThenRun} from "js-vextensions";
 import {DeepMap} from "mobx-graphlink/Dist/Utils/General/DeepMap";
+import chroma from "chroma-js";
 
 G({Moment});
 
@@ -163,4 +164,13 @@ export function WaitXThenRun_Deduped(host: any, key: string, delayInMS: number, 
 		map.delete(key);
 	});
 	return true;
+}
+
+export function Chroma_Safe(input: any, fallbackInput = [0, 0, 0, 0]) {
+	try {
+		return chroma(input);
+	} catch (ex) {
+		// if parsing failed, return the fallback color
+		return chroma(fallbackInput);
+	}
 }

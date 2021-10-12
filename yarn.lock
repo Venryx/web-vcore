@@ -2064,6 +2064,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/chroma-js@npm:^2.1.3":
+  version: 2.1.3
+  resolution: "@types/chroma-js@npm:2.1.3"
+  checksum: 8c94c421b9613c534471b18912b11cdbb267ab8da380ce6d484115f48fb08583e7ab1f7e26fa0e7811a0d42ac531fe9a9b8475afe7b7b91d86cd08b758ca3add
+  languageName: node
+  linkType: hard
+
 "@types/connect@npm:*":
   version: 3.4.35
   resolution: "@types/connect@npm:3.4.35"
@@ -3653,6 +3660,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chroma-js@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "chroma-js@npm:2.1.2"
+  dependencies:
+    cross-env: ^6.0.3
+  checksum: abbd70377446e3cc401ac58c40cdac6c70c41a349e6aca08881d0deb775051ba69c93099f4d47ef83c41b4562b0480b5dfd56d77e2e6f3a81ebb6667ce8d4627
+  languageName: node
+  linkType: hard
+
 "chrome-trace-event@npm:^1.0.2":
   version: 1.0.3
   resolution: "chrome-trace-event@npm:1.0.3"
@@ -4058,6 +4074,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cross-env@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "cross-env@npm:6.0.3"
+  dependencies:
+    cross-spawn: ^7.0.0
+  bin:
+    cross-env: src/bin/cross-env.js
+    cross-env-shell: src/bin/cross-env-shell.js
+  checksum: 1b2d532ad7beff8017db7c28fbee8f902377969b8090cd2b8716ec93bef958bb2838cd061c89c30e904d72f3ff7d3a4e80f0d762b14e60e8191a576be1376578
+  languageName: node
+  linkType: hard
+
 "cross-spawn@npm:^6.0.5":
   version: 6.0.5
   resolution: "cross-spawn@npm:6.0.5"
@@ -4071,7 +4099,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-spawn@npm:^7.0.2, cross-spawn@npm:^7.0.3":
+"cross-spawn@npm:^7.0.0, cross-spawn@npm:^7.0.2, cross-spawn@npm:^7.0.3":
   version: 7.0.3
   resolution: "cross-spawn@npm:7.0.3"
   dependencies:
@@ -12616,6 +12644,7 @@ typescript@^4.3.2:
     "@babel/preset-env": ^7.14.7
     "@babel/preset-react": ^7.14.5
     "@cerner/duplicate-package-checker-webpack-plugin": ^2.1.0
+    "@types/chroma-js": ^2.1.3
     "@types/express": ^4.17.13
     "@types/lodash": ^4.14.144
     "@types/react": ^17.0.9
@@ -12624,6 +12653,7 @@ typescript@^4.3.2:
     "@types/webpack": ^5.28.0
     babel-cli: ^6.4.5
     babel-loader: ^8.2.2
+    chroma-js: ^2.1.2
     codemirror: ^5.54.0
     connect-history-api-fallback: ^1.6.0
     css-loader: ^5.2.6
@@ -12674,7 +12704,7 @@ typescript@^4.3.2:
     react-vcomponents: 1.0.34
     react-vextensions: 1.0.11
     react-vmarkdown: 1.0.3
-    react-vmenu: 1.0.9
+    react-vmenu: 1.0.10
     react-vmessagebox: 1.0.10
     react-vscrollview: 1.0.3
     remarkable: ^2.0.1
