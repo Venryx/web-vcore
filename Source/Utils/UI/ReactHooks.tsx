@@ -1,6 +1,6 @@
 import {UseState, ShallowEquals} from "react-vextensions";
 import {VRect, ToJSON, E} from "js-vextensions";
-import {useRef, useLayoutEffect, MutableRefObject, useState, useCallback, Component} from "react";
+import {useRef, useLayoutEffect, MutableRefObject, useState, useCallback, Component, useEffect} from "react";
 import ReactDOM from "react-dom";
 import {GetSize, GetSize_Method, Size, SizeComp} from "./Sizes.js";
 
@@ -66,4 +66,11 @@ export function UseSize(options?: Partial<UseSize_Options>): [(node: Component |
 	//}, [nodeRef.current]);
 	});
 	return [ref, size];
+}
+
+export function UseGlobalOnClick(func: (e: MouseEvent)=>any, deps?: any[]) {
+	useEffect(()=>{
+		document.addEventListener("click", func);
+		return ()=>document.removeEventListener("click", func);
+	}, deps);
 }
