@@ -68,9 +68,15 @@ export function UseSize(options?: Partial<UseSize_Options>): [(node: Component |
 	return [ref, size];
 }
 
-export function UseGlobalOnClick(func: (e: MouseEvent)=>any, deps?: any[]) {
+export function UseWindowEventListener<K extends keyof WindowEventMap>(eventName: K, func: (this: Document, ev: WindowEventMap[K])=>any, deps?: any[], listenerOptions?: boolean | AddEventListenerOptions) {
 	useEffect(()=>{
-		document.addEventListener("click", func);
-		return ()=>document.removeEventListener("click", func);
+		window.addEventListener(eventName, func, listenerOptions);
+		return ()=>window.removeEventListener(eventName, func, listenerOptions);
+	}, deps);
+}
+export function UseDocumentEventListener<K extends keyof DocumentEventMap>(eventName: K, func: (this: Document, ev: DocumentEventMap[K])=>any, deps?: any[], listenerOptions?: boolean | AddEventListenerOptions) {
+	useEffect(()=>{
+		document.addEventListener(eventName, func, listenerOptions);
+		return ()=>document.removeEventListener(eventName, func, listenerOptions);
 	}, deps);
 }
