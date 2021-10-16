@@ -1,4 +1,4 @@
-import {BailHandler_loadingUI_default_Set, BailMessage} from "mobx-graphlink";
+import {BailHandler_loadingUI_default_Set, BailError} from "mobx-graphlink";
 import React from "react";
 import {Row, Text} from "react-vcomponents";
 import {BaseComponent, BaseComponentPlus} from "react-vextensions";
@@ -9,7 +9,7 @@ BailHandler_loadingUI_default_Set(info=>{
 	return <DefaultLoadingUI comp={info.comp} bailMessage={info.bailMessage}/>;
 });
 
-export class DefaultLoadingUI extends BaseComponentPlus({} as {comp: BaseComponent<any>, bailMessage: BailMessage}, {}) {
+export class DefaultLoadingUI extends BaseComponentPlus({} as {comp: BaseComponent<any>, bailMessage: BailError}, {}) {
 	render() {
 		const {comp, bailMessage} = this.props;
 		const compProps_neededPropsOnly = comp.props.Pairs().filter(a=>{

@@ -6,7 +6,7 @@ import {GetCurrentURL} from "../URL/URLs.js";
 import {manager} from "../../Manager.js";
 import {ActionFunc, Observer, RunInAction} from "../Store/MobX.js";
 import {RootStore} from "web-vcore_UserTypes";
-import {BailMessage} from "mobx-graphlink";
+import {BailError} from "mobx-graphlink";
 
 function isModifiedEvent(event) {
 	return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
@@ -69,7 +69,7 @@ export class Link extends BaseComponentPlus({} as Link_Props, {}) {
 			try {
 				to = manager.GetNewURLForStoreChanges(actionFunc);
 			} catch (ex) {
-				if (ex instanceof BailMessage) {
+				if (ex instanceof BailError) {
 					// if "error" was just a bail, do nothing (data for the "to" prop is just still loading)
 					// (we still catch the bail-error though, because we don't want the "default loading ui" for bails to be shown)
 				} else {
