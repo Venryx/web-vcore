@@ -1,14 +1,26 @@
 import fs from "fs";
-import paths from "path";
+import paths, {dirname} from "path";
 //import {execSync} from "child_process";
 import {createRequire} from "module";
 
-import {dirname} from "path";
 import {fileURLToPath} from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+function FixForYalc(path: string) {
+	const parts = path.replace(/\\/g, "/").split("/");
+	if (parts.slice(-3)[0] == ".yalc") {
+		return [...parts.slice(0, -3), "node_modules", ...parts.slice(-2)].join("/");
+	}
+	return path;
+}
+const __dirname_fixed = FixForYalc(__dirname);
+//const cwd_fixed = FixForYalc(process.cwd());
+
 //const PathFromWVC = subPath=>paths.join(__dirname, "..", subPath);
-const PathFromWVC = subPath=>paths.resolve(__dirname, "..", subPath).replace(/\\/g, "/"); // patch-package expects forward-slashes (eg. for finding files in the patches-dir)
+const PathFromWVC = subPath=>{
+	//return paths.resolve(__dirname, "..", subPath).replace(/\\/g, "/"); // patch-package expects forward-slashes (eg. for finding files in the patches-dir)
+	return paths.resolve(__dirname_fixed, "..", subPath).replace(/\\/g, "/"); // patch-package expects forward-slashes (eg. for finding files in the patches-dir)
+};
 
 const require = createRequire(import.meta.url);
 const patchPackagePath =
@@ -20,7 +32,7 @@ const require_patch = subpath=>require(`${patchPackagePath}/dist/${subpath}`);
 const getPatchFiles_orig = require_patch("patchFs.js").getPatchFiles;
 const getPackageDetailsFromPatchFilename_orig = require_patch("PackageDetails.js").getPackageDetailsFromPatchFilename;
 const process_exit_orig = process.exit;
-//console.log("Test1;", process.cwd());
+//console.log("Test1;", process.cwd(), __dirname, __dirname_fixed);
 const skippedPatches = [] as string[];
 for (const patchFile of fs.readdirSync(PathFromWVC("patches"))) {
 	let orgName, packageName;
@@ -34,7 +46,7 @@ for (const patchFile of fs.readdirSync(PathFromWVC("patches"))) {
 	const orgPlusPackageSubpath = orgName ? `@${orgName}/${packageName}` : packageName;
 	const isSubdepUnderWVC = fs.existsSync(PathFromWVC(`node_modules/${orgPlusPackageSubpath}`));
 	const isSubdepAsPeer = fs.existsSync(PathFromWVC(`../${orgPlusPackageSubpath}`));
-	
+
 	//let result;
 	if (isSubdepUnderWVC) {
 		if (process.argv.includes("level=0")) { skippedPatches.push(patchFile); continue; }

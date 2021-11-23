@@ -19,7 +19,7 @@
 			}
 		},
 		{
-			"label": "tsc (no emit; if builds already handled by user-project)",
+			"label": "tsc (no emit; if wvc symlinked, and builds already handled by user-project)",
 			"type": "shell",
 
 			"command": "./node_modules/.bin/tsc",

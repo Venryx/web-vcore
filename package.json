@@ -18,7 +18,11 @@
 		"patches",
 		"README.md",
 		"LICENSE",
+		"tsconfig.json",
 		"package.json"
+	],
+	"workspaces": [
+		".yalc/*"
 	],
 	"scripts": {
 		"@comment_postinstall": "Behavior of the node-js subscript below: if '.git' doesn't exist under web-vcore, it's installed as a dep, so do nothing -- else, return error-code 1, causing patch-package to run.",
@@ -54,7 +58,8 @@
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.13",
-		"firebase": "^9.1.1"
+		"firebase": "^9.1.1",
+		"postgraphile": "^4.12.1"
 	},
 	"dependencies": {
 		"@apollo/client": "3.5.0-beta.4",
@@ -76,6 +81,7 @@
 		"babel-loader": "^8.2.2",
 		"chroma-js": "^2.1.2",
 		"codemirror": "^5.54.0",
+		"colr": "1.0.1",
 		"connect-history-api-fallback": "^1.6.0",
 		"css-loader": "^5.2.6",
 		"cssnano": "^4.1.10",
