@@ -42,7 +42,8 @@ export var inFirefox = navigator.userAgent.toLowerCase().includes("firefox");
 
 export var loadTime = Date.now();
 export function GetTimeSinceLoad() {
-	return (Date.now() - loadTime) / 1000;
+	//return (Date.now() - loadTime) / 1000;
+	return Date.now() - loadTime;
 }
 
 export function GetCookie(name: string) {
@@ -99,18 +100,18 @@ export function BlobToArrayBuffer(blob: Blob): Promise<ArrayBuffer> {
 }
 
 function IsPrimitive(val) {
-    return val == null || (typeof val != "object" && typeof val != "function");
+	return val == null || (typeof val != "object" && typeof val != "function");
 }
 const weakIDsMap = new WeakMap<any, string>();
 let nextWeakID = 1; // start at 1, so that even the first id is "truthy"
 export function WeakID(obj: any) {
 	if (IsPrimitive(obj)) {
 		// this is kinda verbose, but I don't expect to hit this case anyway
-		return JSON.stringify({type: typeof obj, valAsStr: obj + ""});
+		return JSON.stringify({type: typeof obj, valAsStr: `${obj}`});
 	}
 
 	if (!weakIDsMap.has(obj)) {
-		weakIDsMap.set(obj, nextWeakID + "");
+		weakIDsMap.set(obj, `${nextWeakID}`);
 		nextWeakID++;
 	}
 	return weakIDsMap.get(obj);
@@ -154,7 +155,7 @@ export function WaitXThenRun_Deduped(host: any, key: string, delayInMS: number, 
 	if (!map.has(key)) {
 		map.set(key, false);
 	}
-	
+
 	// if func-call is already buffered for this host+key combination, don't schedule another func-call
 	if (map.get(key)) return false;
 
