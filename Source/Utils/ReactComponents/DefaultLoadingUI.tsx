@@ -37,12 +37,16 @@ export class DefaultLoadingUI extends BaseComponentPlus({} as {comp: BaseCompone
 }
 
 // ugly fix for useXXX call-count sometimes increasing, due to mobx-graphlink's bail-system being used (eg. first render bails, so 0 useXXX calls, followed by successful render, with X calls)
+export const valueForPrevInputSlotsNotYetInitialized = Symbol("valueForPrevInputSlotsNotYetInitialized");
 // eslint-disable-next-line
 Object.defineProperty(Object.prototype, "prevInputs", {
 	//configurable: true, // already defaults to true
 	get() {
+		// if this getter is being called, it means that the first render of a comp was interrupted by a mobx-graphlink "bail", and react-class-hooks is now running, assuming a prevInputs array was set for the current useXXX hook
+		// so, pretend a "prevInputs" array exists (and of the same length as "inputs" is now), but with all values "undefined" (so react-class-hooks detects the array-values as changing)
 		if (this.inputs instanceof Array) {
-			return this.inputs;
+			//return this.inputs;
+			return this.inputs.map(a=>valueForPrevInputSlotsNotYetInitialized);
 		}
 		return undefined;
 	},
