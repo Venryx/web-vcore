@@ -3,7 +3,7 @@ import {BaseComponent, ShallowChanged, FilterOutUnrecognizedProps} from "react-v
 //import {Component as BaseComponent} from "react";
 import {VURL, E} from "js-vextensions";
 import React from "react";
-import {Segment, ParseSegmentsForPatterns} from "../General/RegexHelpers.js";
+import {Segment, ParseTextForPatternMatchSegments} from "../General/RegexHelpers.js";
 import {GetCurrentURL} from "../URL/URLs.js";
 import {Link} from "./Link.js";
 import {manager} from "../../Manager.js";
@@ -40,15 +40,15 @@ export class VReactMarkdown extends BaseComponent
 
 		if (replacements) {
 			const patterns = replacements.VKeys().map((regexStr, index)=>({name: `${index}`, regex: new RegExp(regexStr)}));
-			const segments = ParseSegmentsForPatterns(source, patterns);
+			const segments = ParseTextForPatternMatchSegments(source, patterns);
 			return (
 				<div>
 					{segments.map((segment, index)=>{
-						if (segment.patternMatched == null) {
+						if (segment.patternMatches.size == 0) {
 							if (replacements.default) {
 								return replacements.default(segment, index, extraInfo).VAct(a=>a.key = index);
 							}
-							const text = segment.textParts[0].replace(/\r/g, "");
+							const text = segment.text.replace(/\r/g, "");
 							return (
 								<div style={E(!addMarginsForDanglingNewLines ? {} : {
 									marginTop: text.startsWith("\n\n") ? 15 : text.startsWith("\n") ? 5 : 0,
@@ -58,7 +58,8 @@ export class VReactMarkdown extends BaseComponent
 								</div>
 							);
 						}
-						const renderFuncForReplacement = replacements.VValues()[segment.patternMatched.name] as ReplacementFunc;
+						const mainPatternMatched = [...segment.patternMatches.keys()][0];
+						const renderFuncForReplacement = replacements.VValues()[mainPatternMatched.name] as ReplacementFunc;
 						return renderFuncForReplacement(segment, index, extraInfo).VAct(a=>a.key = index);
 					})}
 				</div>

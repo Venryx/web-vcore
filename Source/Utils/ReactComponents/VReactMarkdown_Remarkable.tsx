@@ -3,7 +3,7 @@ import {BaseComponent, ShallowChanged, FilterOutUnrecognizedProps} from "react-v
 import {Remarkable} from "remarkable";
 import RemarkableReactRenderer from "remarkable-react";
 import React from "react";
-import {ParseSegmentsForPatterns} from "../General/RegexHelpers.js";
+import {ParseTextForPatternMatchSegments} from "../General/RegexHelpers.js";
 import {GetCurrentURL} from "../URL/URLs.js";
 import {Link} from "./Link.js";
 import {ReplacementFunc} from "./VReactMarkdown.js";
@@ -111,14 +111,14 @@ export class VReactMarkdown_Remarkable extends BaseComponent<Props, {}> {
 
 		if (replacements) {
 			const patterns = replacements.VKeys().map((regexStr, index)=>({name: `${index}`, regex: new RegExp(regexStr)}));
-			const segments = ParseSegmentsForPatterns(source, patterns);
+			const segments = ParseTextForPatternMatchSegments(source, patterns);
 			if (segments.length > 1) {
 				const segmentUIs = segments.map((segment, index)=>{
-					if (segment.patternMatched == null) {
+					if (segment.patternMatches.size == 0) {
 						if (replacements.default) {
 							return replacements.default(segment, index, extraInfo).VAct(a=>a.key = index);
 						}
-						const text = segment.textParts[0].replace(/\r/g, "");
+						const text = segment.text.replace(/\r/g, "");
 						return (
 							<VReactMarkdown_Remarkable key={index} source={text.trim()} replacements={replacements} extraInfo={extraInfo}
 								markdownOptions={markdownOptions} rendererOptions={rendererOptions}
@@ -129,7 +129,8 @@ export class VReactMarkdown_Remarkable extends BaseComponent<Props, {}> {
 								addMarginsForDanglingNewLines={addMarginsForDanglingNewLines}/>
 						);
 					}
-					const renderFuncForReplacement = replacements.VValues()[segment.patternMatched.name] as ReplacementFunc;
+					const mainPatternMatched = [...segment.patternMatches.keys()][0];
+					const renderFuncForReplacement = replacements.VValues()[mainPatternMatched.name] as ReplacementFunc;
 					return renderFuncForReplacement(segment, index, extraInfo).VAct(a=>a.key = index);
 				});
 				return React.createElement(containerType, {style}, segmentUIs);

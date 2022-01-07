@@ -3,34 +3,45 @@ export interface Pattern {
 	regex: RegExp;
 }
 export interface Segment {
-	patternMatched: Pattern|null;
-	textParts: string[];
+	text: string;
+	patternMatches: Map<Pattern, RegExpMatchArray>;
 }
 
-export function ParseSegmentsForPatterns(text: string, patterns: Pattern[]): Segment[] {
+export type MainMatchSelector = (patternNextMatches: Map<Pattern, RegExpMatchArray>)=>RegExpMatchArray;
+export const MainMatchSelector_default: MainMatchSelector = patternNextMatches=>{
+	return [...patternNextMatches.values()].OrderBy(a=>a.index)[0];
+};
+
+export function ParseTextForPatternMatchSegments(text: string, patterns: Pattern[], mainMatchSelector: MainMatchSelector = MainMatchSelector_default): Segment[] {
 	var segments = [] as Segment[];
 	var textRemaining = text;
 
 	while (textRemaining.length) {
-		let match: RegExpMatchArray|n;
+		const patternNextMatches = new Map<Pattern, RegExpMatchArray>();
 		for (const pattern of patterns) {
-			match = pattern.regex.exec(textRemaining);
-			if (match) {
-				const partNotUsed = textRemaining.substr(0, match.index);
-				if (partNotUsed.length) {
-					segments.push({patternMatched: null, textParts: [partNotUsed]});
-				}
-
-				segments.push({patternMatched: pattern, textParts: match});
-				textRemaining = textRemaining.substr(match.index! + match[0].length);
-				break;
+			const match = pattern.regex.exec(textRemaining);
+			if (match != null) {
+				patternNextMatches.set(pattern, match);
 			}
 		}
 
-		if (!match) {
-			const partNotUsed = textRemaining;
-			if (partNotUsed.length) {
-				segments.push({patternMatched: null, textParts: [partNotUsed]});
+		if (patternNextMatches.size) {
+			const mainMatch = mainMatchSelector(patternNextMatches);
+			const allMatchesForMainMatchText = [...patternNextMatches].filter(([pattern, match])=>{
+				return match.index == mainMatch.index && match[0] == mainMatch[0];
+			}).ToMap(a=>a[0], a=>a[1]);
+
+			// add segment for text between last segment, and this new pattern-matched segment
+			const unmatchedTextBeforeNewMatch = textRemaining.substr(0, mainMatch.index);
+			if (unmatchedTextBeforeNewMatch.length) {
+				segments.push({text: unmatchedTextBeforeNewMatch, patternMatches: new Map()});
+			}
+
+			segments.push({text: mainMatch[0], patternMatches: allMatchesForMainMatchText});
+			textRemaining = textRemaining.substr(mainMatch.index! + mainMatch[0].length);
+		} else {
+			if (textRemaining.length) {
+				segments.push({text: textRemaining, patternMatches: new Map()});
 			}
 			textRemaining = "";
 		}
