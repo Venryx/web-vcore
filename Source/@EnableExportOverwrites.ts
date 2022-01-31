@@ -6,7 +6,7 @@ Object.defineProperty = function(o, p, attributes) {
 		//const isWebpackExport = Object.keys(attributes).length == 2 && attributes.enumerable == true && attributes.get && attributes.get.toString().match(/return _.+\[key\];/);
 		//if (isWebpackExport) {
 		// add an empty setter, just so that the export-override calls don't error
-		attributes_final = Object.assign({}, attributes, {configurable: true});
+		attributes_final = {...attributes, configurable: true};
 		//}
 	}
 	defineProperty_orig.call(this, o, p, attributes_final);
@@ -18,3 +18,7 @@ Object.defineProperty = function(o, p, attributes) {
 } as any;
 
 export const __EnableExportOverwrites__ = true; // by having user module "export *" from here, we end up marking that module with the special key checked for above
+
+export function RestoreOrigDefinePropertyFunc() {
+	Object.defineProperty = defineProperty_orig;
+}

@@ -5,6 +5,7 @@ import * as frameworkExportsObject from "./index.js";
 import "js-vextensions/Helpers/@ApplyCECode.js";
 //export * from "./UserTypes.js";
 import "./UserTypes.js";
+import {RestoreOrigDefinePropertyFunc} from "./@EnableExportOverwrites.js";
 
 //type __ = typeof import("../node_modules/js-vextensions/Helpers/@ApplyCETypes");
 type __ = typeof import("js-vextensions/Helpers/@ApplyCETypes"); // eslint-disable-line
@@ -75,7 +76,10 @@ export * from "./Utils/URL/History.js";
 export * from "./Utils/URL/URLs.js";
 
 //export * from "./__DisableExportOverwrites__";
-export const __DisableExportOverwrites__ = true;
+export const __DisableExportOverwrites__ = {};
+// now that our exports are done being attached, we can remove our replacement of Object.defineProperty
+// (attempt is also made in handler itself, on seeing the placeholder export/property above, but it seems to not work reliably)
+RestoreOrigDefinePropertyFunc();
 
 // override system
 // ==========
