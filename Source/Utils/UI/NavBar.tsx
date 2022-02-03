@@ -86,15 +86,15 @@ export class NavBarPageButton extends BaseComponentPlus({} as {page?: string, su
 }
 
 @Observer
-export class NavBarPanelButton extends BaseComponentPlus({} as {text: string, panel: string, hasPage?: boolean, corner: "top-left" | "top-right"}, {}, {active: false}) {
+export class NavBarPanelButton extends BaseComponentPlus({} as {text: string, panel: string, hasPage?: boolean, corner: "top-left" | "top-right", style?}, {}, {active: false}) {
 	render() {
-		const {text, panel, hasPage, corner} = this.props;
+		const {text, panel, hasPage, corner, style} = this.props;
 		const {topLeftOpenPanel, topRightOpenPanel} = manager.store.main;
 		const active = (corner == "top-left" ? topLeftOpenPanel : topRightOpenPanel) == panel;
 
 		this.Stash({active});
 		return (
-			<NavBarButton page={hasPage ? panel : null} text={text} panel={true} active={active} onClick={this.OnClick}/>
+			<NavBarButton page={hasPage ? panel : null} text={text} panel={true} active={active} onClick={this.OnClick} style={style}/>
 		);
 	}
 	OnClick = (e: MouseEvent)=>{
