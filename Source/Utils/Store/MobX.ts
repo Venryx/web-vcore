@@ -1,5 +1,5 @@
 import {enableES5, setAutoFreeze, setUseProxies} from "immer";
-import {CE, E, emptyArray, RemoveCircularLinks, ToJSON} from "js-vextensions";
+import {AssertWarn, CE, E, emptyArray, RemoveCircularLinks, ToJSON} from "js-vextensions";
 import {autorun, configure, observable, ObservableMap, ObservableSet, onReactionError, _getAdministration} from "mobx";
 import {BailHandler, BailHandler_Options, RunInAction} from "mobx-graphlink"; // eslint-disable-line
 import {observer} from "mobx-react";
@@ -85,8 +85,11 @@ export function Observer(...args) {
 }
 
 export function ClassHooks(targetClass: Function) {
-	const componentWillMount_orig = targetClass.prototype.componentWillMount;
-	targetClass.prototype.componentWillMount = function() {
+	AssertWarn(targetClass.prototype.componentWillMount == null, "ClassHooks encountered a 'componentWillMount' method rather than UNSAFE_componentWillMount; ignoring/dropping its functionality.");
+	const attachProp = targetClass.prototype.ComponentWillMount ? "ComponentWillMount" : "UNSAFE_componentWillMount";
+
+	const componentWillMount_orig = targetClass.prototype[attachProp];
+	targetClass.prototype[attachProp] = function() {
 		const MAGIC_STACKS = GetMagicStackSymbol(this);
 		if (!this[MAGIC_STACKS]) {
 			// by initializing comp[MAGIC_STACKS] ahead of time, we keep react-universal-hooks from patching this.render
@@ -288,7 +291,7 @@ export function StartUpdatingMirrorOfMobXTree(mobxTree: any, tree_plainMirror: a
 		const targetIsMap = tree_plainMirror instanceof Map || tree_plainMirror instanceof ObservableMap;
 		//const mobxInfo = mobxTree[$mobx];
 		const mobxInfo = _getAdministration(mobxTree) as ObservableObjectAdministration;
-		let mobxKeys =
+		const mobxKeys =
 			opt.onlyCopyMobXProps ? (mobxInfo?.values_?.keys() ?? emptyArray)
 			: (sourceIsMap ? mobxTree.keys() : Object.keys(mobxTree));
 		//const mobxStoredAnnotations = mobxInfo?.appliedAnnotations_; // this only works in dev-mode
