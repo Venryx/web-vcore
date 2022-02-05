@@ -32,6 +32,7 @@ export function cssHelper(compInstance: React.ReactInstance, cloneInputsForHooks
 	let liveKey: string | null;
 	const key = (...classNames: any[])=>{
 		let classNames_final = classNames;
+		const callIndex = keyCallIndex++;
 
 		const keyHooks = ([] as KeyHook[])
 			.concat(compClassHookSets.get(CompClass_Any)?.key ?? [])
@@ -40,7 +41,7 @@ export function cssHelper(compInstance: React.ReactInstance, cloneInputsForHooks
 		for (const hook of keyHooks) {
 			const ctx = new KeyHook_Context({
 				self: compInstance,
-				callIndex: keyCallIndex++,
+				callIndex,
 				classNames_orig: classNames,
 				classNames: classNames_final,
 			});
@@ -59,6 +60,7 @@ export function cssHelper(compInstance: React.ReactInstance, cloneInputsForHooks
 		let keyFromArg: string|n, styles: StyleOrFalsy[];
 		if (typeof args[0] == "string" && args[0].length > 0) [keyFromArg, ...styles] = args;
 		else styles = args;
+		const callIndex = cssCallIndex++;
 
 		const key_final = keyFromArg ?? liveKey;
 		if (liveKey != null && keyFromArg != null) console.warn("Live-key was set using key(...), but the subsequent css(...) call supplied its own key, discarding the live-key.");
@@ -72,7 +74,7 @@ export function cssHelper(compInstance: React.ReactInstance, cloneInputsForHooks
 			const ctx = new CSSHook_Context({
 				self: compInstance,
 				key: key_final,
-				callIndex: cssCallIndex++,
+				callIndex,
 				styleArgs_orig: styles,
 				styleArgs: styles_final,
 			});
