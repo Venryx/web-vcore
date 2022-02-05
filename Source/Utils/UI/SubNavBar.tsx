@@ -6,7 +6,7 @@ import {Page} from "../../Utils/URL/URLs.js";
 import {manager} from "../../Manager.js";
 import {ActionFunc, Observer} from "../Store/MobX.js";
 import {Link} from "../ReactComponents/Link.js";
-import {cssFor} from "./CSSHelper.js";
+import {cssHelper} from "./CSSHelper.js";
 
 export class SubNavBar_Auto extends BaseComponent<{page: string, fullWidth?: boolean, filter?: (subpage: Page)=>boolean}, {}> {
 	render() {
@@ -28,7 +28,7 @@ export class SubNavBar extends BaseComponent<{fullWidth?: boolean}, {}> {
 		const {fullWidth, children} = this.props;
 		if (!manager.useExpandedNavBar()) return null; // if sub-nav-bar hidden, subpage selection is handled in project's NavBar.tsx
 
-		const {key, css, dyn} = cssFor(this);
+		const {key, css, dyn} = cssHelper(this);
 		return (
 			<nav className={key("root", "clickThrough")} style={css({
 				position: "absolute", zIndex: dyn(manager.zIndexes.subNavBar), top: 0, width: "100%", textAlign: "center",
@@ -65,7 +65,7 @@ export class SubNavBarButton extends BaseComponentPlus({} as {
 			}
 		}
 
-		const {css} = cssFor(this);
+		const {css} = cssHelper(this);
 		return (
 			<Link {...rest} actionFunc={actionFunc} to={to} text={text} style={css(
 				{

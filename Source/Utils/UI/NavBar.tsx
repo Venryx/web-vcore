@@ -5,7 +5,7 @@ import {BaseComponentPlus} from "react-vextensions";
 import {manager} from "../../Manager.js";
 import {Link} from "../ReactComponents/Link.js";
 import {Observer, RunInAction} from "../Store/MobX.js";
-import {cssFor} from "./CSSHelper.js";
+import {cssHelper} from "./CSSHelper.js";
 
 // todo: someday move the NavBar comp itself here (probably)
 
@@ -58,7 +58,7 @@ export class NavBarButton extends BaseComponentPlus(
 		} : null;
 
 		const hoverOrActive = hovered || active;
-		const {css} = cssFor(this);
+		const {css} = cssHelper(this);
 		return (
 			<Link actionFunc={actionFunc} onClick={onClick}
 				onMouseEnter={useCallback(()=>this.SetState({hovered: true}), [])}
@@ -97,7 +97,7 @@ export class NavBarPanelButton extends BaseComponentPlus({} as {text: string, pa
 		const active = (corner == "top-left" ? topLeftOpenPanel : topRightOpenPanel) == panel;
 
 		this.Stash({active});
-		const {css} = cssFor(this);
+		const {css} = cssHelper(this);
 		return (
 			<NavBarButton page={hasPage ? panel : null} text={text} panel={true} active={active} onClick={this.OnClick} style={css(style)}/>
 		);

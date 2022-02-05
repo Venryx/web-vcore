@@ -2,7 +2,7 @@ import {BaseComponent} from "react-vextensions";
 import React from "react";
 import {E} from "js-vextensions";
 import {Icon} from "./Icon.js";
-import {cssFor} from "../UI/CSSHelper.js";
+import {cssHelper} from "../UI/CSSHelper.js";
 
 type Props = {
 	collapsable?: boolean, className?: string, itemClassName?: string, title: (JSX.Element | string), selected?: boolean, defaultCollapsed?: boolean, style?, titleStyle?: any,
@@ -37,7 +37,7 @@ export class TreeView extends BaseComponent<Props, {collapsed: boolean}> {
 		var {collapsed} = this.state;
 
 		var iconSize = 8; // with padding: 12
-		const {css} = cssFor(this);
+		const {css} = cssHelper(this);
 		return (
 			<div style={style} {...rest}>
 				<Icon icon={`arrow-${collapsed ? "right" : "down"}`} size={iconSize}

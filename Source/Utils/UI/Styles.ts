@@ -1,4 +1,5 @@
 import {Assert, E} from "js-vextensions";
+import {addHook_css, CompClass_Any, Style} from "./CSSHelper.js";
 
 export type CSSColorStringType = "hsl" | "hsla";
 /** Converts color-props into a css color-string of the specified format. */
@@ -41,3 +42,14 @@ export function ES(...styles) {
 
 	return result;
 }
+
+addHook_css(CompClass_Any, ctx=>{
+	const merged = Object.assign({}, ...ctx.styleArgs);
+	// prevents {flex: 1} from setting {[minWidth/minHeight]: "auto"}
+	if (merged.flex) {
+		const newEntry = {} as Style;
+		if (merged.minWidth == null) newEntry.minWidth = 0;
+		if (merged.minHeight == null) newEntry.minHeight = 0;
+		ctx.styleArgs.push(newEntry);
+	}
+});

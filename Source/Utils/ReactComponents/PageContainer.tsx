@@ -3,20 +3,7 @@ import {BaseComponent, BaseComponentPlus} from "react-vextensions";
 import {Row, Div} from "react-vcomponents";
 import {ToInt, IsNumber, E} from "js-vextensions";
 import React from "react";
-
-// same as E(...), except applies extra things for style-objects
-// (alternative: the global "* { minWidth: 0; minHeight: 0; }" style)
-function ES(...styles) {
-	const result = E(...styles);
-
-	// prevents {flex: 1} from setting {[minWidth/minHeight]: "auto"}
-	if (result.flex) {
-		if (result.minWidth == null) result.minWidth = 0;
-		if (result.minHeight == null) result.minHeight = 0;
-	}
-
-	return result;
-}
+import {cssHelper} from "../UI/CSSHelper.js";
 
 export function GetExpandedCSSPropValuesFromString(propName: string, styleStrOrNum: React.ReactText) {
 	if (styleStrOrNum == null) return {};
@@ -47,7 +34,8 @@ export function GetExpandedCSSPropValuesFromValueArray(propName: string, styleVa
 	return {}; // invalid number of values (must contain calc() or something); return empty object
 }
 
-export function ReactTextToPixelVal(reactText: React.ReactText) {
+export function ReactTextToPixelVal(reactText: React.ReactText | number | n) {
+	if (reactText == null) return null;
 	if (IsNumber(reactText)) return reactText;
 	if (reactText.trim() == "0") return 0;
 	const pxMatch = reactText.match(/(\d+)px/);
@@ -63,6 +51,7 @@ export class PageContainer extends BaseComponentPlus(
 ) {
 	render() {
 		let {preset, scrollable, shadow, style, innerStyle, children, ...rest} = this.props; // eslint-disable-line
+		const {css} = cssHelper(this);
 		const outerStyle = style || {};
 		innerStyle = innerStyle || {};
 		//shadow = shadow ?? preset == "text";
@@ -70,19 +59,17 @@ export class PageContainer extends BaseComponentPlus(
 			shadow = true;
 		}
 
-		const outerStyle_base = ES(
+		const outerStyle_base = css("outerStyle_base",
 			preset == "text" && {flex: "0 1 960px", margin: "50px 10px 20px 10px"},
 			preset == "full" && {flex: 1, width: "100%", margin: "30px 0 0 0"},
-			shadow && {filter: "drop-shadow(rgb(0, 0, 0) 0px 0px 10px)"},
-		);
-		const innerStyle_base = ES(
+			shadow && {filter: "drop-shadow(rgb(0, 0, 0) 0px 0px 10px)"});
+		const innerStyle_base = css("innerStyle_base",
 			{display: "flex", flexDirection: "column", borderRadius: 10},
-			preset == "text" && {padding: 50, background: `rgba(0,0,0,${shadow ? ".6" : ".8"})`},
-		);
+			preset == "text" && {padding: 50, background: `rgba(0,0,0,${shadow ? ".6" : ".8"})`});
 
 		if (preset) {
-			const marginValuesFromMarginProp = GetExpandedCSSPropValuesFromString("margin", ES(outerStyle_base, outerStyle).margin);
-			const marginValues = ES(marginValuesFromMarginProp, outerStyle);
+			const marginValuesFromMarginProp = GetExpandedCSSPropValuesFromString("margin", css(outerStyle_base, outerStyle).margin as string);
+			const marginValues = css(marginValuesFromMarginProp, outerStyle);
 			const verticalMargin = (ReactTextToPixelVal(marginValues.marginTop) ?? 0) + (ReactTextToPixelVal(marginValues.marginBottom) ?? 0);
 			outerStyle_base[preset == "full" ? "height" : "maxHeight"] = `calc(100% - ${verticalMargin}px)`;
 		}
@@ -90,15 +77,17 @@ export class PageContainer extends BaseComponentPlus(
 		if (scrollable) {
 			return (
 				<ScrollView {...rest as any}
-						style={ES(outerStyle_base, outerStyle)}
-						contentStyle={ES(innerStyle_base, innerStyle)}>
+					style={css("root", outerStyle_base, outerStyle)}
+					contentStyle={css("root_content", innerStyle_base, innerStyle)}
+				>
 					{children}
 				</ScrollView>
 			);
 		}
 		return (
 			<Div {...rest as any}
-					style={ES(outerStyle_base, innerStyle_base, {alignItems: "stretch"}, outerStyle, innerStyle)}>
+				style={css("root", outerStyle_base, innerStyle_base, {alignItems: "stretch"}, outerStyle, innerStyle)}
+			>
 				{children}
 			</Div>
 		);

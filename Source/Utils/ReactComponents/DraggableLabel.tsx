@@ -1,7 +1,7 @@
 import {BaseComponent} from "react-vextensions";
 import {Vector2, E} from "js-vextensions";
 import React from "react";
-import {cssFor} from "../UI/CSSHelper.js";
+import {cssHelper} from "../UI/CSSHelper.js";
 
 export class DraggableLabel extends BaseComponent<{
 	onDragStart: ()=>any,
@@ -9,7 +9,7 @@ export class DraggableLabel extends BaseComponent<{
 } & Omit<React.HTMLProps<HTMLLabelElement>, "onDragStart" | "onDrag">, {}> {
 	render() {
 		const {onDragStart, onDrag, style, ...rest} = this.props;
-		const {css} = cssFor(this);
+		const {css} = cssHelper(this);
 		return (
 			<label {...rest}
 				style={css(

@@ -5,13 +5,12 @@ Todo items
 2) Extract this system into a separate package. (at some point)
 */
 
-import React from "react";
-import {ES} from "./Styles.js";
+import React, {Component} from "react";
 
 /**
  * Example usage:
  * ```
- * const {key, css, dyn} = cssFor(this);
+ * const {key, css, dyn} = cssHelper(this);
  * return (
  * 	<nav className={key("root", "clickThrough")} style={css({
  * 		position: "absolute", zIndex: dyn(manager.zIndexes.subNavBar), top: 0, width: "100%", textAlign: "center",
@@ -26,7 +25,7 @@ import {ES} from "./Styles.js";
  * );
  * ```
  */
-export function cssFor(compInstance: React.ReactInstance, cloneInputsForHooks = true) {
+export function cssHelper(compInstance: React.ReactInstance, cloneInputsForHooks = true) {
 	const compClass = compInstance.constructor as CompClass;
 
 	let keyCallIndex = 0;
@@ -34,7 +33,9 @@ export function cssFor(compInstance: React.ReactInstance, cloneInputsForHooks = 
 	const key = (...classNames: any[])=>{
 		let classNames_final = classNames;
 
-		const keyHooks = compClassHookSets.get(compClass)?.key ?? [];
+		const keyHooks = ([] as KeyHook[])
+			.concat(compClassHookSets.get(CompClass_Any)?.key ?? [])
+			.concat(compClassHookSets.get(compClass)?.key ?? []);
 		if (cloneInputsForHooks && keyHooks.length) classNames_final = classNames_final.slice();
 		for (const hook of keyHooks) {
 			const ctx = new KeyHook_Context({
@@ -51,15 +52,26 @@ export function cssFor(compInstance: React.ReactInstance, cloneInputsForHooks = 
 	};
 
 	let cssCallIndex = 0;
-	const css = (...styles: StyleOrFalsy[])=>{
+	const css = <{
+		(key: string, ...styles: StyleOrFalsy[]): React.CSSProperties;
+		(...styles: StyleOrFalsy[]): React.CSSProperties;
+	}>((...args)=>{
+		let keyFromArg: string|n, styles: StyleOrFalsy[];
+		if (typeof args[0] == "string" && args[0].length > 0) [keyFromArg, ...styles] = args;
+		else styles = args;
+
+		const key_final = keyFromArg ?? liveKey;
+		if (liveKey != null && keyFromArg != null) console.warn("Live-key was set using key(...), but the subsequent css(...) call supplied its own key, discarding the live-key.");
 		let styles_final = styles;
 
-		const cssHooks = compClassHookSets.get(compClass)?.css ?? [];
+		const cssHooks = ([] as CSSHook[])
+			.concat(compClassHookSets.get(CompClass_Any)?.css ?? [])
+			.concat(compClassHookSets.get(compClass)?.css ?? []);
 		if (cloneInputsForHooks && cssHooks.length) styles_final = styles_final.slice();
 		for (const hook of cssHooks) {
 			const ctx = new CSSHook_Context({
 				self: compInstance,
-				key: liveKey,
+				key: key_final,
 				callIndex: cssCallIndex++,
 				styleArgs_orig: styles,
 				styleArgs: styles_final,
@@ -68,8 +80,8 @@ export function cssFor(compInstance: React.ReactInstance, cloneInputsForHooks = 
 		}
 
 		liveKey = null;
-		return ES(...styles_final) as React.CSSProperties;
-	};
+		return Object.assign({}, ...styles_final) as React.CSSProperties;
+	});
 
 	const dyn = <T>(val: T)=>{
 		return val;
@@ -87,7 +99,9 @@ export type ConvertType_UndefToUndefOrNull<T> = T extends undefined ? (undefined
 
 export type StyleOrFalsy = Style | "" | 0 | false | null | undefined;
 export type CompClass = new(..._)=>React.Component;
-export const compClassHookSets = new Map<CompClass, CompClassHookSet>();
+/** Pass this into the addHook functions to have your hook run for any component-class. */
+export class CompClass_Any extends Component {}
+export const compClassHookSets = new WeakMap<CompClass, CompClassHookSet>();
 export class CompClassHookSet {
 	key: KeyHook[] = [];
 	css: CSSHook[] = [];

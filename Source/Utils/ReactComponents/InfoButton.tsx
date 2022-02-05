@@ -5,7 +5,7 @@ import {Button, ButtonProps} from "react-vcomponents";
 import React from "react";
 import {E} from "js-vextensions";
 import {InTooltip, InTooltipProps} from "./Tooltip.js";
-import {cssFor} from "../UI/CSSHelper.js";
+import {cssHelper} from "../UI/CSSHelper.js";
 
 type EffectType = "float" | "solid";
 class TooltipInfo {
@@ -59,7 +59,7 @@ export class InfoButton extends BaseComponent<InfoButtonProps, {}> {
 				{text}
 			</InTooltip>
 		);
-		const {css} = cssFor(this);
+		const {css} = cssHelper(this);
 		return (
 			<Tooltip placement="top" overlay={tooltip}>
 				<Button {...rest as any} size={13} iconSize={13} iconPath="/Images/Buttons/Info.png"

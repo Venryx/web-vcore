@@ -2,7 +2,7 @@ import {BaseComponent} from "react-vextensions";
 import React, {SVGFactory, DetailedHTMLFactory} from "react";
 import {Assert, E} from "js-vextensions";
 import {manager} from "../../index.js";
-import {cssFor} from "../UI/CSSHelper.js";
+import {cssHelper} from "../UI/CSSHelper.js";
 
 // todo: get this working, despite our now being in the web-vcore module
 
@@ -27,7 +27,7 @@ export class Icon extends BaseComponent<Props, {}> {
 	static defaultProps = {color: "rgba(255,255,255,.7)"};
 	render() {
 		const {divContainer, icon, iconData, size, color, style, ...rest} = this.props;
-		const {css} = cssFor(this);
+		const {css} = cssHelper(this);
 
 		let svgComp: JSX.Element|undefined;
 		if (icon) {
