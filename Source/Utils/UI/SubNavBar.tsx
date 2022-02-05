@@ -70,7 +70,7 @@ export class SubNavBarButton extends BaseComponentPlus({} as {
 			<Link {...rest} actionFunc={actionFunc} to={to} text={text} style={css(
 				{
 					display: "inline-block", cursor: "pointer", verticalAlign: "middle",
-					lineHeight: "30px", color: "rgba(255,255,255,.7)", padding: "0 15px", fontSize: 12, textDecoration: "none", opacity: 0.9,
+					lineHeight: "30px", color: "rgba(255,255,255,1)", padding: "0 15px", fontSize: 12, textDecoration: "none", opacity: 0.9,
 					//":hover": {color: "rgba(100,255,100,1)"},
 				},
 				active && {color: "rgba(100,255,100,1)"},
