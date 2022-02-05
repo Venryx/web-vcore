@@ -1,5 +1,5 @@
 import {Assert, E} from "js-vextensions";
-import {addHook_css, CompClass_Any, Style} from "./CSSHelper.js";
+import {addHook_css, CompClass_Any, Style} from "react-vextensions";
 
 export type CSSColorStringType = "hsl" | "hsla";
 /** Converts color-props into a css color-string of the specified format. */

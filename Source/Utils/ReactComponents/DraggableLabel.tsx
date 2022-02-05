@@ -1,7 +1,6 @@
-import {BaseComponent} from "react-vextensions";
+import {BaseComponent, cssHelper} from "react-vextensions";
 import {Vector2, E} from "js-vextensions";
 import React from "react";
-import {cssHelper} from "../UI/CSSHelper.js";
 
 export class DraggableLabel extends BaseComponent<{
 	onDragStart: ()=>any,

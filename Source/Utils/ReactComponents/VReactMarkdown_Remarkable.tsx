@@ -7,7 +7,7 @@ import {ParseTextForPatternMatchSegments} from "../General/RegexHelpers.js";
 import {GetCurrentURL} from "../URL/URLs.js";
 import {Link} from "./Link.js";
 import {ReplacementFunc} from "./VReactMarkdown.js";
-import {cssHelper} from "../UI/CSSHelper.js";
+import {cssHelper} from "react-vextensions";;
 
 //import Markdown from "react-remarkable";
 

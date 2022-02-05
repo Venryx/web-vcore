@@ -2,7 +2,7 @@ import {BaseComponent} from "react-vextensions";
 import React from "react";
 import {E} from "js-vextensions";
 import {Icon} from "./Icon.js";
-import {cssHelper} from "../UI/CSSHelper.js";
+import {cssHelper} from "react-vextensions";;
 
 type Props = {
 	collapsable?: boolean, className?: string, itemClassName?: string, title: (JSX.Element | string), selected?: boolean, defaultCollapsed?: boolean, style?, titleStyle?: any,

@@ -1,9 +1,8 @@
 import {ScrollView} from "react-vscrollview";
-import {BaseComponent, BaseComponentPlus} from "react-vextensions";
+import {BaseComponent, BaseComponentPlus, cssHelper} from "react-vextensions";
 import {Row, Div} from "react-vcomponents";
 import {ToInt, IsNumber, E} from "js-vextensions";
 import React from "react";
-import {cssHelper} from "../UI/CSSHelper.js";
 
 export function GetExpandedCSSPropValuesFromString(propName: string, styleStrOrNum: React.ReactText) {
 	if (styleStrOrNum == null) return {};

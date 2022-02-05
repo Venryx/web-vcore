@@ -1,6 +1,6 @@
 import {BaseComponent} from "react-vextensions";
 import React, {HTMLProps} from "react";
-import {cssHelper} from "../UI/CSSHelper.js";
+import {cssHelper} from "react-vextensions";;
 //import "rc-tooltip/assets/bootstrap.css";
 
 export type InTooltipProps = {style?: any} & Partial<HTMLProps<HTMLDivElement>>;

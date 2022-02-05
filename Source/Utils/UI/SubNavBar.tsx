@@ -1,12 +1,11 @@
 import {E} from "js-vextensions";
-import {BaseComponent, BaseComponentPlus} from "react-vextensions";
+import {BaseComponent, BaseComponentPlus, cssHelper} from "react-vextensions";
 import React, {ClassAttributes, ComponentProps, ComponentPropsWithoutRef} from "react";
 import {RootStore} from "web-vcore_UserTypes";
 import {Page} from "../../Utils/URL/URLs.js";
 import {manager} from "../../Manager.js";
 import {ActionFunc, Observer} from "../Store/MobX.js";
 import {Link} from "../ReactComponents/Link.js";
-import {cssHelper} from "./CSSHelper.js";
 
 export class SubNavBar_Auto extends BaseComponent<{page: string, fullWidth?: boolean, filter?: (subpage: Page)=>boolean}, {}> {
 	render() {
@@ -71,7 +70,7 @@ export class SubNavBarButton extends BaseComponentPlus({} as {
 				{
 					display: "inline-block", cursor: "pointer", verticalAlign: "middle",
 					lineHeight: "30px", color: "rgba(255,255,255,1)", padding: "0 15px", fontSize: 12, textDecoration: "none", opacity: 0.9,
-					//":hover": {color: "rgba(100,255,100,1)"},
+					":hover": {color: "rgba(100,255,100,1)"},
 				},
 				active && {color: "rgba(100,255,100,1)"},
 				style,

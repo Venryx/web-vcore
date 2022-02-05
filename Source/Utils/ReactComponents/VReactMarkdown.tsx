@@ -7,7 +7,7 @@ import {Segment, ParseTextForPatternMatchSegments} from "../General/RegexHelpers
 import {GetCurrentURL} from "../URL/URLs.js";
 import {Link} from "./Link.js";
 import {manager} from "../../Manager.js";
-import {cssHelper} from "../UI/CSSHelper.js";
+import {cssHelper} from "react-vextensions";;
 
 export type ReplacementFunc = (segment: Segment, index: number, extraInfo)=>JSX.Element;
 
