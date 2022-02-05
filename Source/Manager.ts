@@ -1,16 +1,36 @@
 import {VURL, Assert} from "js-vextensions";
 import {RootStore} from "web-vcore_UserTypes";
+import {PartialBy} from "mobx-graphlink";
+import chroma from "chroma-js";
 import {browserHistory} from "./Utils/URL/History.js";
 import {LogOptions} from "./Utils/General/Logging.js";
 import {ActionFunc} from "./Utils/Store/MobX.js";
 import {Page} from "./Utils/URL/URLs.js";
 
+/** For any field in baseMap that extendMap lacks, mutate extendMap to include it; equivalent to Object.assign(extendMap, baseMap, {...extendMap}). */
+function ExtendObjectMap_StoredInExtendMap(baseMap: Object, extendMap: Object|n) {
+	if (extendMap == null) return baseMap;
+	for (const [key, value] of Object.entries(baseMap)) {
+		if (!(key in extendMap)) {
+			extendMap[key] = value;
+		}
+	}
+}
+
+type Populate_OmitFields = "Populate" | "store" | "rootState";
+type Populate_OptionalFields = "colors" | "zIndexes";
 export class Manager {
 	/*onPopulated = new Promise((resolve, reject)=>this.onPopulated_resolve = resolve);
 	onPopulated_resolve: Function;*/
 	//Populate(data: Omit<Manager, "onPopulated" | "onPopulated_resolve" | "Populate">) {
-	Populate(data: Omit<Manager, "Populate" | "store" | "rootState">) {
+	Populate(data: PartialBy<Omit<Manager, Populate_OmitFields>, Populate_OptionalFields>) {
+		const oldData = {...this};
 		this.Extend(data);
+
+		// use these helpers, such that the object-reference remains the same as the object sent in (thus the caller can mutate the values easily later)
+		ExtendObjectMap_StoredInExtendMap(oldData.colors, data.colors);
+		ExtendObjectMap_StoredInExtendMap(oldData.zIndexes, data.zIndexes);
+
 		//G({Log: Log}); // set globals
 		//this.onPopulated_resolve();
 		OnPopulated_listeners.forEach(a=>a());
@@ -22,8 +42,8 @@ export class Manager {
 	// styling and such
 	// ==========
 
-	colors: {navBarBoxShadow: string};
-	zIndexes: {subNavBar: number};
+	colors = {};
+	zIndexes = {subNavBar: 11};
 	iconInfo: {[key: string]: any};
 	useExpandedNavBar: ()=>boolean;
 

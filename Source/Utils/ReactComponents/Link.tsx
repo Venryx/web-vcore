@@ -2,11 +2,11 @@ import {VURL, Assert, E} from "js-vextensions";
 import React from "react";
 import {BaseComponent, FilterOutUnrecognizedProps, BaseComponentPlus} from "react-vextensions";
 import {runInAction} from "mobx";
+import {RootStore} from "web-vcore_UserTypes";
+import {BailError} from "mobx-graphlink";
 import {GetCurrentURL} from "../URL/URLs.js";
 import {manager} from "../../Manager.js";
 import {ActionFunc, Observer, RunInAction} from "../Store/MobX.js";
-import {RootStore} from "web-vcore_UserTypes";
-import {BailError} from "mobx-graphlink";
 
 function isModifiedEvent(event) {
 	return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);

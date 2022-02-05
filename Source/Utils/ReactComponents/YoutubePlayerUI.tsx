@@ -3,6 +3,7 @@ import {BaseComponent, BaseComponentPlus} from "react-vextensions";
 import {Row} from "react-vcomponents";
 import {E} from "js-vextensions";
 import {YoutubePlayer, PosChangeSource} from "../General/YoutubePlayer.js";
+import {cssFor} from "../UI/CSSHelper.js";
 
 export function ParseYoutubeVideoID(url: string) {
 	return url?.match(/v=([A-Za-z0-9_-]{11})/)?.[1];
@@ -22,8 +23,9 @@ export class YoutubePlayerUI extends BaseComponentPlus(
 	root: HTMLDivElement|null;
 	render() {
 		const {heightVSWidthPercent, style} = this.props;
+		const {css} = cssFor(this);
 		return (
-			<div ref={c=>this.root = c} style={E({position: "relative", paddingBottom: `${heightVSWidthPercent * 100}%`, height: 0}, style)}/>
+			<div ref={c=>this.root = c} style={css({position: "relative", paddingBottom: `${heightVSWidthPercent * 100}%`, height: 0}, style)}/>
 		);
 	}
 

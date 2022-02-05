@@ -2,6 +2,7 @@ import {BaseComponent} from "react-vextensions";
 import React from "react";
 import {E} from "js-vextensions";
 import {Icon} from "./Icon.js";
+import {cssFor} from "../UI/CSSHelper.js";
 
 type Props = {
 	collapsable?: boolean, className?: string, itemClassName?: string, title: (JSX.Element | string), selected?: boolean, defaultCollapsed?: boolean, style?, titleStyle?: any,
@@ -36,10 +37,11 @@ export class TreeView extends BaseComponent<Props, {collapsed: boolean}> {
 		var {collapsed} = this.state;
 
 		var iconSize = 8; // with padding: 12
+		const {css} = cssFor(this);
 		return (
 			<div style={style} {...rest}>
 				<Icon icon={`arrow-${collapsed ? "right" : "down"}`} size={iconSize}
-					style={E(
+					style={css(
 						{
 							display: "inline-block", boxSizing: "content-box" as any, width: iconSize, height: iconSize, verticalAlign: "top", marginTop: 2, padding: 2,
 							backgroundPosition: 2, backgroundRepeat: "no-repeat", backgroundSize: 8, cursor: "pointer",
@@ -48,14 +50,14 @@ export class TreeView extends BaseComponent<Props, {collapsed: boolean}> {
 					)}
 					onClick={this.onArrowClick.bind(this)}/>
 				<div onClick={this.onClick.bind(this)}
-					style={E(
+					style={css(
 						titleStyle,
 						{display: "inline-flex", width: "calc(100% - 12px)",
 							backgroundColor: selected ? "rgba(44, 79, 122, .5)" : null},
 					)}>
 					{title}
 				</div>
-				<div style={E({paddingLeft: 10}, collapsed && {display: "none"})}>
+				<div style={css({paddingLeft: 10}, collapsed && {display: "none"})}>
 					{children}
 				</div>
 			</div>

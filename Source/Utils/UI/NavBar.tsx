@@ -5,6 +5,7 @@ import {BaseComponentPlus} from "react-vextensions";
 import {manager} from "../../Manager.js";
 import {Link} from "../ReactComponents/Link.js";
 import {Observer, RunInAction} from "../Store/MobX.js";
+import {cssFor} from "./CSSHelper.js";
 
 // todo: someday move the NavBar comp itself here (probably)
 
@@ -23,14 +24,6 @@ export class NavBarButton extends BaseComponentPlus(
 		const currentPage = manager.store.main.page;
 		active = active != null ? active : page == currentPage;
 		const pageEntry = manager.pageTree.children[page];
-
-		const finalStyle = E(
-			{
-				position: "relative", display: "inline-block", cursor: "pointer", verticalAlign: "middle",
-				lineHeight: largeVersion ? "45px" : "25px", color: "#FFF", padding: "0 15px", fontSize: 12, textDecoration: "none", opacity: 0.9,
-			},
-			style,
-		);
 
 		//const actionFunc = page ? (s: RootStore)=>{
 		const actionFunc = page ? (s: any)=>{
@@ -65,11 +58,22 @@ export class NavBarButton extends BaseComponentPlus(
 		} : null;
 
 		const hoverOrActive = hovered || active;
+		const {css} = cssFor(this);
 		return (
-			<Link actionFunc={actionFunc} style={finalStyle} onMouseEnter={useCallback(()=>this.SetState({hovered: true}), [])} onMouseLeave={useCallback(()=>this.SetState({hovered: false}), [])} onClick={onClick}>
+			<Link actionFunc={actionFunc} onClick={onClick}
+				onMouseEnter={useCallback(()=>this.SetState({hovered: true}), [])}
+				onMouseLeave={useCallback(()=>this.SetState({hovered: false}), [])}
+				style={css(
+					{
+						position: "relative", display: "inline-block", cursor: "pointer", verticalAlign: "middle",
+						lineHeight: largeVersion ? "45px" : "25px", color: "rgba(255,255,255,1)", padding: "0 15px", fontSize: 12, textDecoration: "none", opacity: 0.9,
+					},
+					style,
+				)}
+			>
 				{text}
 				{hoverOrActive &&
-					<div style={{position: "absolute", left: 0, right: 0, bottom: 0, height: 2, background: "rgba(100,255,100,1)"}}/>}
+					<div style={css({position: "absolute", left: 0, right: 0, bottom: 0, height: 2, background: "rgba(100,255,100,1)"})}/>}
 			</Link>
 		);
 	}
@@ -93,8 +97,9 @@ export class NavBarPanelButton extends BaseComponentPlus({} as {text: string, pa
 		const active = (corner == "top-left" ? topLeftOpenPanel : topRightOpenPanel) == panel;
 
 		this.Stash({active});
+		const {css} = cssFor(this);
 		return (
-			<NavBarButton page={hasPage ? panel : null} text={text} panel={true} active={active} onClick={this.OnClick} style={style}/>
+			<NavBarButton page={hasPage ? panel : null} text={text} panel={true} active={active} onClick={this.OnClick} style={css(style)}/>
 		);
 	}
 	OnClick = (e: MouseEvent)=>{

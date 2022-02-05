@@ -2,6 +2,7 @@ import {BaseComponent} from "react-vextensions";
 import React, {SVGFactory, DetailedHTMLFactory} from "react";
 import {Assert, E} from "js-vextensions";
 import {manager} from "../../index.js";
+import {cssFor} from "../UI/CSSHelper.js";
 
 // todo: get this working, despite our now being in the web-vcore module
 
@@ -26,6 +27,7 @@ export class Icon extends BaseComponent<Props, {}> {
 	static defaultProps = {color: "rgba(255,255,255,.7)"};
 	render() {
 		const {divContainer, icon, iconData, size, color, style, ...rest} = this.props;
+		const {css} = cssFor(this);
 
 		let svgComp: JSX.Element|undefined;
 		if (icon) {
@@ -34,7 +36,7 @@ export class Icon extends BaseComponent<Props, {}> {
 			const info = manager.iconInfo[`./${icon}.svg`];
 			Assert(info != null, `Could not find icon-info for "${icon}.svg" in manager.iconInfo map. See comment in web-vcore/Source/Utils/ReactComponent/Icon.tsx for example code.`);
 			svgComp = (
-				<svg {...rest as any} viewBox={info.viewBox} width={size} height={size} style={E(style)}>
+				<svg {...rest as any} viewBox={info.viewBox} width={size} height={size} style={css(style)}>
 					<use xlinkHref={`#${info.id}`} style={{fill: color}}/>
 				</svg>
 			);
@@ -43,7 +45,7 @@ export class Icon extends BaseComponent<Props, {}> {
 		const divContainer_final = divContainer || iconData;
 		if (divContainer_final) {
 			return (
-				<div {...rest as any} style={E({width: size, height: size}, iconData && {background: `url(${iconData})`}, style)}>
+				<div {...rest as any} style={css({width: size, height: size}, iconData && {background: `url(${iconData})`}, style)}>
 					{svgComp}
 				</div>
 			);

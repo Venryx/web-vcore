@@ -7,6 +7,7 @@ import {ParseTextForPatternMatchSegments} from "../General/RegexHelpers.js";
 import {GetCurrentURL} from "../URL/URLs.js";
 import {Link} from "./Link.js";
 import {ReplacementFunc} from "./VReactMarkdown.js";
+import {cssFor} from "../UI/CSSHelper.js";
 
 //import Markdown from "react-remarkable";
 
@@ -104,6 +105,7 @@ export class VReactMarkdown_Remarkable extends BaseComponent<Props, {}> {
 	render() {
 		const {source, extraInfo, markdownOptions, rendererOptions, replacements, containerType, style, addMarginsForDanglingNewLines, ...rest} = this.props;
 		//source = source || this.FlattenedChildren.join("\n\n");
+		const {css} = cssFor(this);
 
 		if (this.markdown == null) {
 			this.InitMarkdown(this.props);
@@ -122,7 +124,7 @@ export class VReactMarkdown_Remarkable extends BaseComponent<Props, {}> {
 						return (
 							<VReactMarkdown_Remarkable key={index} source={text.trim()} replacements={replacements} extraInfo={extraInfo}
 								markdownOptions={markdownOptions} rendererOptions={rendererOptions}
-								style={E(addMarginsForDanglingNewLines && {
+								style={css(addMarginsForDanglingNewLines && {
 									marginTop: text.startsWith("\n\n") ? 15 : text.startsWith("\n") ? 5 : 0,
 									marginBottom: text.endsWith("\n\n") ? 15 : text.endsWith("\n") ? 5 : 0,
 								})}

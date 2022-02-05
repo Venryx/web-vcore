@@ -7,6 +7,7 @@ import {Segment, ParseTextForPatternMatchSegments} from "../General/RegexHelpers
 import {GetCurrentURL} from "../URL/URLs.js";
 import {Link} from "./Link.js";
 import {manager} from "../../Manager.js";
+import {cssFor} from "../UI/CSSHelper.js";
 
 export type ReplacementFunc = (segment: Segment, index: number, extraInfo)=>JSX.Element;
 
@@ -16,6 +17,7 @@ export class VReactMarkdown extends BaseComponent
 	{}> {
 	render() {
 		const {source, replacements, extraInfo, style, addMarginsForDanglingNewLines, containerProps, components, ...rest} = this.props;
+		const {css} = cssFor(this);
 
 		const containerProps_final = {...containerProps};
 		containerProps_final.style = E(containerProps_final.style, style);
@@ -50,7 +52,7 @@ export class VReactMarkdown extends BaseComponent
 							}
 							const text = segment.text.replace(/\r/g, "");
 							return (
-								<div style={E(!addMarginsForDanglingNewLines ? {} : {
+								<div style={css(!addMarginsForDanglingNewLines ? {} : {
 									marginTop: text.startsWith("\n\n") ? 15 : text.startsWith("\n") ? 5 : 0,
 									marginBottom: text.endsWith("\n\n") ? 15 : text.endsWith("\n") ? 5 : 0,
 								})}>
