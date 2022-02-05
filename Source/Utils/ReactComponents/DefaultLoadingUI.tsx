@@ -2,8 +2,6 @@ import {BailHandler_loadingUI_default_Set, BailError} from "mobx-graphlink";
 import React from "react";
 import {Row, Text} from "react-vcomponents";
 import {BaseComponent, BaseComponentPlus, cssHelper} from "react-vextensions";
-
-import {ES} from "../UI/Styles.js";
 import {InfoButton} from "./InfoButton.js";
 
 BailHandler_loadingUI_default_Set(info=>{

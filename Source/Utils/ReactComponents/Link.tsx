@@ -96,10 +96,4 @@ export class Link extends BaseComponentPlus({} as Link_Props, {}) {
 			</a>
 		);
 	}
-
-	// add proxy, since using Radium
-	/*setState(newState, callback?) {
-		return this.SetState(newState, callback);
-	}*/
 }
-//Link.prototype.setState = function(newState, callback?) { return this.SetState(newState, callback); }; // add proxy, since using Radium
