@@ -48,6 +48,17 @@ If including package.json, modify the diff file afterward to omit the npm-instal
 
 For details on how the patch files are parsed, see here: https://github.com/ds300/patch-package/blob/5c2c92bf504885fba4840870a23fc8999c00e572/src/patch/parse.ts
 
+### Usage of yalc/zalc with subdeps
+
+Steps to newly-link subdep:
+* 1\) Run `zalc push` in subdep's source repo.
+* 2\) Run `zalc add SUBDEP_NAME` in web-vcore repo.
+* 3\) Open `yalc.lock`, remove the fields other than `signature` for the subdep, then add the field `pure: true`.
+* 4\) Open `package.json`, and set the version for that subdep (back to) the current version number. (must update this when version changes in subdep's source repo)
+* 5\) Run `yarn` in web-vcore repo.
+* 6\) Run `zalc push` in web-vcore repo.
+* 7\) Run `yarn` in user project.
+
 ### Documentation
 
 For the most part, web-vcore is meant to be learned/used based on referencing the codebase of existing projects using it (eg. [Debate Map](https://github.com/debate-map/app)). This is because the package is only intended/expected to be used for projects I'm building, so there's not that much benefit to creating full-fledged documentation.

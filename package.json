@@ -133,7 +133,7 @@
 		"react-vmarkdown": "1.0.3",
 		"react-vmenu": "1.0.14",
 		"react-vmessagebox": "1.0.12",
-		"react-vscrollview": "1.0.3",
+		"react-vscrollview": "1.0.4",
 		"remarkable": "^2.0.1",
 		"remarkable-react": "^1.4.3",
 		"sass-loader": "^12.1.0",

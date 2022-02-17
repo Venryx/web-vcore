@@ -16,6 +16,7 @@ import webpack from "webpack";
 import WebpackStringReplacer from "webpack-string-replacer";
 import ModuleDependencyWarning from "webpack/lib/ModuleDependencyWarning.js";
 import DuplicatePackageCheckerPlugin from "@cerner/duplicate-package-checker-webpack-plugin";
+import _ from "lodash";
 import {MakeSoWebpackConfigOutputsStats} from "./WebpackConfig/OutputStats.js";
 import type {CreateConfig_ReturnType} from "../Config";
 
@@ -123,7 +124,11 @@ export class CreateWebpackConfig_Options {
 	npmPatch_replacerConfig: any;
 
 	/** Raw webpack-config field sets/overrides. */
-	ext: Partial<webpack.Configuration> & {
+	ext_shallow: Partial<webpack.Configuration> & {
+		name: string,
+	};
+	/** Deep webpack-config merge object. (runs after application of the shallow ext_shallow data) */
+	ext_deep: Partial<webpack.Configuration> & {
 		name: string,
 	};
 
@@ -598,7 +603,10 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 		alwaysEmitErrorsFor: ["react", "react-router"],
 	}));
 
-	return Object.assign(webpackConfig, opt.ext);
+	// apply parent-project's overrides
+	Object.assign(webpackConfig, opt.ext_shallow);
+	_.merge(webpackConfig, opt.ext_deep);
+	return webpackConfig;
 }
 
 // also do this, for if sending to cli-started webpack

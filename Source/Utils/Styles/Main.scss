@@ -33,9 +33,9 @@
 
 // Some best-practice CSS that's useful for most apps
 // Just remove them if they're not what you want
-html {
+/*html {
 	box-sizing: border-box;
-}
+}*/
 
 html, body {
 	margin: 0;
@@ -55,7 +55,9 @@ html, body {
 	}*/
 }
 * {
-	box-sizing: inherit;
+	//box-sizing: inherit;
+	box-sizing: border-box;
+
 	// If element has {flex: 1}, css-spec dictates that minWidth/minHeight be set to "auto".
 	// We revert that by having all elements default minWidth/minHeight to 0.
 	// Why? Because otherwise, given:
@@ -69,7 +71,8 @@ html, body {
 	min-height: 0;*/
 }
 *:before, *:after {
-	box-sizing: inherit;
+	//box-sizing: inherit;
+	box-sizing: border-box;
 }
 /**, .quick1 { nothing: nothing; }*/
 [type=button] {
