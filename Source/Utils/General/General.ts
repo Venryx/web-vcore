@@ -1,7 +1,7 @@
 import Moment from "moment";
 import {Assert, emptyArray, emptyArray_forLoading, WaitXThenRun} from "js-vextensions";
 import {DeepMap} from "mobx-graphlink/Dist/Utils/General/DeepMap";
-import chroma from "chroma-js";
+import chroma, {ColorSpaces} from "chroma-js";
 
 G({Moment});
 
@@ -167,9 +167,42 @@ export function WaitXThenRun_Deduped(host: any, key: string, delayInMS: number, 
 	return true;
 }
 
-export function Chroma_Safe(input: any, fallbackInput = [0, 0, 0, 0]) {
+/** Wrapper around chroma that tries to detect the input-type right away, to avoid chroma's default error-throwing-based discovery approach. */
+export function Chroma(input: string | number | number[] | chroma.Color, colorSpace?: keyof ColorSpaces) {
+	if (typeof input == "string") {
+		if (colorSpace == null) {
+			colorSpace = input.slice(0, input.indexOf("(")) as any;
+			if (colorSpace!.endsWith("a") && colorSpace != "rgba") {
+				colorSpace = colorSpace!.slice(0, -1) as any;
+			}
+		}
+
+		const subParts = input.slice(input.indexOf("(") + 1, input.indexOf(")")).split(",");
+		const vals = subParts.map(str=>{
+			if (str.includes("%")) return parseFloat(str) / 100;
+			return Number(str);
+		});
+		input = vals;
+	}
+
+	const colorSpaceFunc = colorSpace == "rgba" ? "rgb" : colorSpace; // despite "rgba" being a color-space (as per ColorSpaces type), it uses the same "chroma.rgb" function
+	const colorSpaceFuncs = ["rgb", /*"rgba",*/ "hsl", "hsv", "hsi", "lab", "lch", "hcl", "cmyk", "gl"];
+	if (input instanceof Array && typeof colorSpaceFunc == "string" && colorSpaceFuncs.includes(colorSpaceFunc)) {
+		// these functions accept 3-4 arguments, but @types/chroma-js doesn't know this, so cast "as any"
+		return chroma[colorSpaceFunc](input[0], input[1], input[2], input[3]);
+	}
+
+	//return chroma(input);
+	//return chroma(...arguments);
+	return chroma.apply(this, arguments); // eslint-disable-line
+}
+
+/** Wrapper around chroma that:
+ * 1) Tries to detect the input-type right away, to avoid chroma's default error-throwing-based discovery approach.
+ * 2) Has a try-catch of its own, so that if error occurs, it returns the fallback-color rather than bubbling-up the error. */
+export function Chroma_Safe(input: string | number | number[] | chroma.Color, fallbackInput = [0, 0, 0, 0]) {
 	try {
-		return chroma(input);
+		return Chroma(input);
 	} catch (ex) {
 		// if parsing failed, return the fallback color
 		return chroma(fallbackInput);
