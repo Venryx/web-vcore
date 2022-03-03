@@ -168,7 +168,7 @@ export function WaitXThenRun_Deduped(host: any, key: string, delayInMS: number, 
 }
 
 /** Wrapper around chroma that tries to detect the input-type right away, to avoid chroma's default error-throwing-based discovery approach. */
-export function Chroma(input: string | number | number[] | chroma.Color, colorSpace?: keyof ColorSpaces) {
+export function Chroma(input: string | number | number[] | chroma.Color, colorSpace?: keyof ColorSpaces): chroma.Color {
 	if (typeof input == "string") {
 		if (colorSpace == null) {
 			colorSpace = input.slice(0, input.indexOf("(")) as any;
