@@ -96,8 +96,8 @@ export const OnPopulated_listeners = [] as (()=>any)[];
 export function OnPopulated(listener: ()=>any) { OnPopulated_listeners.push(listener); }
 
 // globals
-declare global {
+/*declare global {
 	//function Log(message, appendStackTrace?: boolean, logLater?: boolean);
 	function Log(options: LogOptions, ...messageSegments: any[]);
 	function Log(...messageSegments: any[]);
-}
+}*/

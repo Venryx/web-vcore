@@ -7,7 +7,7 @@ export let youtubeAPIReady = false;
 export const onYoutubeAPIReadyListeners = [] as Function[];
 g.onYouTubeIframeAPIReady = ()=>{
 	youtubeAPIReady = true;
-	Log("Youtube API ready.");
+	console.log("Youtube API ready.");
 	onYoutubeAPIReadyListeners.forEach(a=>a());
 };
 
@@ -174,7 +174,7 @@ export class YoutubePlayer {
 	OnEndReached() {
 		// if null, clip must have ended while we were trying to stop/switch the video; just do nothing
 		if (this.loadedClipInfo == null) return;
-		
+
 		if (this.loop) {
 			this.SetPosition(this.loadedClipInfo.startTime ?? 0);
 			this.Play();

@@ -51,8 +51,8 @@ export function EB_StoreError(comp: BaseComponent, error: Error | string, errorI
 
 	const error_final = {message: errorMessage, origError: error, info: errorInfo};
 	comp.SetState({error: error_final});
-	Log(`%c In ErrorBoundary/componentDidCatch. error:`, "color: #222; background: #dfd");
-	Log(error_final);
+	console.log(`%c In ErrorBoundary/componentDidCatch. error:`, "color: #222; background: #dfd");
+	console.log(error_final);
 	//logErrorToMyService(error, info);
 }
 export function EB_ShowError(error: ReactError, style?) {
