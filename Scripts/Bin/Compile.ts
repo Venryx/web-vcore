@@ -3,7 +3,7 @@ import debug_base from "debug";
 import webpack from "webpack";
 import pathModule from "path";
 import {StartWebpackCompiler} from "../Build/WebpackCompiler.js";
-import type {CreateConfig_ReturnType} from "../Config";
+import type {CreateConfig_ReturnType} from "../Config.js";
 
 const debug = debug_base("app:bin:compile");
 
@@ -36,7 +36,8 @@ export function Compile(config: CreateConfig_ReturnType, webpackConfig: webpack.
 			debug("Compilation completed successfully.");
 		})
 		.catch(err=>{
-			debug("Compiler encountered an error.", err);
+			//debug("Compiler encountered an error.", err);
+			console.error("Compiler encountered an error:", err);
 			process.exit(1);
 		});
 }
