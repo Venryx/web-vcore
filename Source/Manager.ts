@@ -6,6 +6,8 @@ import {browserHistory} from "./Utils/URL/History.js";
 import {LogOptions} from "./Utils/General/Logging.js";
 import {ActionFunc} from "./Utils/Store/MobX.js";
 import {Page} from "./Utils/URL/URLs.js";
+import {NotificationMessage} from "./UI/NotificationsUI/NotificationMessage.js";
+import {Skin} from "./Utils/Skins/Skin.js";
 
 /** For any field in baseMap that extendMap lacks, mutate extendMap to include it; equivalent to Object.assign(extendMap, baseMap, {...extendMap}). */
 function ExtendObjectMap_StoredInExtendMap(baseMap: Object, extendMap: Object|n) {
@@ -42,6 +44,7 @@ export class Manager {
 	// styling and such
 	// ==========
 
+	GetSkin: ()=>Skin;
 	colors = {};
 	zIndexes = {subNavBar: 11};
 	iconInfo: {[key: string]: any};

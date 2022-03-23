@@ -35,7 +35,12 @@ export class SubNavBar extends BaseComponent<{fullWidth?: boolean}, {}> {
 				// background: "rgba(0,0,0,.5)", boxShadow: "3px 3px 7px rgba(0,0,0,.07)",
 			})}>
 				<div className={key("sub1")} style={css(
-					{display: "inline-block", background: "rgba(0,0,0,.7)", boxShadow: "rgba(100, 100, 100, .3) 0px 0px 3px, rgba(70,70,70,.5) 0px 0px 150px"},
+					{
+						display: "inline-block",
+						background: manager.GetSkin().OverlayPanelBackgroundColor().css(),
+						boxShadow: manager.GetSkin().NavBarBoxShadow(),
+						color: "rgb(255,255,255)",
+					},
 					dyn(fullWidth ? {width: "100%"} : {borderRadius: "0 0 10px 10px"}),
 				)}>
 					{children}
