@@ -11,11 +11,11 @@ BailHandler_loadingUI_default_Set(info=>{
 export class DefaultLoadingUI extends BaseComponentPlus({} as {comp: BaseComponent<any>, bailMessage: BailError}, {}) {
 	render() {
 		const {comp, bailMessage} = this.props;
-		const compProps_neededPropsOnly = comp.props.Pairs().filter(a=>{
+		const compProps_neededPropsOnly = Object.entries(comp.props).filter(a=>{
 			// allow attachment of react-beautiful-dnd's drag-handle props, otherwise a prominent warning is generated (in dev mode)
-			if (a.key.startsWith("data-rbd-drag-handle-")) return true;
+			if (a[0].startsWith("data-rbd-drag-handle-")) return true;
 			return false;
-		}).ToMapObj(a=>a.key, a=>a.value);
+		}).ToMapObj(a=>a[0], a=>a[1]);
 		//console.log(`Comp:${comp.constructor.name} @CompProps:`, compProps_neededPropsOnly);
 		const {css} = cssHelper(this);
 		return (

@@ -9,7 +9,7 @@ export class Page {
 	constructor(initialData?: Partial<Page>, children?: {[key: string]: Page}) {
 		if (initialData) this.VSet(initialData);
 		if (children) {
-			for (const {key, value: child} of children.Pairs()) {
+			for (const [key, child] of Object.entries(children)) {
 				if (child.key == null) child.key = key;
 				if (child.title == null) child.title = ModifyString(child.key, m=>[m.startLower_to_upper]);
 			}
@@ -26,7 +26,7 @@ export class Page {
 
 	children = {} as {[key: string]: Page};
 	get ChildKeys() { return Object.keys(this.children); }
-	get DefaultChild() { return this.children.Pairs()[0]?.key; }
+	get DefaultChild() { return Object.keys(this.children)[0]; }
 }
 
 /*export function GetCurrentURL(fromAddressBar = false) {

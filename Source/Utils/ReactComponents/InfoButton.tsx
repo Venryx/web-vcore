@@ -1,11 +1,10 @@
-import {BaseComponent} from "react-vextensions";
+import {BaseComponent, cssHelper} from "react-vextensions";
 //import ReactTooltip from "react-tooltip";
 import Tooltip from "rc-tooltip";
 import {Button, ButtonProps} from "react-vcomponents";
 import React from "react";
 import {E} from "js-vextensions";
 import {InTooltip, InTooltipProps} from "./Tooltip.js";
-import {cssHelper} from "react-vextensions";;
 
 type EffectType = "float" | "solid";
 class TooltipInfo {
@@ -63,7 +62,11 @@ export class InfoButton extends BaseComponent<InfoButtonProps, {}> {
 		return (
 			<Tooltip placement="top" overlay={tooltip}>
 				<Button {...rest as any} size={13} iconSize={13} iconPath="/Images/Buttons/Info.png"
-						useOpacityForHover={true} style={css({position: `relative`, zIndex: 1, marginLeft: 1, backgroundColor: null, boxShadow: null, border: null}, style)}
+						useOpacityForHover={true} style={css(
+							{position: `relative`, zIndex: 1, marginLeft: 1, backgroundColor: null, boxShadow: null, border: null},
+							//{marginTop: "auto", marginBottom: "auto"}, // maybe use this; it vertically-centers in parent, without need for {alignItems: "center"} on parent
+							style,
+						)}
 						//title={text}
 						data-tip data-for={this.tooltip?.IDStr}>
 					{/*<ReactTooltip id={tipID} effect={effect}>
