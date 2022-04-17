@@ -63,7 +63,10 @@ export class InfoButton extends BaseComponent<InfoButtonProps, {}> {
 			<Tooltip placement="top" overlay={tooltip}>
 				<Button {...rest as any} size={13} iconSize={13} iconPath="/Images/Buttons/Info.png"
 						useOpacityForHover={true} style={css(
-							{position: `relative`, zIndex: 1, marginLeft: 1, backgroundColor: null, boxShadow: null, border: null},
+							{
+								position: `relative`, zIndex: 1, marginLeft: 1, alignSelf: "center",
+								backgroundColor: null, boxShadow: null, border: null,
+							},
 							//{marginTop: "auto", marginBottom: "auto"}, // maybe use this; it vertically-centers in parent, without need for {alignItems: "center"} on parent
 							style,
 						)}
