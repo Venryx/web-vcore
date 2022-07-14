@@ -52,12 +52,13 @@ For details on how the patch files are parsed, see here: https://github.com/ds30
 
 Steps to newly-link subdep:
 * 1\) Run `zalc push` in subdep's source repo.
-* 2\) Run `zalc add SUBDEP_NAME` in web-vcore repo.
+* 2\) Run `zalc add SUBDEP_NAME` in web-vcore repo. (without `--pure`, as that doesn't create symlink in `node_modules`)
 * 3\) Open `yalc.lock`, remove the fields other than `signature` for the subdep, then add the field `pure: true`.
 * 4\) Open `package.json`, and set the version for that subdep (back to) the current version number. (must update this when version changes in subdep's source repo)
 * 5\) Run `yarn` in web-vcore repo.
 * 6\) Run `zalc push` in web-vcore repo.
 * 7\) Run `yarn` in user project.
+* Note: If you need to repair the linkage manually fsr, use a tool like [Hard Link Shell Extension](https://schinagl.priv.at/nt/hardlinkshellext/linkshellextension.html) to create a Junction from `node_modules/X` to `.yalc/X`.
 
 ### Documentation
 

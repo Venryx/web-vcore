@@ -65,6 +65,7 @@ export class InfoButton extends BaseComponent<InfoButtonProps, {}> {
 						useOpacityForHover={true} style={css(
 							{
 								position: `relative`, zIndex: 1, marginLeft: 1, alignSelf: "center",
+								backgroundPosition: "center", // fsr, this is set to "-1px -1px" by default, which cuts off 1px of the image
 								backgroundColor: null, boxShadow: null, border: null,
 							},
 							//{marginTop: "auto", marginBottom: "auto"}, // maybe use this; it vertically-centers in parent, without need for {alignItems: "center"} on parent
