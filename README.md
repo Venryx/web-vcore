@@ -4,6 +4,8 @@ Core code shared between my projects, for web-app frontends.
 
 ### Installation
 
+> todo: update these instructions
+
 1) Install the package: (or symlink it; that's recommended for long-term usage)
 ```
 npm install web-vcore
@@ -50,6 +52,8 @@ For details on how the patch files are parsed, see here: https://github.com/ds30
 
 ### Usage of yalc/zalc with subdeps
 
+> todo: ensure these instructions are up-to-date
+
 Steps to newly-link subdep:
 * 1\) Run `zalc push` in subdep's source repo.
 * 2\) Run `zalc add SUBDEP_NAME` in web-vcore repo. (without `--pure`, as that doesn't create symlink in `node_modules`)
@@ -68,3 +72,14 @@ That said, there are some things (eg. particularly complex components) for which
 
 * [Abbreviations and Comments](./Docs/AbbreviationsAndComments.md)
 * [Database Migrations](./Docs/DatabaseMigrations.md)
+
+### What is the purpose of web-vcore? And why is web-vcore updated so frequently?
+
+There are two primary functions of the web-vcore package:
+1) Serve as a "container of subdependencies", such that by adding web-vcore to a project, you get a set of subdependencies with it that are known to work well together, with consistent versions that are used across my web projects.
+2) Because my web projects use a lot of custom libraries, and because I frequently make small "micro changes" to those libraries, I've found it helpful to combine web-vcore with use of [yalc](https://github.com/wclr/yalc) (or in some cases, a fork of it called [zalc](https://github.com/Venryx/zalc)). Specifically, I use yalc as a way to have local changes made to custom libraries (ie. subdependencies of web-vcore that I've written myself) propagated up to the higher-level web projects, without needing to constantly be making npm publishes of both the subdependencies and the web-vcore container package; I yalc-push from the subdep into the web-vcore package, then yalc-push from there into the larger web project(s).
+
+Due to local library changes being propagated to my web projects without needing npm-publishes, this of course raises the concern of me neglecting to actually push those changes to a place where other developers of my web projects can access them. The middle-ground I've settled on for now is:
+* Include the `.yalc` folder of web-vcore in the contents that npm publishes for the web-vcore package. Thus, as long as I remember to do an npm-publish of the web-vcore package each time I make subdependency changes, I don't need to bother about comprehensively tracking down what subdependencies were changed during each web-project commit, in order to make additional library publishes. (I do of course eventually make npm publishes for those subdependencies, but this way I can do so at convenient times and with greater care.)
+
+While this approach is non-standard, and not perfect, it has been very helpful from a practical standpoint, in terms of letting me iterate quickly while still maintaining the separation of logic into lots of small components/libraries.
