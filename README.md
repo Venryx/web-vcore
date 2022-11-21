@@ -64,6 +64,8 @@ Steps to newly-link subdep:
 * 7\) Run `yarn` in user project.
 * Note: If you need to repair the linkage manually fsr, use a tool like [Hard Link Shell Extension](https://schinagl.priv.at/nt/hardlinkshellext/linkshellextension.html) to create a Junction from `node_modules/X` to `.yalc/X`.
 
+> Note: The npm/yalc publishes have the `.yalc/graphql-feedback/codemirror` folder excluded; it's usually not necessary to include, and saves ~3.5mb for each publish. This just means, that if you're using web-vcore through yalc, and you're using the graphql-feedback subdep, and you don't have `codemirror` as a dependency in your wider project, you just need to add it as a dependency there.
+
 ### Documentation
 
 For the most part, web-vcore is meant to be learned/used based on referencing the codebase of existing projects using it (eg. [Debate Map](https://github.com/debate-map/app)). This is because the package is only intended/expected to be used for projects I'm building, so there's not that much benefit to creating full-fledged documentation.
