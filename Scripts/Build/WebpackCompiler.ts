@@ -23,7 +23,7 @@ export function StartWebpackCompiler(config: CreateConfig_ReturnType, webpackCon
 			if (jsonStats.errors!.length > 0) {
 				debug("Webpack compiler encountered errors.");
 				debug(jsonStats.errors!.join("\n"));
-				return reject(new Error("Webpack compiler encountered errors"));
+				return reject(new Error(`Webpack compiler encountered errors:\n${jsonStats.errors!.join("\n")}`));
 			} if (jsonStats.warnings!.length > 0) {
 				debug("Webpack compiler encountered warnings.");
 				debug(jsonStats.warnings!.join("\n"));
