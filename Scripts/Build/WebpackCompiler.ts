@@ -16,18 +16,23 @@ export function StartWebpackCompiler(config: CreateConfig_ReturnType, webpackCon
 				return reject(err);
 			}
 
-			const jsonStats = stats!.toJson();
+			const jsonStats: webpack.StatsCompilation = stats!.toJson();
 			debug("Webpack compile completed.");
 			debug(stats!.toString(statsFormat));
 
+			const errorsAsStr = jsonStats.errors!.map(a=>JSON.stringify(a, null, "\t")).join("\n");
+			const warningsAsStr = jsonStats.warnings!.map(a=>JSON.stringify(a, null, "\t")).join("\n");
+
 			if (jsonStats.errors!.length > 0) {
 				debug("Webpack compiler encountered errors.");
-				debug(jsonStats.errors!.join("\n"));
-				return reject(new Error(`Webpack compiler encountered errors:\n${jsonStats.errors!.join("\n")}`));
-			} if (jsonStats.warnings!.length > 0) {
+				debug(errorsAsStr);
+				return reject(new Error(`Webpack compiler encountered errors:\n${errorsAsStr}`));
+			}
+			if (jsonStats.warnings!.length > 0) {
 				debug("Webpack compiler encountered warnings.");
-				debug(jsonStats.warnings!.join("\n"));
-			} else {
+				debug(warningsAsStr);
+			}
+			if (errorsAsStr.length == 0 && warningsAsStr.length == 0) {
 				debug("No errors or warnings encountered.");
 			}
 			resolve(jsonStats);
