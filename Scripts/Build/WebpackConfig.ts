@@ -122,15 +122,12 @@ export class TSLoaderEntry {
 export class CreateWebpackConfig_Options {
 	config: CreateConfig_ReturnType;
 	npmPatch_replacerConfig: any;
+	name: string;
 
 	/** Raw webpack-config field sets/overrides. */
-	ext_shallow: Partial<webpack.Configuration> & {
-		name: string,
-	};
+	ext_shallow?: Partial<webpack.Configuration>;
 	/** Deep webpack-config merge object. (runs after application of the shallow ext_shallow data) */
-	ext_deep: Partial<webpack.Configuration> & {
-		name: string,
-	};
+	ext_deep?: Partial<webpack.Configuration>;
 
 	// custom options
 	sourcesFromRoot? = false;
@@ -153,7 +150,7 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 
 	debug("Creating configuration.");
 	const webpackConfig = <webpack.Configuration>{
-		//name: "client",
+		name: opt.name,
 		mode: PROD && !QUICK ? "production" : "development",
 		optimization: {
 			// use paths as runtime identifiers for webpack modules (easier debugging)
