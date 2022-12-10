@@ -28,8 +28,8 @@ declare global {
 declare const ENV, DEV, PROD, TEST;
 
 global.ENV = NODE_ENV;
-global.DEV = ENV == "development";
-global.PROD = ENV == "production";
+global.DEV = ENV == "dev";
+global.PROD = ENV == "prod";
 global.TEST = ENV == "test";
 
 // alias for stringify; we have to stringify/wrap-with-quotes the global-var names (ie. make them json), because that's what webpack.DefinePlugin expects
