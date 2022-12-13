@@ -5,9 +5,9 @@ import devMiddleware from "webpack-dev-middleware";
 import connectHistoryAPIFallback from "connect-history-api-fallback";
 import pathModule from "path";
 import type {CreateConfig_ReturnType} from "../Config";
+import {DEV} from "../EnvVars/ReadEnvVars.js";
 //import fs from "fs";
 
-declare const ENV, DEV, PROD, TEST;
 const debug = debug_base("app:server");
 
 export function Serve(config: CreateConfig_ReturnType, webpackConfig: webpack.Configuration|null, extToServe = ["html", "js", "css", "png", "jpg", "wasm"], writeToDisk = undefined) {

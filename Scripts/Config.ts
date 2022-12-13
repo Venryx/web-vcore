@@ -1,36 +1,14 @@
 import debug_base from "debug";
 import ip from "ip";
 import path from "path";
+import {createRequire} from "module";
+import {ENV, DEV, PROD, TEST, ENV_Long} from "./EnvVars/ReadEnvVars.js";
 //import yargs from "yargs";
 
 //const {argv} = yargs;
 
 //const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const {NODE_ENV, PORT, USE_TSLOADER, BASENAME} = process.env;
 const debug = debug_base("app:config");
-
-// make these variables global throughout the compile-time scripts
-declare global {
-	namespace NodeJS {
-		interface Global {
-			ENV: string|undefined;
-			DEV: boolean;
-			PROD: boolean;
-			TEST: boolean;
-		}
-	}
-	// commented; causes ts-errors in user-projects atm
-	/*const ENV: string;
-	const DEV: boolean;
-	const PROD: boolean;
-	const TEST: boolean;*/
-}
-declare const ENV, DEV, PROD, TEST;
-
-global.ENV = NODE_ENV;
-global.DEV = ENV == "dev";
-global.PROD = ENV == "prod";
-global.TEST = ENV == "test";
 
 // alias for stringify; we have to stringify/wrap-with-quotes the global-var names (ie. make them json), because that's what webpack.DefinePlugin expects
 function S(obj) {
@@ -87,12 +65,12 @@ const config_base = {
 		// DON'T EVER USE THESE (use ones above instead -- to be consistent); we only include them in case libraries use them (such as redux)
 		// ==========
 
-		"NODE_ENV": S(ENV),
+		"NODE_ENV": S(ENV_Long()),
 		// this version is needed, for "process.env.XXX" refs from libs we don't care about (else runtime error)
 		"process.env": {
-			NODE_ENV: S(ENV),
+			NODE_ENV: S(ENV_Long()),
 		},
-		//"process.env.NODE_ENV": S(ENV),
+		//"process.env.NODE_ENV": S(ENV_Long()),
 		...{
 			"__DEV__": S(DEV),
 			"__PROD__": S(PROD),

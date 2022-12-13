@@ -19,17 +19,15 @@ import DuplicatePackageCheckerPlugin from "@cerner/duplicate-package-checker-web
 import _ from "lodash";
 import {MakeSoWebpackConfigOutputsStats} from "./WebpackConfig/OutputStats.js";
 import type {CreateConfig_ReturnType} from "../Config";
+import {DEV, OUTPUT_STATS, PROD, QUICK, USE_TSLOADER} from "../EnvVars/ReadEnvVars.js";
 
 // we could either add a reference from "./Scripts/tsconfig.json" to "./tsconfig.json", or we could use require; doing latter for now
 //import wvcPackageJSON from "../../package.json";
 const require = createRequire(import.meta.url);
 const wvcPackageJSON = require("../../package.json");
 
-declare const ENV, DEV, PROD, TEST;
 declare const {CreateConfig}: typeof import("../Config");
 const debug = debug_base("app:webpack:config");
-
-const {QUICK, USE_TSLOADER, OUTPUT_STATS} = process.env;
 
 const __dirname = pathModule.dirname(fileURLToPath(import.meta.url));
 export function PathFromWebVCoreRoot(...subpathNodes: string[]) {
