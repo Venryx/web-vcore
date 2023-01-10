@@ -5,15 +5,33 @@ import {ScrollView} from "react-vscrollview";
 import {E} from "js-vextensions";
 import {HandleError} from "../General/Errors.js";
 
+export function BuildErrorWrapperComp<Props>(regularUIFunc_getter: ()=>Function, errorUI?: ErrorUIFunc<Props>, errorUIStyle?) {
+	return class ErrorWrapperComp extends BaseComponentPlus({} as Props, {error: null as ReactError|null}) {
+		componentDidCatch(message, info) { EB_StoreError(this as BaseComponent, message, info); }
+		ClearError() { this.SetState({error: null}); }
+
+		render() {
+			const {error} = this.state;
+			if (error) {
+				const errorUIProps = {error, style: errorUIStyle, defaultUI: defaultErrorUI};
+				return (errorUI ?? defaultErrorUI)(errorUIProps, this);
+			}
+
+			const RegularUIFunc = regularUIFunc_getter();
+			return <RegularUIFunc {...this.props}/>;
+		}
+	};
+}
+
 type ReactErrorInfo = {componentStack: string};
 export type ReactError = {message: string, info: ReactErrorInfo};
 
-export type ErrorUIFunc = (props: ErrorUIProps, comp: Component)=>JSX.Element;
+export type ErrorUIFunc<Props = {}> = (props: ErrorUIProps, comp: Component<Props>)=>JSX.Element;
 export type ErrorUIProps = {error: ReactError, style, defaultUI: ErrorUIFunc};
 export const defaultErrorUI = (props: ErrorUIProps)=>{
 	const {error, style} = props;
 	return (
-		<ScrollView style={E({height: "100%"}, style)}>
+		<ScrollView style={E({height: "100%", maxHeight: "100px"}, style)}>
 			{/*<Text>An error has occured in the UI-rendering code.</Text>
 			<TextArea value={error}/>
 			<TextArea value={errorInfo.componentStack}/>

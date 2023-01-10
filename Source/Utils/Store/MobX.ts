@@ -1,5 +1,5 @@
 import {enableES5, setAutoFreeze, setUseProxies} from "immer";
-import {AssertWarn, CE, E, emptyArray, RemoveCircularLinks, ToJSON} from "js-vextensions";
+import {Assert, AssertWarn, CE, E, emptyArray, RemoveCircularLinks, ToJSON} from "js-vextensions";
 import {autorun, configure, observable, ObservableMap, ObservableSet, onReactionError, _getAdministration} from "mobx";
 import {BailHandler, BailHandler_Options, RunInAction} from "mobx-graphlink"; // eslint-disable-line
 import {observer} from "mobx-react";
@@ -300,7 +300,10 @@ export function StartUpdatingMirrorOfMobXTree(mobxTree: any, tree_plainMirror: a
 		for (const key of mobxKeys) {
 			const valueFromSource = sourceIsMap ? mobxTree.get(key) : mobxTree[key]; // this counts as a mobx-get, meaning the autorun subscribes, so this func reruns when the prop-value changes
 			//const valueForTarget_old = tree_plainMirror[key];
-			const fieldObservedAsRefOnly = mobxStoredAnnotations?.[key].annotationType_ == "observable.ref";
+			/*if (mobxStoredAnnotations != null && mobxStoredAnnotations[key] == null) {
+				Assert(false, `MobX annotation not found for key "${key}". This likely means the field needs to be "set to null" by default, so mobx attaches the annotation before mirroring occurs.`);
+			}*/
+			const fieldObservedAsRefOnly = mobxStoredAnnotations?.[key]?.annotationType_ == "observable.ref";
 
 			let valueForTarget;
 			if (typeof valueFromSource == "object" && valueFromSource != null && !fieldObservedAsRefOnly) {
