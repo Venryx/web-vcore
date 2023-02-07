@@ -7,6 +7,7 @@ import {BailError} from "mobx-graphlink";
 import {GetCurrentURL} from "../URL/URLs.js";
 import {manager} from "../../Manager.js";
 import {ActionFunc, Observer, RunInAction} from "../Store/MobX.js";
+import {NotifyCalledHistoryReplaceOrPushState} from "./AddressBarWrapper.js";
 
 function isModifiedEvent(event) {
 	return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
@@ -49,8 +50,10 @@ export class Link extends BaseComponentPlus({} as Link_Props, {}) {
 			//manager.store.dispatch(replaceURL ? replace(to) : push(to));
 			if (replaceURL) {
 				history.replaceState(null, null as any, to);
+				NotifyCalledHistoryReplaceOrPushState();
 			} else {
 				history.pushState(null, null as any, to);
+				NotifyCalledHistoryReplaceOrPushState();
 			}
 		}
 	}

@@ -7,12 +7,20 @@ import {loadingURL, NotifyURLLoaded, LoadURL} from "../URL/URLs.js";
 import {e} from "../../PrivateExports.js";
 import {Observer} from "../Store/MobX.js";
 
-// this handles: address-bar-change -> store-changes
+// this handles: address-bar-change (from user pressing back/forward) -> store-changes
 window.addEventListener("popstate", e=>{
 	//LoadURL(e.state);
 	//LoadURL(VURL.FromLocationObject(window.location));
 	LoadURL(VURL.Parse(window.location.href));
 });
+
+/**
+ * This handles address-bar-change (from history.pushState and history.replaceState, eg. from Link components) -> store-changes.
+ * (We could monkey-patch history.pushState and history.replaceState to intercept calls, but since the only calls atm are in Link.tsx, it's cleaner to just manually call this.)
+*/
+export function NotifyCalledHistoryReplaceOrPushState() {
+	LoadURL(VURL.Parse(window.location.href));
+}
 
 let lastProcessedURL: VURL;
 @Observer

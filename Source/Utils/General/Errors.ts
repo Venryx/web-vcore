@@ -56,13 +56,14 @@ export function HandleError(error: Error, recordWithSentry = true, extraInfo = {
 	//alert("An error has occurred: " + error);
 
 	if (recordWithSentry) {
-		/*(()=> {
-			// errors that should be shown to user, but not recorded
-			if (message.startsWith("KaTeX parse error: ")) return;
-			Raven.captureException(error);
-		})();*/
-		Raven.captureException(error, {extra: extraInfo});
+		// errors that should be shown to user, but not recorded
+		//if (errorStr.startsWith("KaTeX parse error: ")) return;
+
+		SendErrorToSentry(error, extraInfo);
 	}
 
 	if (manager.PostHandleError) manager.PostHandleError(error, errorStr);
+}
+export function SendErrorToSentry(error: Error, extraInfo = {}) {
+	Raven.captureException(error, {extra: extraInfo});
 }
