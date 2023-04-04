@@ -284,13 +284,22 @@ export function GetMirrorOfMobXTree<T>(mobxTree: T, opt = new GetMirrorOfMobXTre
 	return mobxTree["$mirror"];
 }
 
+/** Wrapper around _getAdministration that returns null when encountering a non-mobx object, rather than erroring. */
+export function GetAdministration_Safe(possibleMobXTree: any) {
+	try {
+		//return mobxTree[$mobx];
+		return _getAdministration(possibleMobXTree) as ObservableObjectAdministration;
+	} catch (ex) {
+		return null;
+	}
+}
+
 export function StartUpdatingMirrorOfMobXTree(mobxTree: any, tree_plainMirror: any, opt = new GetMirrorOfMobXTree_Options()) {
 	//const stopUpdating = autorun(()=>{
 	autorun(()=>{
 		const sourceIsMap = mobxTree instanceof Map || mobxTree instanceof ObservableMap;
 		const targetIsMap = tree_plainMirror instanceof Map || tree_plainMirror instanceof ObservableMap;
-		//const mobxInfo = mobxTree[$mobx];
-		const mobxInfo = _getAdministration(mobxTree) as ObservableObjectAdministration;
+		const mobxInfo = GetAdministration_Safe(mobxTree);
 		const mobxKeys =
 			opt.onlyCopyMobXProps ? (mobxInfo?.values_?.keys() ?? emptyArray)
 			: (sourceIsMap ? mobxTree.keys() : Object.keys(mobxTree));
