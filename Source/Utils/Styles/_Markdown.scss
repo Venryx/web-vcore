@@ -31,7 +31,9 @@ blockquote {
 }
 .CodeMirror-cursor {
 	width: 1px;
-	background: rgba(255,255,255,.7);
+	//background: rgba(255,255,255,.7);
+	// this line comes later in the output css file than react-markdown's, so this takes priority (which is needed for cursor to show up on dark background)
+	border-left: 1px solid rgba(255, 255, 255, 0.7);
 }
 
 .CodeMirror-overlayscroll-horizontal {
