@@ -8,9 +8,9 @@ BailHandler_loadingUI_default_Set(info=>{
 	return <DefaultLoadingUI comp={info.comp} bailMessage={info.bailMessage}/>;
 });
 
-export class DefaultLoadingUI extends BaseComponentPlus({} as {comp: BaseComponent<any>, bailMessage: BailError}, {}) {
+export class DefaultLoadingUI extends BaseComponentPlus({} as {comp: BaseComponent<any>, bailMessage: BailError, style?}, {}) {
 	render() {
-		const {comp, bailMessage} = this.props;
+		const {comp, bailMessage, style} = this.props;
 		const compProps_neededPropsOnly = Object.entries(comp.props).filter(a=>{
 			// allow attachment of react-beautiful-dnd's drag-handle props, otherwise a prominent warning is generated (in dev mode)
 			if (a[0].startsWith("data-rbd-drag-handle-")) return true;
@@ -25,7 +25,7 @@ export class DefaultLoadingUI extends BaseComponentPlus({} as {comp: BaseCompone
 				color: "white",
 				textShadow: "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000",
 				zIndex: 11, // needed to show above sub-nav-bar
-			})}>
+			}, style)}>
 				<Row center>
 					<Text>Loading...</Text>
 					<InfoButton ml={5} mt={2} // dunno why mt:2 needed, but wouldn't center fully otherwise

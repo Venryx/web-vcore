@@ -1,7 +1,7 @@
 {
 	"name": "web-vcore",
 	"description": "Core code shared between my projects, for web-app frontends.",
-	"version": "0.0.71",
+	"version": "0.0.72",
 	"license": "MIT",
 	"author": "Venryx (https://venryx.com)",
 	"repository": "https://github.com/Venryx/web-vcore",
@@ -133,7 +133,7 @@
 		"react-vmarkdown": "1.0.3",
 		"react-vmenu": "1.0.14",
 		"react-vmessagebox": "1.0.14",
-		"react-vscrollview": "1.0.4",
+		"react-vscrollview": "1.0.5",
 		"remarkable": "^2.0.1",
 		"remarkable-react": "^1.4.3",
 		"sass": "^1.56.1",
