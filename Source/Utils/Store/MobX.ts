@@ -47,6 +47,8 @@ export function observer_simple<T extends IReactComponent>(target: T): T {
 	return observer(target as any)["type"];
 }
 
+// todo: probably rename/replace/rework @Observer decorator to be called @EnhancedComp or something (since it does more than just add mobx observer functionality, it also adds class-hooks and such)
+
 // variant of @observer decorator, which also adds (and is compatible with) class-hooks (similar to mobx-graphlink's @MGLObserver, but with more options)
 export class Observer_Options {
 	classHooks = true;

@@ -10,7 +10,7 @@ import {Observer, RunInAction} from "../Store/MobX.js";
 
 @Observer
 export class NavBarButton extends BaseComponentPlus(
-	{} as {page?: string, subpage?: string, text: string, panel?: boolean, active?: boolean, style?, onClick?: (e)=>void},
+	{} as {page?: string|n, subpage?: string, text: string, panel?: boolean, active?: boolean, style?, onClick?: (e)=>void},
 	{hovered: false},
 ) {
 	render() {
@@ -22,10 +22,10 @@ export class NavBarButton extends BaseComponentPlus(
 
 		const currentPage = manager.store.main.page;
 		active = active != null ? active : page == currentPage;
-		const pageEntry = manager.pageTree.children[page];
+		const pageEntry = page != null ? manager.pageTree.children[page] : null;
 
 		//const actionFunc = page ? (s: RootStore)=>{
-		const actionFunc = page ? (s: any)=>{
+		const actionFunc = page && pageEntry ? (s: any)=>{
 			if (page != currentPage) {
 				s.main.page = page;
 			} else {

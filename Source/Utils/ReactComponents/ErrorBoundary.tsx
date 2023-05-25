@@ -5,8 +5,8 @@ import {ScrollView} from "react-vscrollview";
 import {E} from "js-vextensions";
 import {HandleError} from "../General/Errors.js";
 
-export function BuildErrorWrapperComp<Props>(regularUIFunc_getter: ()=>Function, errorUI?: ErrorUIFunc<Props>, errorUIStyle?) {
-	return class ErrorWrapperComp extends BaseComponentPlus({} as Props, {error: null as ReactError|null}) {
+export function BuildErrorWrapperComp<Props extends object>(regularUIFunc_getter: ()=>Function, errorUI?: ErrorUIFunc<Props>, errorUIStyle?) {
+	return class ErrorWrapperComp extends BaseComponent<Props, {error: ReactError|null}> {
 		componentDidCatch(message, info) { EB_StoreError(this as BaseComponent, message, info); }
 		ClearError() { this.SetState({error: null}); }
 

@@ -52,15 +52,16 @@ const config_base = {
 
 	/* eslint-disable */
 	codeVarReplacements: {
-		// this is always a compile-time define/insertion
-		"ENV_COMPILE_TIME": S(ENV),
-		// if building for production, lock all the env-variables as compile-time defines (meaning eg. `if (DEV)` blocks are compiled out)
-		...(PROD && {
-			"ENV": S(ENV),
-			"DEV": S(DEV),
-			"PROD": S(PROD),
-			"TEST": S(TEST)
-		}),
+		// all compile-time instances of these fields get replaced with constants
+		"globalThis.ENV": S(ENV),
+		"globalThis.DEV": S(DEV),
+		"globalThis.PROD": S(PROD),
+		"globalThis.TEST": S(TEST),
+		// in the root project, the `globalThis.` part may be left out
+		"ENV": S(ENV),
+		"DEV": S(DEV),
+		"PROD": S(PROD),
+		"TEST": S(TEST),
 
 		// DON'T EVER USE THESE (use ones above instead -- to be consistent); we only include them in case libraries use them (such as redux)
 		// ==========
@@ -70,7 +71,7 @@ const config_base = {
 		"process.env": {
 			NODE_ENV: S(ENV_Long()),
 		},
-		//"process.env.NODE_ENV": S(ENV_Long()),
+		//"process.env.NODE_ENV": S(ENV_Long()), // edit: why the above, instead of this?
 		...{
 			"__DEV__": S(DEV),
 			"__PROD__": S(PROD),
