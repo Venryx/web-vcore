@@ -108,19 +108,30 @@ export function GetContentSize(content: string | Element, options?: Partial<GetC
 	return result;
 }
 
-export const autoElements = {} as {[key: string]: Element};
-export function GetAutoElement(startHTML: string) {
-	if (autoElements[startHTML] == null) {
-		const holder = GetHiddenHolder();
-		const tempHolder = document.createElement("div") as HTMLElement;
-		holder.appendChild(tempHolder);
+export const autoElements = {} as {[key: string]: Element[]};
+export function GetAutoElements(startHTML: string, useCache = true, storeInHolder = true) {
+	if (useCache && autoElements[startHTML]) return autoElements[startHTML];
 
-		tempHolder.innerHTML = startHTML;
-		const element = tempHolder.children[0];
-		holder.appendChild(element);
-		tempHolder.remove();
+	//const holder = GetHiddenHolder();
+	const tempHolder = document.createElement("div") as HTMLElement;
+	//holder.appendChild(tempHolder);
 
-		autoElements[startHTML] = element;
+	tempHolder.innerHTML = startHTML;
+	const elements_fresh = [...tempHolder.children];
+	//tempHolder.remove();
+
+	if (useCache) {
+		autoElements[startHTML] = elements_fresh;
 	}
-	return autoElements[startHTML];
+	if (storeInHolder) {
+		const holder = GetHiddenHolder();
+		for (const element of elements_fresh) {
+			holder.appendChild(element);
+		}
+	}
+
+	return elements_fresh;
+}
+export function GetAutoElement(startHTML: string) {
+	return GetAutoElements(startHTML)[0];
 }
