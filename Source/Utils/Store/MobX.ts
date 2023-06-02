@@ -236,13 +236,6 @@ export function GetMobXStoredAnnotations(mobxTree: Object) {
 // mobx-mirror
 // ==========
 
-/*export type MobXToPlainConverter = (mobxTree: any)=>any;
-export const defaultMobXToPlainConverters = [
-	(mobxTree)=> {
-		if (mobxTree instanceof )
-	},
-] as MobXToPlainConverter[];*/
-
 export class GetMirrorOfMobXTree_Options {
 	/** Most callers of GetMirrorOfMobXTree only care to have mobx-prop pathways mirrored, and excluding the rest improves perf substantially. */
 	//onlyCopyMobXNodes = true;
@@ -252,15 +245,7 @@ export class GetMirrorOfMobXTree_Options {
 	/** List of classes for which instances in source-tree will have their copy-instances assigned the same prototype. */
 	prototypesToKeep: Function[] = [Array, Map, Set];
 
-	onChange?: (sourceObj: any, mirrorObj: any, mirrorObj_old?: any)=>void;
-
-	// new approach (better long-term, since mobx-utils' "transformers" concept is very close to what we need, and the lib is managed by the lead mobx dev)
-	//useTransformers = false;
-	keepAlive = true;
-
-	// new approach 2
-	//useComputed = false;
-	//alreadyInReactive = false;
+	onChange?: (sourceObj: any, mirrorObj: any)=>void;
 }
 
 /**
@@ -312,28 +297,25 @@ export function GetAdministration_Safe(possibleMobXTree: any) {
 export function StartUpdatingMirrorOfMobXTree(mobxTree: any, tree_plainMirror: any, opt = new GetMirrorOfMobXTree_Options()) {
 	//const stopUpdating = autorun(()=>{
 	reaction(()=>{
-		const tree_plainMirror_oldData = Clone(tree_plainMirror);
-
 		const sourceIsMap = mobxTree instanceof Map || mobxTree instanceof ObservableMap;
 		const targetIsMap = tree_plainMirror instanceof Map || tree_plainMirror instanceof ObservableMap;
 		const mobxInfo = GetAdministration_Safe(mobxTree);
-		//const keys = sourceIsMap ? mobxTree.keys() : Object.keys(mobxTree); // always access the keys, to ensure the autorun subscribes to them (using the mobx-admin-object path doesn't do this)
-		const keys = sourceIsMap || mobxInfo ? mobx_keys(mobxTree) : Object.keys(mobxTree); // always access the keys, to ensure the autorun subscribes to them (using the mobx-admin-object path doesn't do this)
+
+		const keys = sourceIsMap ? mobxTree.keys() : Object.keys(mobxTree); // always access the keys, to ensure the autorun subscribes to them (using the mobx-admin-object path doesn't do this)
+		//const keys = sourceIsMap || mobxInfo ? mobx_keys(mobxTree) : Object.keys(mobxTree); // always access the keys, to ensure the autorun subscribes to them (using the mobx-admin-object path doesn't do this)
 		const mobxKeys =
 			// if mobxTree is an Observable[Map/Set], then all of its keys are "mobx props"/reactive
 			opt.onlyCopyMobXProps && !(mobxTree instanceof ObservableMap || mobxTree instanceof ObservableSet)
-				? [...(mobxInfo?.values_?.keys() ?? emptyArray)]
+				//? mobxInfo?.keys_() ?? emptyArray
+				// Why do we use x.values_.keys() rather than x.keys_()? Because the former works on both Map's and arrays.
+				//? [...(mobxInfo?.values_?.keys() ?? emptyArray)] // converting to array makes debugging a bit nicer (fixes watch-panel glitch of showing no-items on 2nd+ views), but it's not necessary
+				? mobxInfo?.values_?.keys() ?? emptyArray
 				: keys;
-		//const mobxStoredAnnotations = mobxInfo?.appliedAnnotations_; // this only works in dev-mode
 		const mobxStoredAnnotations = GetMobXStoredAnnotations(mobxTree);
 
 		for (const key of mobxKeys) {
-			//const valueFromSource = sourceIsMap ? mobxTree.get(key) : mobxTree[key]; // this counts as a mobx-get, meaning the autorun subscribes, so this func reruns when the prop-value changes
-			const valueFromSource = sourceIsMap || mobxInfo ? mobx_get(mobxTree, key) : mobxTree[key]; // this counts as a mobx-get, meaning the autorun subscribes, so this func reruns when the prop-value changes
-			//const valueForTarget_old = tree_plainMirror[key];
-			/*if (mobxStoredAnnotations != null && mobxStoredAnnotations[key] == null) {
-				Assert(false, `MobX annotation not found for key "${key}". This likely means the field needs to be "set to null" by default, so mobx attaches the annotation before mirroring occurs.`);
-			}*/
+			const valueFromSource = sourceIsMap ? mobxTree.get(key) : mobxTree[key]; // this counts as a mobx-get, meaning the autorun subscribes, so this func reruns when the prop-value changes
+			//const valueFromSource = sourceIsMap || mobxInfo ? mobx_get(mobxTree, key) : mobxTree[key]; // this counts as a mobx-get, meaning the autorun subscribes, so this func reruns when the prop-value changes
 			const fieldObservedAsRefOnly = mobxStoredAnnotations?.[key]?.annotationType_ == "observable.ref" || GetAdministration_Safe(valueFromSource) == null;
 
 			let valueForTarget;
@@ -353,10 +335,11 @@ export function StartUpdatingMirrorOfMobXTree(mobxTree: any, tree_plainMirror: a
 
 			//if (typeof valueForTarget_old == "object" && valueForTarget_old["$mirror_stopUpdating"]) { [...]
 		}
-
-		return {tree_plainMirror_oldData};
-	}, ({tree_plainMirror_oldData})=>{
-		opt.onChange?.(mobxTree, tree_plainMirror, tree_plainMirror_oldData);
+	}, ()=>{
+		opt.onChange?.(mobxTree, tree_plainMirror);
+	}, {
+		// this makes-so when reaction/first-func runs, the effect/second-func runs as well (we split them simply to prevent onChange from adding to the observed data)
+		equals: ()=>false,
 	});
 
 	// attempted fix for first autorun call not immediately populating the mobx-mirror, if already in mobx mutate-batch (ie. when globalState.inBatch > 0) [canceled; too involved]
@@ -384,220 +367,3 @@ export function StartUpdatingMirrorOfMobXTree(mobxTree: any, tree_plainMirror: a
 		}
   	}
 }*/
-
-// this version, currently, creates a mirror-object local (ie. stored in a "$mirror" prop) to each source-object; this shouldn't be necessary, but it's fine for now
-export function GetMirrorOfMobXTree_New(mobxTree_root: any, opt = new GetMirrorOfMobXTree_Options()) {
-	const transformer = createTransformer((mobxTree: any)=>{
-		// create mirror on source object, if not present
-		if (mobxTree["$mirror_new"] == null) {
-			const tree_plainMirror =
-				Array.isArray(mobxTree) ? [] :
-				mobxTree instanceof Map || mobxTree instanceof ObservableMap ? new Map() :
-				mobxTree instanceof Set || mobxTree instanceof ObservableSet ? new Set() :
-				{};
-			if (CE(opt.prototypesToKeep).Any(a=>mobxTree instanceof a)) {
-				Object.setPrototypeOf(tree_plainMirror, Object.getPrototypeOf(mobxTree));
-			}
-
-			if (Object.isExtensible(mobxTree)) {
-				Object.defineProperty(mobxTree, "$mirror_new", {value: tree_plainMirror});
-			} else {
-				console.warn("Could not extend mobx-tree with $mirror_new property. @mobxTree:", mobxTree);
-			}
-		}
-		const tree_plainMirror = mobxTree["$mirror_new"];
-
-		//const tree_plainMirror_oldData = Clone(tree_plainMirror);
-
-		// create a new mirror object each time; createTransformer should make this work (ie. not rerun this func if source mobxTree is unchanged), so I must be doing something wrong
-		/*const tree_plainMirror =
-			Array.isArray(mobxTree) ? [] :
-			mobxTree instanceof Map || mobxTree instanceof ObservableMap ? new Map() :
-			mobxTree instanceof Set || mobxTree instanceof ObservableSet ? new Set() :
-			{};
-		if (CE(opt.prototypesToKeep).Any(a=>mobxTree instanceof a)) {
-			Object.setPrototypeOf(tree_plainMirror, Object.getPrototypeOf(mobxTree));
-		}*/
-
-		const sourceIsMap = mobxTree instanceof Map || mobxTree instanceof ObservableMap;
-		const targetIsMap = tree_plainMirror instanceof Map || tree_plainMirror instanceof ObservableMap;
-		const mobxInfo = GetAdministration_Safe(mobxTree);
-		/*const keys = sourceIsMap ? mobxTree.keys() : Object.keys(mobxTree); // always access the keys, to ensure the autorun subscribes to them (using the mobx-admin-object path doesn't do this)
-		const mobxKeys =
-			opt.onlyCopyMobXProps ? (mobxInfo?.values_?.keys() ?? emptyArray)
-			: keys;*/
-		const keys = sourceIsMap || mobxInfo ? mobx_keys(mobxTree) : Object.keys(mobxTree); // always access the keys, to ensure the autorun subscribes to them (using the mobx-admin-object path doesn't do this)
-		const mobxKeys =
-			// if mobxTree is an Observable[Map/Set], then all of its keys are "mobx props"/reactive
-			opt.onlyCopyMobXProps && !(mobxTree instanceof ObservableMap || mobxTree instanceof ObservableSet)
-				? [...(mobxInfo?.values_?.keys() ?? emptyArray)]
-				: keys;
-		const mobxStoredAnnotations = GetMobXStoredAnnotations(mobxTree);
-
-		for (const key of mobxKeys) {
-			//if (key == "graphlink") continue; // temp; for debugging
-
-			//const valueFromSource = sourceIsMap ? mobxTree.get(key) : mobxTree[key]; // this counts as a mobx-get, meaning the autorun subscribes, so this func reruns when the prop-value changes
-			const valueFromSource = sourceIsMap || mobxInfo ? mobx_get(mobxTree, key) : mobxTree[key]; // this counts as a mobx-get, meaning the autorun subscribes, so this func reruns when the prop-value changes
-			const fieldObservedAsRefOnly = mobxStoredAnnotations?.[key]?.annotationType_ == "observable.ref" || GetAdministration_Safe(valueFromSource) == null;
-
-			let valueForTarget;
-			if (typeof valueFromSource == "object" && valueFromSource != null && !fieldObservedAsRefOnly) {
-				valueForTarget = transformer(valueFromSource);
-			} else {
-				valueForTarget = valueFromSource;
-			}
-
-			if (targetIsMap) {
-				(tree_plainMirror as Map<any, any>).set(key, valueForTarget);
-			} else {
-				tree_plainMirror[key] = valueForTarget;
-			}
-		}
-
-		// todo: find way to ensure that user's handler-func does not itself access observables, else will cause this mirror-func to rerun!
-		opt.onChange?.(mobxTree, tree_plainMirror, /*tree_plainMirror_oldData*/ null);
-
-		return tree_plainMirror;
-	}, {keepAlive: opt.keepAlive});
-	return transformer(mobxTree_root);
-}
-
-/*export function StartUpdatingMirrorOfMobXTree_New2(mobxTree: any, opt = new GetMirrorOfMobXTree_Options()) {
-	return computed(func, {keepAlive: true});
-	/*return new ComputedValue({
-		get: func,
-	});*#/
-
-	function func() {
-		// create mirror on source object, if not present
-		if (mobxTree["$mirror"] == null) {
-			const tree_plainMirror =
-				Array.isArray(mobxTree) ? [] :
-				mobxTree instanceof Map || mobxTree instanceof ObservableMap ? new Map() :
-				mobxTree instanceof Set || mobxTree instanceof ObservableSet ? new Set() :
-				{};
-			if (CE(opt.prototypesToKeep).Any(a=>mobxTree instanceof a)) {
-				Object.setPrototypeOf(tree_plainMirror, Object.getPrototypeOf(mobxTree));
-			}
-
-			if (Object.isExtensible(mobxTree)) {
-				Object.defineProperty(mobxTree, "$mirror", {value: tree_plainMirror});
-			} else {
-				console.warn("Could not extend mobx-tree with $mirror property. @mobxTree:", mobxTree);
-			}
-		}
-		const tree_plainMirror = mobxTree["$mirror"];
-
-		const sourceIsMap = mobxTree instanceof Map || mobxTree instanceof ObservableMap;
-		const targetIsMap = tree_plainMirror instanceof Map || tree_plainMirror instanceof ObservableMap;
-		const mobxInfo = GetAdministration_Safe(mobxTree);
-		//const keys = sourceIsMap ? mobxTree.keys() : Object.keys(mobxTree); // always access the keys, to ensure the autorun subscribes to them (using the mobx-admin-object path doesn't do this)
-		const keys = sourceIsMap || mobxInfo ? mobx_keys(mobxTree) : Object.keys(mobxTree); // always access the keys, to ensure the autorun subscribes to them (using the mobx-admin-object path doesn't do this)
-		const mobxKeys =
-			// if mobxTree is an Observable[Map/Set], then all of its keys are "mobx props"/reactive
-			opt.onlyCopyMobXProps && !(mobxTree instanceof ObservableMap || mobxTree instanceof ObservableSet)
-				? [...(mobxInfo?.values_?.keys() ?? emptyArray)]
-				: keys;
-		const mobxStoredAnnotations = GetMobXStoredAnnotations(mobxTree);
-
-		for (const key of mobxKeys) {
-			const valueFromSource = mobxInfo ? mobx_get(mobxTree, key) : mobxTree[key]; // this counts as a mobx-get, meaning the autorun subscribes, so this func reruns when the prop-value changes
-			const fieldObservedAsRefOnly = mobxStoredAnnotations?.[key]?.annotationType_ == "observable.ref" || GetAdministration_Safe(valueFromSource) == null;
-
-			let valueForTarget;
-			if (typeof valueFromSource == "object" && valueFromSource != null && !fieldObservedAsRefOnly) {
-				valueForTarget = GetMirrorOfMobXTree(valueFromSource, opt.removeCircularLinks ? E(opt, {removeCircularLinks: false}) : opt);
-			} else {
-				valueForTarget = valueFromSource;
-			}
-
-			if (targetIsMap) {
-				tree_plainMirror.set(key, valueForTarget);
-				//mobx_set(tree_plainMirror, key, valueForTarget);
-			} else {
-				tree_plainMirror[key] = valueForTarget;
-			}
-		}
-
-		return tree_plainMirror;
-	}
-}*/
-
-export function GetMirrorOfMobXTree_New2(mobxTree: any, opt = new GetMirrorOfMobXTree_Options()) {
-	return computed(func, {keepAlive: opt.keepAlive});
-	/*return new ComputedValue({
-		get: func,
-	});*/
-
-	function func() {
-		// create a new mirror object each time, so that changes propagate up to root
-		const tree_plainMirror =
-			Array.isArray(mobxTree) ? [] :
-			mobxTree instanceof Map || mobxTree instanceof ObservableMap ? new Map() :
-			mobxTree instanceof Set || mobxTree instanceof ObservableSet ? new Set() :
-			{};
-		if (CE(opt.prototypesToKeep).Any(a=>mobxTree instanceof a)) {
-			Object.setPrototypeOf(tree_plainMirror, Object.getPrototypeOf(mobxTree));
-		}
-		// create mirror on source object, if not present
-		/*if (mobxTree["$mirror2"] == null) {
-			const tree_plainMirror =
-				Array.isArray(mobxTree) ? [] :
-				mobxTree instanceof Map || mobxTree instanceof ObservableMap ? new Map() :
-				mobxTree instanceof Set || mobxTree instanceof ObservableSet ? new Set() :
-				{};
-			if (CE(opt.prototypesToKeep).Any(a=>mobxTree instanceof a)) {
-				Object.setPrototypeOf(tree_plainMirror, Object.getPrototypeOf(mobxTree));
-			}
-
-			if (Object.isExtensible(mobxTree)) {
-				Object.defineProperty(mobxTree, "$mirror2", {value: tree_plainMirror});
-			} else {
-				console.warn("Could not extend mobx-tree with $mirror2 property. @mobxTree:", mobxTree);
-			}
-		}
-		const tree_plainMirror = mobxTree["$mirror2"];*/
-
-		const sourceIsMap = mobxTree instanceof Map || mobxTree instanceof ObservableMap;
-		const targetIsMap = tree_plainMirror instanceof Map || tree_plainMirror instanceof ObservableMap;
-		const mobxInfo = GetAdministration_Safe(mobxTree);
-		//const keys = sourceIsMap ? mobxTree.keys() : Object.keys(mobxTree); // always access the keys, to ensure the autorun subscribes to them (using the mobx-admin-object path doesn't do this)
-		const keys = sourceIsMap || mobxInfo ? mobx_keys(mobxTree) : Object.keys(mobxTree); // always access the keys, to ensure the autorun subscribes to them (using the mobx-admin-object path doesn't do this)
-		const mobxKeys =
-			// if mobxTree is an Observable[Map/Set], then all of its keys are "mobx props"/reactive
-			opt.onlyCopyMobXProps && !(mobxTree instanceof ObservableMap || mobxTree instanceof ObservableSet)
-				? [...(mobxInfo?.values_?.keys() ?? emptyArray)]
-				: keys;
-		const mobxStoredAnnotations = GetMobXStoredAnnotations(mobxTree);
-
-		for (const key of mobxKeys) {
-			const valueFromSource = sourceIsMap || mobxInfo ? mobx_get(mobxTree, key) : mobxTree[key]; // this counts as a mobx-get, meaning the autorun subscribes, so this func reruns when the prop-value changes
-			const fieldObservedAsRefOnly = mobxStoredAnnotations?.[key]?.annotationType_ == "observable.ref" || GetAdministration_Safe(valueFromSource) == null;
-
-			let valueForTarget;
-			if (typeof valueFromSource == "object" && valueFromSource != null && !fieldObservedAsRefOnly) {
-				//valueForTarget = GetMirrorOfMobXTree(valueFromSource, opt.removeCircularLinks ? E(opt, {removeCircularLinks: false}) : opt);
-				valueForTarget = GetMirrorOfMobXTree_New2(valueFromSource, opt);
-				// force child computed-value to actually get computed
-				//valueForTarget.get();
-				//console.log("ChildKeys:", Object.keys(valueForTarget.get())); // force child computed-value to actually get computed
-				valueForTarget.get(); // force child computed-value to actually get computed
-			} else {
-				valueForTarget = valueFromSource;
-			}
-
-			if (targetIsMap) {
-				(tree_plainMirror as Map<any, any>).set(key, valueForTarget);
-				//mobx_set(tree_plainMirror, key, valueForTarget);
-			} else {
-				tree_plainMirror[key] = valueForTarget;
-			}
-		}
-
-		// todo: find way to ensure that user's handler-func does not itself access observables, else will cause this mirror-func to rerun!
-		opt.onChange?.(mobxTree, tree_plainMirror);
-
-		return tree_plainMirror;
-	}
-}
