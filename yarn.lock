@@ -8741,7 +8741,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"mobx-graphlink@0.0.39, mobx-graphlink@workspace:.yalc/mobx-graphlink":
+"mobx-graphlink@0.0.40, mobx-graphlink@workspace:.yalc/mobx-graphlink":
   version: 0.0.0-use.local
   resolution: "mobx-graphlink@workspace:.yalc/mobx-graphlink"
   dependencies:
@@ -8809,6 +8809,15 @@ fsevents@~2.3.2:
   peerDependencies:
     mobx: "*"
   checksum: 4f62b2dc13065fb75369378443d459b32a554a7c6f21677cefb6c380bf4e0f24223e3501701c4a2a3b642b6bb0cbc8c4e170a8bbea9d78c99ac8c0752d34cecd
+  languageName: node
+  linkType: hard
+
+"mobx-utils@npm:^6.0.6":
+  version: 6.0.6
+  resolution: "mobx-utils@npm:6.0.6"
+  peerDependencies:
+    mobx: ^6.0.0
+  checksum: 10d1dc8612143a49bc33380532615e052ecf68cbca20c354d5b8adcafc3a7e5181ec9bbb2360181ce7f8a191297b2d86a1bd177191fbab463c9120401b93598c
   languageName: node
   linkType: hard
 
@@ -13514,9 +13523,10 @@ typescript@^4.3.2:
     lodash: ^4.17.15
     mini-css-extract-plugin: ^1.6.0
     mobx: ^6.3.2
-    mobx-graphlink: 0.0.39
+    mobx-graphlink: 0.0.40
     mobx-react: ^7.2.0
     mobx-sync: 3.0.0
+    mobx-utils: ^6.0.6
     moment: 2.24.0
     patch-package: ^6.4.7
     postcss-loader: ^6.1.0
