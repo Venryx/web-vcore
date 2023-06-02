@@ -1,7 +1,7 @@
 {
 	"name": "web-vcore",
 	"description": "Core code shared between my projects, for web-app frontends.",
-	"version": "0.0.76",
+	"version": "0.0.77",
 	"license": "MIT",
 	"author": "Venryx (https://venryx.com)",
 	"repository": "https://github.com/Venryx/web-vcore",
@@ -63,7 +63,7 @@
 		"postgraphile": "^4.12.1"
 	},
 	"dependencies": {
-		"@apollo/client": "3.5.0-beta.4",
+		"@apollo/client": "3.7.15",
 		"@babel/core": "^7.14.6",
 		"@babel/plugin-proposal-class-properties": "^7.14.5",
 		"@babel/plugin-proposal-nullish-coalescing-operator": "^7.14.5",
@@ -101,9 +101,10 @@
 		"express": "^4.17.1",
 		"file-loader": "^6.2.0",
 		"fs-extra": "^8.1.0",
-		"graphql": "^15.5.0",
+		"graphql": "^16.6.0",
 		"graphql-feedback": "0.0.6",
 		"graphql-tag": "2.12.5",
+		"graphql-ws": "5.13.1",
 		"history": "^4.10.1",
 		"html-webpack-plugin": "^5.3.1",
 		"immer": "^7.0.7",
@@ -112,7 +113,7 @@
 		"lodash": "^4.17.15",
 		"mini-css-extract-plugin": "^1.6.0",
 		"mobx": "^6.3.2",
-		"mobx-graphlink": "0.0.38",
+		"mobx-graphlink": "0.0.39",
 		"mobx-react": "^7.2.0",
 		"mobx-sync": "3.0.0",
 		"moment": "2.24.0",

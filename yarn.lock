@@ -5,32 +5,39 @@ __metadata:
   version: 4
   cacheKey: 8
 
-"@apollo/client@npm:3.5.0-beta.4":
-  version: 3.5.0-beta.4
-  resolution: "@apollo/client@npm:3.5.0-beta.4"
+"@apollo/client@npm:3.7.15":
+  version: 3.7.15
+  resolution: "@apollo/client@npm:3.7.15"
   dependencies:
-    "@graphql-typed-document-node/core": ^3.0.0
-    "@wry/context": ^0.6.0
+    "@graphql-typed-document-node/core": ^3.1.1
+    "@wry/context": ^0.7.0
     "@wry/equality": ^0.5.0
-    "@wry/trie": ^0.3.0
-    graphql-tag: ^2.12.3
+    "@wry/trie": ^0.4.0
+    graphql-tag: ^2.12.6
     hoist-non-react-statics: ^3.3.2
-    optimism: ^0.16.1
+    optimism: ^0.16.2
     prop-types: ^15.7.2
+    response-iterator: ^0.2.6
     symbol-observable: ^4.0.0
-    ts-invariant: ^0.9.0
+    ts-invariant: ^0.10.3
     tslib: ^2.3.0
-    zen-observable-ts: ^1.1.0
+    zen-observable-ts: ^1.2.5
   peerDependencies:
-    graphql: ^14.0.0 || ^15.0.0
-    react: ^16.8.0 || ^17.0.0
-    subscriptions-transport-ws: ^0.9.0
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+    graphql-ws: ^5.5.5
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    subscriptions-transport-ws: ^0.9.0 || ^0.11.0
   peerDependenciesMeta:
+    graphql-ws:
+      optional: true
     react:
+      optional: true
+    react-dom:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 6102d88f7e7150e95cef7dc2326e0b8e2a7bd1d23dac81c845c962422bd78b48cc52dee48dca1a177002a5e688a1987434eba48e90c8cb76f727cb1e286efc74
+  checksum: a33e56847dfb7d6176ffb3cd4d3ff2c548826ce51280a6c8f70e3d75daf9d3a287e79bf3d86ea0b16e39218c90d8a7b4f528eb340055387cf9137705970c0f59
   languageName: node
   linkType: hard
 
@@ -1922,12 +1929,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-typed-document-node/core@npm:^3.0.0":
-  version: 3.1.0
-  resolution: "@graphql-typed-document-node/core@npm:3.1.0"
+"@graphql-typed-document-node/core@npm:^3.1.1":
+  version: 3.2.0
+  resolution: "@graphql-typed-document-node/core@npm:3.2.0"
   peerDependencies:
-    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-  checksum: 582eb2006012a29bdcf72d223e3fec1a1ccdac8f4e249bd92cb68412e9881b4f7aa9ed9c74a495a2aa988904aaa4b8aa7b21bf0cb8c7aed700b8150f5818ef3f
+    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: fa44443accd28c8cf4cb96aaaf39d144a22e8b091b13366843f4e97d19c7bfeaf609ce3c7603a4aeffe385081eaf8ea245d078633a7324c11c5ec4b2011bb76d
   languageName: node
   linkType: hard
 
@@ -2425,13 +2432,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/zen-observable@npm:0.8.3":
-  version: 0.8.3
-  resolution: "@types/zen-observable@npm:0.8.3"
-  checksum: 08c88354abcf03a2176a2ec32e07da1f25fdad94fbc2f419bea53d77deb04ad4759518b4fe3fc695e61065dd4bdf7c8bd26b5211a6cd5be2233872806bdee48d
-  languageName: node
-  linkType: hard
-
 "@typescript-eslint/eslint-plugin@npm:^4.28.2":
   version: 4.33.0
   resolution: "@typescript-eslint/eslint-plugin@npm:4.33.0"
@@ -2728,12 +2728,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wry/context@npm:^0.6.0":
-  version: 0.6.1
-  resolution: "@wry/context@npm:0.6.1"
+"@wry/context@npm:^0.7.0":
+  version: 0.7.3
+  resolution: "@wry/context@npm:0.7.3"
   dependencies:
     tslib: ^2.3.0
-  checksum: 4187863175061a8f54659f124e3e5c202e010b2b65bf886b4de9777ce8a45cf183b6f6d88f1f537002cbcbea52103a2eadc337d494106490def10acaf9522c5d
+  checksum: 91c1e9eee9046c48ff857d60dcbb59f22246ce0f9bb2d9b190e0555227e7ba3f86024032cc057f3f5141d3bee93fc6b2a15ce2c79fa512569d3432eb8e1af02b
   languageName: node
   linkType: hard
 
@@ -2752,6 +2752,15 @@ __metadata:
   dependencies:
     tslib: ^2.3.0
   checksum: c3f6b200aefc64b5cd9976b7ed0dd22852eb826d835c5dccd3d03ef788d258af50ca64e8de654e5f812134afdb9d5890f334c8de2276d0dca1751785694654f9
+  languageName: node
+  linkType: hard
+
+"@wry/trie@npm:^0.4.0":
+  version: 0.4.3
+  resolution: "@wry/trie@npm:0.4.3"
+  dependencies:
+    tslib: ^2.3.0
+  checksum: 106e021125cfafd22250a6631a0438a6a3debae7bd73f6db87fe42aa0757fe67693db0dfbe200ae1f60ba608c3e09ddb8a4e2b3527d56ed0a7e02aa0ee4c94e1
   languageName: node
   linkType: hard
 
@@ -6380,34 +6389,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"graphql-feedback@npm:0.0.5":
-  version: 0.0.5
-  resolution: "graphql-feedback@npm:0.0.5"
-  dependencies:
-    classnames: ^2.3.1
-    codemirror: ^5.62.2
-    mobx-sync: ^3.0.0
-    react-vmarkdown: ^1.0.3
-    slugid: ^2.0.0
-  peerDependencies:
-    "@apollo/client": ^3.3.20
-    js-vextensions: ^0.0.1
-    mobx: ^6.3.2
-    mobx-graphlink: ^0.0.6
-    mobx-react: ^7.2.0
-    postgraphile: ^4.12.3
-    react: ^17.0.2
-    react-beautiful-dnd: ^10.0.4
-    react-dom: ^17.0.2
-    react-vcomponents: ^1.0.39
-    react-vextensions: ^1.0.15
-    react-vmessagebox: 0.0.1
-    react-vscrollview: 0.0.2
-  checksum: c8c0feaed68c6e08c8e82d18ef05572cd6952bb8a7403a75dcb18f75892beb3021eed334e8e3622727fab9d58deecd665c6604dc53d8235832657017adeea245
-  languageName: node
-  linkType: hard
-
-"graphql-feedback@workspace:.yalc/graphql-feedback":
+"graphql-feedback@0.0.6, graphql-feedback@workspace:.yalc/graphql-feedback":
   version: 0.0.0-use.local
   resolution: "graphql-feedback@workspace:.yalc/graphql-feedback"
   dependencies:
@@ -6426,8 +6408,8 @@ fsevents@~2.3.2:
     react: ^17.0.2
     react-beautiful-dnd: ^10.0.4
     react-dom: ^17.0.2
-    react-vcomponents: ^1.0.39
-    react-vextensions: ^1.0.15
+    react-vcomponents: ^1.0.42
+    react-vextensions: ^1.0.16
     react-vmessagebox: 0.0.1
     react-vscrollview: 0.0.2
   languageName: unknown
@@ -6445,7 +6427,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"graphql-tag@npm:2.12.5, graphql-tag@npm:^2.12.3":
+"graphql-tag@npm:2.12.5":
   version: 2.12.5
   resolution: "graphql-tag@npm:2.12.5"
   dependencies:
@@ -6453,6 +6435,26 @@ fsevents@~2.3.2:
   peerDependencies:
     graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
   checksum: 7afe8b0a261bc81278e8350cbc48a641986665fa88521ece137feb8d1d62aacbe79afd4e159b618d56af106291ae8369592e46584fd8fbaf4f440201ea884fdd
+  languageName: node
+  linkType: hard
+
+"graphql-tag@npm:^2.12.6":
+  version: 2.12.6
+  resolution: "graphql-tag@npm:2.12.6"
+  dependencies:
+    tslib: ^2.1.0
+  peerDependencies:
+    graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: b15162a3d62f17b9b79302445b9ee330e041582f1c7faca74b9dec5daa74272c906ec1c34e1c50592bb6215e5c3eba80a309103f6ba9e4c1cddc350c46f010df
+  languageName: node
+  linkType: hard
+
+"graphql-ws@npm:5.13.1":
+  version: 5.13.1
+  resolution: "graphql-ws@npm:5.13.1"
+  peerDependencies:
+    graphql: ">=0.11 <=16"
+  checksum: 7a820c15d6d99f1b4c40b928131899a66edf2fdbca3db09a03dd7f6bde1e81f0a76ccda8e26254aabb0dc30f2a8c133cb0c5c5627c2dde8d032a8dc5a21f0ed3
   languageName: node
   linkType: hard
 
@@ -6472,10 +6474,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"graphql@npm:^15.5.0":
-  version: 15.5.0
-  resolution: "graphql@npm:15.5.0"
-  checksum: 58a69f7274ae94c690bfa2517f96bbaf1327e1ca1fc46606e772ba2f7ca517adeb375346301373351e693022f448b7866163034209623d7c5315819ef8c5e7c0
+"graphql@npm:^16.6.0":
+  version: 16.6.0
+  resolution: "graphql@npm:16.6.0"
+  checksum: bf1d9e3c1938ce3c1a81e909bd3ead1ae4707c577f91cff1ca2eca474bfbc7873d5d7b942e1e9777ff5a8304421dba57a4b76d7a29eb19de8711cb70e3c2415e
   languageName: node
   linkType: hard
 
@@ -8739,7 +8741,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"mobx-graphlink@0.0.38, mobx-graphlink@workspace:.yalc/mobx-graphlink":
+"mobx-graphlink@0.0.39, mobx-graphlink@workspace:.yalc/mobx-graphlink":
   version: 0.0.0-use.local
   resolution: "mobx-graphlink@workspace:.yalc/mobx-graphlink"
   dependencies:
@@ -8758,9 +8760,9 @@ fsevents@~2.3.2:
     updeep: ^1.2.0
     uuid: ^8.3.2
   peerDependencies:
-    "@apollo/client": ^3.3.20
+    "@apollo/client": ^3.7.15
     "@types/react": ^17.0.9
-    graphql: ^15.5.0
+    graphql: ^16.6.0
     mobx: ^6.3.2
     mobx-react: ^7.2.0
     react: ^17.0.2
@@ -9378,13 +9380,13 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"optimism@npm:^0.16.1":
-  version: 0.16.1
-  resolution: "optimism@npm:0.16.1"
+"optimism@npm:^0.16.2":
+  version: 0.16.2
+  resolution: "optimism@npm:0.16.2"
   dependencies:
-    "@wry/context": ^0.6.0
+    "@wry/context": ^0.7.0
     "@wry/trie": ^0.3.0
-  checksum: 7506a3e5e37b8945059ffacd68039e920ad121aab3eeff27483b7a8b594f6f694f2a3b61a198aeecc43b81753d35c8cb32b7f662d2b5e2d2449fe7068da678e1
+  checksum: a98ed9a0b8ee2b031010222099b60860d52860bf8182889f2695a7cf2185f21aca59020f78e2b47c0ae7697843caa576798d792967314ff59f6aa7c5d9de7f3a
   languageName: node
   linkType: hard
 
@@ -11019,7 +11021,7 @@ fsevents@~2.3.2:
   languageName: unknown
   linkType: soft
 
-"react-vcomponents@1.0.42, react-vcomponents@workspace:.yalc/react-vcomponents":
+"react-vcomponents@1.0.43, react-vcomponents@workspace:.yalc/react-vcomponents":
   version: 0.0.0-use.local
   resolution: "react-vcomponents@workspace:.yalc/react-vcomponents"
   dependencies:
@@ -11029,11 +11031,11 @@ fsevents@~2.3.2:
   peerDependencies:
     react: ^17.0.2
     react-dom: ^17.0.2
-    react-vextensions: ^1.0.14
+    react-vextensions: ^1.0.16
   languageName: unknown
   linkType: soft
 
-"react-vextensions@1.0.16, react-vextensions@workspace:.yalc/react-vextensions":
+"react-vextensions@1.0.18, react-vextensions@workspace:.yalc/react-vextensions":
   version: 0.0.0-use.local
   resolution: "react-vextensions@workspace:.yalc/react-vextensions"
   dependencies:
@@ -11553,6 +11555,13 @@ resolve@^2.0.0-next.3:
     is-core-module: ^2.2.0
     path-parse: ^1.0.6
   checksum: eb88c5e53843bc022215744307a5f5664446c0fdb8f43c33456dce98d5ee6b3162d0cd0a177bb6f1c3d5c8bf01391ac7ab2de0e936e35318725fb40ba7efdaf6
+  languageName: node
+  linkType: hard
+
+"response-iterator@npm:^0.2.6":
+  version: 0.2.6
+  resolution: "response-iterator@npm:0.2.6"
+  checksum: b0db3c0665a0d698d65512951de9623c086b9c84ce015a76076d4bd0bf733779601d0b41f0931d16ae38132fba29e1ce291c1f8e6550fc32daaa2dc3ab4f338d
   languageName: node
   linkType: hard
 
@@ -12904,12 +12913,12 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"ts-invariant@npm:^0.9.0":
-  version: 0.9.1
-  resolution: "ts-invariant@npm:0.9.1"
+"ts-invariant@npm:^0.10.3":
+  version: 0.10.3
+  resolution: "ts-invariant@npm:0.10.3"
   dependencies:
     tslib: ^2.1.0
-  checksum: 810f8abd2f7f0cf85c16db797ef72f705bc52a51d1982a18656b7b15e2b32739556e8d37989557eec6b69f8a08ddada27651064f2330a529a388e0fa5a5e2e9a
+  checksum: bb07d56fe4aae69d8860e0301dfdee2d375281159054bc24bf1e49e513fb0835bf7f70a11351344d213a79199c5e695f37ebbf5a447188a377ce0cd81d91ddb5
   languageName: node
   linkType: hard
 
@@ -13453,7 +13462,7 @@ typescript@^4.3.2:
   version: 0.0.0-use.local
   resolution: "web-vcore@workspace:."
   dependencies:
-    "@apollo/client": 3.5.0-beta.4
+    "@apollo/client": 3.7.15
     "@babel/core": ^7.14.6
     "@babel/plugin-proposal-class-properties": ^7.14.5
     "@babel/plugin-proposal-nullish-coalescing-operator": ^7.14.5
@@ -13493,9 +13502,10 @@ typescript@^4.3.2:
     file-loader: ^6.2.0
     firebase: ^9.1.1
     fs-extra: ^8.1.0
-    graphql: ^15.5.0
-    graphql-feedback: 0.0.5
+    graphql: ^16.6.0
+    graphql-feedback: 0.0.6
     graphql-tag: 2.12.5
+    graphql-ws: 5.13.1
     history: ^4.10.1
     html-webpack-plugin: ^5.3.1
     immer: ^7.0.7
@@ -13504,7 +13514,7 @@ typescript@^4.3.2:
     lodash: ^4.17.15
     mini-css-extract-plugin: ^1.6.0
     mobx: ^6.3.2
-    mobx-graphlink: 0.0.38
+    mobx-graphlink: 0.0.39
     mobx-react: ^7.2.0
     mobx-sync: 3.0.0
     moment: 2.24.0
@@ -13521,8 +13531,8 @@ typescript@^4.3.2:
     react-markdown: ^6.0.3
     react-universal-hooks: 0.5.1
     react-uplot: 0.0.8
-    react-vcomponents: 1.0.42
-    react-vextensions: 1.0.16
+    react-vcomponents: 1.0.43
+    react-vextensions: 1.0.18
     react-vmarkdown: 1.0.3
     react-vmenu: 1.0.14
     react-vmessagebox: 1.0.14
@@ -13947,13 +13957,12 @@ typescript@^4.3.2:
   languageName: node
   linkType: hard
 
-"zen-observable-ts@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "zen-observable-ts@npm:1.1.0"
+"zen-observable-ts@npm:^1.2.5":
+  version: 1.2.5
+  resolution: "zen-observable-ts@npm:1.2.5"
   dependencies:
-    "@types/zen-observable": 0.8.3
     zen-observable: 0.8.15
-  checksum: 1772727f2c96af228c52b008260e1e4ae512782abc9d4f4a78d1a61913aa3b55ae672ad343ecf6895d9b968b5e3f4a41b5a317702cdc6cd5f6f93bc0dacf8103
+  checksum: 3b707b7a0239a9bc40f73ba71b27733a689a957c1f364fabb9fa9cbd7d04b7c2faf0d517bf17004e3ed3f4330ac613e84c0d32313e450ddaa046f3350af44541
   languageName: node
   linkType: hard
 
