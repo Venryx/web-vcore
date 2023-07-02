@@ -1,9 +1,14 @@
+import {config} from "webpack";
 import debug_base from "debug";
 import ip from "ip";
 import path from "path";
 import {createRequire} from "module";
 import {ENV, DEV, PROD, TEST, ENV_Long} from "./EnvVars/ReadEnvVars.js";
 //import yargs from "yargs";
+
+/*const func = config.getNormalizedWebpackOptions;
+type Configuration = ReturnType<typeof func>;
+type StatsOptions = Exclude<Configuration["stats"], string | boolean | undefined>;*/
 
 //const {argv} = yargs;
 
@@ -46,7 +51,7 @@ const config_base = {
 		chunks: PROD,
 		chunkModules: PROD,
 		colors: true,
-	},
+	} as any, //as StatsOptions,
 	compiler_hash_type: PROD ? "chunkhash" : null,
 	// compiler_css_modules: true, // enable/disable css modules
 

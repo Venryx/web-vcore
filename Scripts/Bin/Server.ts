@@ -52,6 +52,9 @@ export function Serve(
 
 	if (DEV) {
 		if (webpackConfig == null) throw new Error("If DEV, webpackConfig must be non-null.");
+		if (webpackConfig.stats != null && JSON.stringify(webpackConfig.stats) != JSON.stringify(config.compiler_stats)) {
+			throw new Error("Webpack config contains a 'stats' property, but it will be ignored, since its superseded by the 'compiler_stats' config property.");
+		}
 		const compiler = webpack(webpackConfig);
 
 		//compiler.apply(new webpack.ProgressPlugin({ profile: true }));

@@ -240,6 +240,8 @@ export class GetMirrorOfMobXTree_Options {
 	/** Most callers of GetMirrorOfMobXTree only care to have mobx-prop pathways mirrored, and excluding the rest improves perf substantially. */
 	//onlyCopyMobXNodes = true;
 	onlyCopyMobXProps = true;
+	mirrorObservableRefs = false; // why is this false by default?
+
 	/** If enabled, removes circular-links from mirror tree. This doesn't affect original object-tree, and makes the mirror tree usable in immer.produce(). */
 	removeCircularLinks = false; // disabled by default, since onlyCopyMobXNodes is usually sufficient (and enabling this just adds some slowdown)
 	/** List of classes for which instances in source-tree will have their copy-instances assigned the same prototype. */
@@ -319,7 +321,7 @@ export function StartUpdatingMirrorOfMobXTree(mobxTree: any, tree_plainMirror: a
 			const fieldObservedAsRefOnly = mobxStoredAnnotations?.[key]?.annotationType_ == "observable.ref" || GetAdministration_Safe(valueFromSource) == null;
 
 			let valueForTarget;
-			if (typeof valueFromSource == "object" && valueFromSource != null && !fieldObservedAsRefOnly) {
+			if (typeof valueFromSource == "object" && valueFromSource != null && (opt.mirrorObservableRefs || !fieldObservedAsRefOnly)) {
 				//if (!opt.onlyCopyMobXNodes || valueFromSource[$mobx] != null) {
 				valueForTarget = GetMirrorOfMobXTree(valueFromSource, opt.removeCircularLinks ? E(opt, {removeCircularLinks: false}) : opt);
 			} else {
