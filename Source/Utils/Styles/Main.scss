@@ -1,58 +1,31 @@
 // Do not include this file directly, since it omits the subdep imports; instead, import the "Entry_Base" in this folder, from user-project.
 // If WVC is symlinked, WVC's webpack-config will then detect its own symlinking, and change the import to "Entry_Symlinked", fixing the subdep paths.
-
-.sliderHandleAbove .rc-slider > [role=slider] {
-	z-index: 1;
-}
-
-.rdtPicker {
-	background: rgba(0,0,0,.7);
-	border: 1px solid rgba(255,255,255,.3);
-}
-.rdtPicker table td {
-	border: none;
-}
-.rdtCounter .rdtBtn:hover {
-	background: rgba(255,255,255,.3);
-}
-
-.rc-tooltip-inner {
-	padding: 4px 7px;
-	background-color: rgb(30,30,30);
-	min-height: initial !important;
-}
+// TODO: Confirm whether the note above is still accurate. (I think it is no longer accurate, now that yalc is used instead of "npm link" and such.)
 
 @import "Markdown";
+@import "Fonts";
 //@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
 //@import "bootstrap";
 @import "bootstrap-limited";
 @import "bootstrap-social";
 
+// include declaration of font-face for Roboto, using google-fonts
+// todo: perhaps remove this at some point, to avoid an unnecessary/extra resource-request (since Quicksand is now my standard "main font")
 //@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,100,500,900);
 @import url("//fonts.googleapis.com/css?family=Roboto:300,400,100,500,900");
-
-// Some best-practice CSS that's useful for most apps
-// Just remove them if they're not what you want
-/*html {
-	box-sizing: border-box;
-}*/
 
 html, body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
-	//background-color: $background;
-	font-family: 'Roboto', 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif,
-		// add these fonts at end, for providing colored emojis (otherwise it falls back to non-colored ones for, eg. ✔ and ⚙ -- though not 🚧)
-		'segoe ui emoji', 'noto color emoji', 'android emoji', 'emojisymbols', 'emojione mozilla', 'twemoji mozilla', 'segoe ui symbol';
-	//font-size: 15px;
 	font-size: 14px;
-	/*@include desktop {
-		font-size: 15px;
-	}
-	@include mobile {
-		font-size: 12px;
-	}*/
+
+	// keep list in-sync with DefaultSkin.ts (also, see there for the comments on the list) [included in both places, because fonts are something we want loaded asap, ie. before reactjs tree has finished rendering]
+	font-family: (
+		"Quicksand",
+		"Roboto", "Open Sans", "Helvetica Neue", "Helvetica", "Arial", "sans-serif",
+		"Segoe UI Emoji", "Noto Color Emoji", "Android Emoji", "EmojiSymbols", "EmojiOne Mozilla", "TweMoji Mozilla", "Segoe UI Symbol",
+	);
 }
 * {
 	//box-sizing: inherit;
@@ -74,7 +47,6 @@ html, body {
 	//box-sizing: inherit;
 	box-sizing: border-box;
 }
-/**, .quick1 { nothing: nothing; }*/
 [type=button] {
 	-webkit-appearance: none !important;
 }
@@ -235,6 +207,33 @@ video::-webkit-media-controls-timeline {
 	align-self: center;
 	width: calc(100% - 64px);
 }
+
+// rc-slider
+// ==========
+
+.sliderHandleAbove .rc-slider > [role=slider] {
+	z-index: 1;
+}
+
+.rdtPicker {
+	background: rgba(0,0,0,.7);
+	border: 1px solid rgba(255,255,255,.3);
+}
+.rdtPicker table td {
+	border: none;
+}
+.rdtCounter .rdtBtn:hover {
+	background: rgba(255,255,255,.3);
+}
+
+.rc-tooltip-inner {
+	padding: 4px 7px;
+	background-color: rgb(30,30,30);
+	min-height: initial !important;
+}
+
+// shapes
+// ==========
 
 .triangle {
 	position: relative;

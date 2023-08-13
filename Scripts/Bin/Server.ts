@@ -24,7 +24,12 @@ export function Serve(
 	// extensions to serve (without a redirect to "index.html")
 	// note: perhaps should leave empty, since prefix approach should be sufficient, and is arguably better (eg. keeps redirects working for content ids that happen to end with these extensions)
 	// [that said, it doesn't matter that much, since these exceptions are only for development/webpack anyway; eg. in production, my web-servers tend to use approach of only redirecting if no file at given path is found]
-	extToServe = ["html", "js", "css", "map", "txt", "png", "jpg", "wasm", "woff2"],
+	extToServe = [
+		"html", "js", "css", "map",
+		"png", "jpg",
+		"otf", "woff", "woff2",
+		"txt", "wasm",
+	],
 	writeToDisk = undefined,
 ) {
 	const paths = config.utils_paths;
