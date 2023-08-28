@@ -42,7 +42,7 @@ export type SpeakInfo = {
 export class TextSpeaker {
 	speaking = false;
 	Speak(info: SpeakInfo, stopOtherSpeech = true) {
-		return new Promise<void>((resolve, reject)=>{
+		return new Promise<SpeechSynthesisEvent>((resolve, reject)=>{
 			if (g.speechSynthesis == null) return reject(new Error("Speech-synthesis not supported."));
 			const voice = GetVoices().find(a=>a.name == info.voice);
 			//Assert(voice != null, `Could not find voice named "${info.voice}".`);
@@ -58,16 +58,16 @@ export class TextSpeaker {
 			speech.rate = info.rate || 1; // for me, this can range from 10% to 1000%
 			speech.pitch = info.pitch || 1; // for me, this can range from ~1% to 200%
 
-			speech.addEventListener("start", ()=>{
+			speech.addEventListener("start", e=>{
 				this.speaking = true; // set speaking to true here as well (this runs after the "end" event of the previous speech, preventing our correct speaking:true state from being overwritten)
 			});
-			speech.addEventListener("end", ()=>{
+			speech.addEventListener("end", e=>{
 				this.speaking = false;
-				resolve();
+				resolve(e);
 			});
-			speech.addEventListener("error", ()=>{
+			speech.addEventListener("error", e=>{
 				this.speaking = false;
-				reject();
+				reject(e);
 			});
 
 			/*speech.addEventListener("boundary", e=>Log("boundary:", e));
