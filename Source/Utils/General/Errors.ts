@@ -1,8 +1,8 @@
 import Raven from "raven-js";
 import {manager} from "../../Manager.js";
 
-export function ShouldErrorBeIgnored(errorStr: string) {
-	errorStr = typeof errorStr == "string" ? errorStr : ""; // defensive
+export function ShouldErrorBeIgnored(e: ErrorEvent) {
+	const errorStr = typeof e.message == "string" ? e.message : ""; // defensive
 
 	// ignore these "errors"; they occur during normal operation, and are not a problem
 	if (errorStr.includes("ResizeObserver loop limit exceeded")) return true;
@@ -15,7 +15,7 @@ export function ShouldErrorBeIgnored(errorStr: string) {
 window.addEventListener("error", e=>{
 	const {message, filename: filePath, lineno: line, colno: column, error} = e as {message: string, filename: string, lineno: number, colno: number, error: Error};
 
-	if (ShouldErrorBeIgnored(e.message)) {
+	if (ShouldErrorBeIgnored(e)) {
 		e.stopImmediatePropagation();
 		return false;
 	}

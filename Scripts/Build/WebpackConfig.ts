@@ -10,7 +10,7 @@ import {CE, E} from "js-vextensions";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import {createRequire} from "module";
 import pathModule from "path";
-import SpriteLoaderPlugin from "svg-sprite-loader/plugin";
+import SpriteLoaderPlugin from "svg-sprite-loader/plugin.js";
 import {fileURLToPath} from "url";
 import webpack from "webpack";
 import WebpackStringReplacer from "webpack-string-replacer";
