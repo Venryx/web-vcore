@@ -1,4 +1,5 @@
 import {Assert, E} from "js-vextensions";
+import {TextArea} from "react-vcomponents";
 import {addHook_css, CompClass_Any, Style} from "react-vextensions";
 
 // value found since this is lowest value that yields: chroma("rgb(255,255,255)").darken(5.55).css() == "rgb(0,0,0)"
@@ -47,7 +48,11 @@ export function ES(...styles) {
 }
 
 addHook_css(CompClass_Any, ctx=>{
+	// special cases, which should not have their styles modified
+	if (ctx.self instanceof TextArea && ctx.self.props.autoSize) return; // if using TextArea with autoSize=true, don't modify styles (else minHeight may get set, which causes error in react-textarea-autosize)
+
 	const merged = Object.assign({}, ...ctx.styleArgs);
+
 	// prevents {flex: 1} from setting {[minWidth/minHeight]: "auto"}
 	if (merged.flex) {
 		const newEntry = {} as Style;
