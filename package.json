@@ -1,7 +1,7 @@
 {
 	"name": "web-vcore",
 	"description": "Core code shared between my projects, for web-app frontends.",
-	"version": "0.0.86",
+	"version": "0.0.87",
 	"license": "MIT",
 	"author": "Venryx (https://venryx.com)",
 	"repository": "https://github.com/Venryx/web-vcore",
@@ -104,7 +104,7 @@
 		"file-loader": "^6.2.0",
 		"fs-extra": "^8.1.0",
 		"graphql": "^16.6.0",
-		"graphql-feedback": "0.0.6",
+		"graphql-feedback": "0.0.7",
 		"graphql-tag": "2.12.5",
 		"graphql-ws": "5.13.1",
 		"history": "^4.10.1",

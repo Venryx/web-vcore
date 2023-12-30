@@ -51,13 +51,13 @@ export function observer_simple<T extends IReactComponent>(target: T): T {
 
 // todo: probably rename/replace/rework @Observer decorator to be called @EnhancedComp or something (since it does more than just add mobx observer functionality, it also adds class-hooks and such)
 
-// variant of @observer decorator, which also adds (and is compatible with) class-hooks (similar to mobx-graphlink's @MGLObserver, but with more options)
+// variant of @observer decorator, which also adds (and is compatible with) class-hooks (similar to mobx-graphlink's @ObserverMGL, but with more options)
 export class Observer_Options {
 	classHooks = true;
 
 	/*mglObserver = true;
-	mglObserver_opts?: MGLObserver_Options;*/
-	// from mobx-graphlink's @MGLObserver
+	mglObserver_opts?: ObserverMGL_Options;*/
+	// from mobx-graphlink's @ObserverMGL
 	bailHandler = true;
 	bailHandler_opts?: BailHandler_Options;
 }
@@ -79,7 +79,7 @@ export function Observer(...args) {
 			EnsureClassProtoRenderFunctionIsWrapped(targetClass.prototype);
 		}
 		/*if (opts.mglObserver) {
-			MGLObserver(opts.mglObserver_opts)(targetClass);
+			ObserverMGL(opts.mglObserver_opts)(targetClass);
 		} else {
 			observer(targetClass as any);
 		}*/
