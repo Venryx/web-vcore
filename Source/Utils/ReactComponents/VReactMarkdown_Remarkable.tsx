@@ -1,5 +1,5 @@
 import {VURL, E} from "js-vextensions";
-import {BaseComponent, ShallowChanged, FilterOutUnrecognizedProps} from "react-vextensions";
+import {BaseComponent, ShallowChanged, FilterOutUnrecognizedProps, cssHelper} from "react-vextensions";
 import {Remarkable} from "remarkable";
 import RemarkableReactRenderer from "remarkable-react";
 import React from "react";
@@ -7,7 +7,6 @@ import {ParseTextForPatternMatchSegments} from "../General/RegexHelpers.js";
 import {GetCurrentURL} from "../URL/URLs.js";
 import {Link} from "./Link.js";
 import {ReplacementFunc} from "./VReactMarkdown.js";
-import {cssHelper} from "react-vextensions";;
 
 //import Markdown from "react-remarkable";
 
@@ -118,7 +117,7 @@ export class VReactMarkdown_Remarkable extends BaseComponent<Props, {}> {
 				const segmentUIs = segments.map((segment, index)=>{
 					if (segment.patternMatches.size == 0) {
 						if (replacements.default) {
-							return replacements.default(segment, index, extraInfo).VAct(a=>a.key = index);
+							return replacements.default(segment, index, extraInfo).VAct(a=>a.key = index.toString());
 						}
 						const text = segment.text.replace(/\r/g, "");
 						return (
@@ -133,7 +132,7 @@ export class VReactMarkdown_Remarkable extends BaseComponent<Props, {}> {
 					}
 					const mainPatternMatched = [...segment.patternMatches.keys()][0];
 					const renderFuncForReplacement = replacements.VValues()[mainPatternMatched.name] as ReplacementFunc;
-					return renderFuncForReplacement(segment, index, extraInfo).VAct(a=>a.key = index);
+					return renderFuncForReplacement(segment, index, extraInfo).VAct(a=>a.key = index.toString());
 				});
 				return React.createElement(containerType, {style}, segmentUIs);
 			}
