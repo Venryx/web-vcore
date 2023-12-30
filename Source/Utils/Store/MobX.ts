@@ -43,8 +43,8 @@ export function ConfigureMobX() {
 
 export type ActionFunc<StoreType> = (store: StoreType)=>void;
 
-// variant of observer(...) wrapper-func, which returns a simple function result, instead of a ReactJS element-info entry (needed for ShowMessageBox.message)
 type IReactComponent = any; // temp
+/** Variant of observer(...) wrapper-func, which returns a simple function result, instead of a ReactJS element-info entry. (*was* needed for ShowMessageBox.message; should be unnecessary now) */
 export function observer_simple<T extends IReactComponent>(target: T): T {
 	return observer(target as any)["type"];
 }

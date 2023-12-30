@@ -29,7 +29,7 @@ export class DefaultLoadingUI extends BaseComponentPlus({} as {comp: BaseCompone
 				<Row center>
 					<Text>Loading...</Text>
 					<InfoButton ml={5} mt={2} // dunno why mt:2 needed, but wouldn't center fully otherwise
-						sel text={`Details (comp: ${comp.constructor.name}): ${bailMessage.message}`}/>
+						sel text={`Details (comp: ${comp["name"] ?? comp.constructor?.name}): ${bailMessage.message}`}/>
 				</Row>
 			</div>
 		);
