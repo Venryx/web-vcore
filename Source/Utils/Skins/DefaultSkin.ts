@@ -32,15 +32,20 @@ export class DefaultSkin extends Skin {
 	override MainFont() {
 		// keep list in-sync with Main.scss
 		const fonts = [
+			// fonts we supply ourselves (in most projects)
+			// ----------
 			// "Quicksand" is the standard "main font" for my projects; not all use it atm, but eventually all should converge
 			// The font should also be supplied from the web-server (eg. in project Resources/Fonts folder), so it's available for all visitors. (atm, this part is not handled by web-vcore)
 			"Quicksand",
+			// try to supply common technical symbols, using Symbola font; it's generally not provided by OS, so relies on user-project providing it (eg. in Resources/Fonts folder)
+			"Symbola",
+
+			// fallback fonts (for characters not provided by the manually-provided fonts)
+			// ----------
 			// regular-text fallback-fonts (eg. for projects that aren't yet providing the Quicksand font themselves, that get loaded on devices without the Quicksand font)
 			"Roboto", "Open Sans", "Helvetica Neue", "Helvetica", "Arial", "sans-serif",
 			// try to supply colored emojis, using some emoji fonts that might be present on OS (otherwise it falls back to non-colored ones for, eg. ✔ and ⚙ -- though not 🚧)
 			"Segoe UI Emoji", "Noto Color Emoji", "Android Emoji", "EmojiSymbols", "EmojiOne Mozilla", "TweMoji Mozilla", "Segoe UI Symbol",
-			// try to supply common technical symbols, using Symbola font; it's generally not provided by OS, so relies on user-project providing it (eg. in Resources/Fonts folder)
-			"Symbola",
 		];
 		return fonts.join(", ");
 	}

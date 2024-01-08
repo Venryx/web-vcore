@@ -22,7 +22,7 @@ html, body {
 
 	// keep list in-sync with DefaultSkin.ts (also, see there for the comments on the list) [included in both places, because fonts are something we want loaded asap, ie. before reactjs tree has finished rendering]
 	font-family: (
-		"Quicksand",
+		"Quicksand", "Symbola",
 		"Roboto", "Open Sans", "Helvetica Neue", "Helvetica", "Arial", "sans-serif",
 		"Segoe UI Emoji", "Noto Color Emoji", "Android Emoji", "EmojiSymbols", "EmojiOne Mozilla", "TweMoji Mozilla", "Segoe UI Symbol",
 	);

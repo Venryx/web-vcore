@@ -22,13 +22,15 @@
 // TODO: Maybe replace Symbola with a "lighter" font, that still has the most useful symbols; Symbola.woff2 is almost 1mb in size!
 @font-face {
 	font-family: "Symbola";
-	src: url("/Fonts/Symbola.woff2") format("woff2");
+	src: url("/Fonts/Symbola_10.03.woff2") format("woff2");
 	//font-display: swap; font-style: normal; font-weight: 500;
 }
 
-// Declare font-face for "Adobe NotDef" font; this can help you notice when a font doesn't support a given character; to use it, change css temporarily: {fontFamily: "MyFont, Adobe NotDef"}
+// Declare font-face for "Adobe NotDef" font; this can help you notice when a font doesn't support a given character. To use it:
+// 1) Ensure the "/Fonts/AdobeNotDef-Regular.otf" file is present/served from your dev-server. (can download-then-rename from: https://github.com/adobe-fonts/adobe-notdef/blob/master/AND-Regular.otf)
+// 2) Change css of element temporarily, to have `fontFamily` include `AdobeNotDef` as the entry just after your chosen font. (eg. `MyFont, AdobeNotDef`}
 @font-face {
-	font-family: "Adobe NotDef";
-	src: url("/Fonts/AND-Regular.otf") format("opentype");
+	font-family: "AdobeNotDef";
+	src: url("/Fonts/AdobeNotDef-Regular.otf") format("opentype");
 	//font-display: swap; font-style: normal; font-weight: 500;
 }
