@@ -7988,14 +7988,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-vextensions@npm:1.0.75":
-  version: 1.0.75
-  resolution: "js-vextensions@npm:1.0.75"
-  checksum: 5895f205213eba3a918e66989614a3076954bb6f9093f642ab93c9eab06265bfba77df54352a538efb38a14a42f6a7fcb2850e2ada15ddb88355959975ece9ec
-  languageName: node
-  linkType: hard
-
-"js-vextensions@npm:^1.0.74, js-vextensions@workspace:.yalc/js-vextensions":
+"js-vextensions@npm:1.0.76, js-vextensions@npm:^1.0.74, js-vextensions@workspace:.yalc/js-vextensions":
   version: 0.0.0-use.local
   resolution: "js-vextensions@workspace:.yalc/js-vextensions"
   languageName: unknown
@@ -13957,7 +13950,7 @@ __metadata:
     html-webpack-plugin: "npm:^5.3.1"
     immer: "npm:^7.0.7"
     ip: "npm:^1.1.5"
-    js-vextensions: "npm:1.0.75"
+    js-vextensions: "npm:1.0.76"
     lodash: "npm:^4.17.15"
     mini-css-extract-plugin: "npm:^1.6.0"
     mobx: "npm:^6.3.2"
