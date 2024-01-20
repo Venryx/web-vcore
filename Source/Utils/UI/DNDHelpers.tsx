@@ -45,8 +45,11 @@ export function MakeDraggable(getDraggableCompProps: (props: Object)=>DraggableC
 			firstDragInfoForCurrentData = {} as DragInfo;
 			render() {
 				//if (this.compProps == null || !this.compProps.enabled) {
-				if (this.compProps == null) {
+				if (this.compProps === null) {
 					return <Draggable key={"-123"} draggableId={"-123"} index={-123}>{(provided, snapshot)=>(<WrappedComponent {...this.props} dragInfo={null}/>)}</Draggable>;
+				}
+				if (this.compProps === undefined) {
+					return <WrappedComponent {...this.props} dragInfo={null}/>;
 				}
 
 				const draggableID = ToJSON(this.compProps.draggableInfo);
