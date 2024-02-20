@@ -10,26 +10,29 @@ import {DEV} from "../EnvVars/ReadEnvVars.js";
 
 const debug = debug_base("app:server");
 
+export const prefixesToServe_default = [
+	// standard folders under "Resources" in my projects
+	"/Fonts/", "/Images/", "/SVGs/",
+	// standard files (directly) under "Resources" in my projects
+	"/robots.txt",
+	// other standard files output into the "Dist" folder in my projects
+	"/index.html", "/app.js", "/app.js.map", "/app.css", "/app.css.map",
+];
+export const extToServe_default = [
+	"html", "js", "css", "map",
+	"png", "jpg",
+	"ttf", "otf", "woff", "woff2",
+	"txt", "wasm",
+];
+
 export function Serve(
 	config: CreateConfig_ReturnType,
 	webpackConfig: webpack.Configuration|null,
-	prefixesToServe = [
-		// standard folders under "Resources" in my projects
-		"/Fonts/", "/Images/", "/SVGs/",
-		// standard files (directly) under "Resources" in my projects
-		"/robots.txt",
-		// other standard files output into the "Dist" folder in my projects
-		"/index.html", "/app.js", "/app.js.map", "/app.css", "/app.css.map",
-	],
+	prefixesToServe = prefixesToServe_default,
 	// extensions to serve (without a redirect to "index.html")
 	// note: perhaps should leave empty, since prefix approach should be sufficient, and is arguably better (eg. keeps redirects working for content ids that happen to end with these extensions)
 	// [that said, it doesn't matter that much, since these exceptions are only for development/webpack anyway; eg. in production, my web-servers tend to use approach of only redirecting if no file at given path is found]
-	extToServe = [
-		"html", "js", "css", "map",
-		"png", "jpg",
-		"otf", "woff", "woff2",
-		"txt", "wasm",
-	],
+	extToServe = extToServe_default,
 	writeToDisk = undefined,
 ) {
 	const paths = config.utils_paths;
