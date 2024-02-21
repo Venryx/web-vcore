@@ -1,8 +1,24 @@
 import Raven from "raven-js";
 import {manager} from "../../Manager.js";
 
-export function ShouldErrorBeIgnored(e: ErrorEvent) {
-	const errorStr = typeof e.message == "string" ? e.message : ""; // defensive
+/** Unlike StringifyError, this doesn't assume that the argument is an actual Error object -- nor does it add a prefix-text or stack-trace. */
+export function BasicStringifyErrorlike(errorEvent: ErrorEvent|PromiseRejectionEvent|Event) {
+	const e = (errorEvent ?? {}) as any;
+	const errorMessage = [
+		// for ErrorEvent
+		e.message,
+		// for PromiseRejectionEvent and Event (from "onrejectionhandled" listener)
+		e.reason?.message,
+		e.reason,
+		// fallbacks
+		e?.toString(),
+		e,
+	].find(a=>a != null);
+	const errorStr = `${errorMessage}`;
+	return errorStr;
+}
+export function ShouldErrorBeIgnored(e: ErrorEvent|PromiseRejectionEvent|Event) {
+	const errorStr = BasicStringifyErrorlike(e);
 
 	// ignore these "errors"; they occur during normal operation, and are not a problem
 	if (errorStr.includes("ResizeObserver loop limit exceeded")) return true;
@@ -13,13 +29,12 @@ export function ShouldErrorBeIgnored(e: ErrorEvent) {
 
 //g.onerror = function(message: string, filePath: string, line: number, column: number, error: Error) {
 window.addEventListener("error", e=>{
-	const {message, filename: filePath, lineno: line, colno: column, error} = e as {message: string, filename: string, lineno: number, colno: number, error: Error};
-
-	if (ShouldErrorBeIgnored(e)) {
+	if (manager.ShouldErrorBeIgnored(e)) {
 		e.stopImmediatePropagation();
 		return false;
 	}
 
+	const {message, filename: filePath, lineno: line, colno: column, error} = e as {message: string, filename: string, lineno: number, colno: number, error: Error};
 	// sentry already picks up errors that make it here; so don't send it to sentry again
 	if (error != null) {
 		HandleError(error, false);
@@ -28,14 +43,25 @@ window.addEventListener("error", e=>{
 	}
 });
 window.addEventListener("unhandledrejection", e=>{
+	if (manager.ShouldErrorBeIgnored(e)) {
+		e.stopImmediatePropagation();
+		return false;
+	}
+
 	//console.error(`Unhandled rejection (promise: `, e.promise, `, reason: `, e.reason, `).`);
 	HandleError(e["reason"]);
 });
 window.addEventListener("onrejectionhandled", e=>{
+	if (manager.ShouldErrorBeIgnored(e)) {
+		e.stopImmediatePropagation();
+		return false;
+	}
+
 	//console.error(`Unhandled rejection (promise: `, e.promise, `, reason: `, e.reason, `).`);
 	HandleError(e["reason"]);
 });
 
+export const stringifyError_errorOccurredPrefix = "An error has occurred: ";
 export function StringifyError(error: Error, allowAddErrorOccurredPrefix = true) {
 	error = error || {message: "[empty error]"} as any;
 	const message = (error.message || error.toString()).replace(/\r/g, "").TrimStart("\n");
@@ -45,7 +71,7 @@ export function StringifyError(error: Error, allowAddErrorOccurredPrefix = true)
 	let errorStr = "";
 	if (allowAddErrorOccurredPrefix) {
 		const alreadyHasPrefix = message.startsWith("Assert failed) ");
-		if (!alreadyHasPrefix) errorStr += `An error has occurred: `;
+		if (!alreadyHasPrefix) errorStr += stringifyError_errorOccurredPrefix;
 	}
 	if (!stack.includes(message)) errorStr += message;
 	errorStr += (errorStr.length ? "\n" : "") + stack;
