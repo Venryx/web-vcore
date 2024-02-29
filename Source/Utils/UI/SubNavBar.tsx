@@ -7,6 +7,8 @@ import {manager} from "../../Manager.js";
 import {ActionFunc, Observer} from "../Store/MobX.js";
 import {Link} from "../ReactComponents/Link.js";
 
+export const subNavBarHeight = 30;
+
 export class SubNavBar_Auto extends BaseComponent<{page: string, fullWidth?: boolean, filter?: (subpage: Page)=>boolean}, {}> {
 	render() {
 		const {page, filter, ...rest} = this.props;
@@ -74,7 +76,7 @@ export class SubNavBarButton extends BaseComponentPlus({} as {
 			<Link {...rest} actionFunc={actionFunc} to={to} text={text} style={css(
 				{
 					display: "inline-block", cursor: "pointer", verticalAlign: "middle",
-					lineHeight: "30px", color: "rgba(255,255,255,1)", padding: "0 15px", fontSize: 12, textDecoration: "none", opacity: 0.9,
+					lineHeight: `${subNavBarHeight}px`, color: "rgba(255,255,255,1)", padding: "0 15px", fontSize: 12, textDecoration: "none", opacity: 0.9,
 					":hover": {color: "rgba(100,255,100,1)"},
 				},
 				active && {color: "rgba(100,255,100,1)"},

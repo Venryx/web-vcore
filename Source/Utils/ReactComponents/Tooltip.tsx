@@ -1,6 +1,6 @@
-import {BaseComponent} from "react-vextensions";
+import {BaseComponent, cssHelper} from "react-vextensions";
 import React, {HTMLProps} from "react";
-import {cssHelper} from "react-vextensions";;
+
 //import "rc-tooltip/assets/bootstrap.css";
 
 export type InTooltipProps = {style?: any} & Partial<HTMLProps<HTMLDivElement>>;
@@ -10,7 +10,7 @@ export class InTooltip extends BaseComponent<InTooltipProps, {}> {
 		const {style, children, ...rest} = this.props;
 		const {css} = cssHelper(this);
 		return (
-			<div {...rest} style={css({whiteSpace: "pre"}, style)}>
+			<div {...rest} style={css({whiteSpace: "pre-wrap"}, style)}>
 				{children}
 			</div>
 		);
