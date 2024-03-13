@@ -26,7 +26,7 @@ export class NotificationsUI extends BaseComponent<{placement: "topLeft" | "topR
 		const messages = wvc_store.notificationMessages;
 		const {css, key} = cssHelper(this);
 		return (
-			<div className="clickThrough" style={css(
+			<div className="NotificationsUI_outer clickThrough" style={css(
 				{position: "fixed", width: "30%", bottom: 0, zIndex: 12},
 				placement == "topLeft" && {left: 0, top: navBarHeight},
 				placement == "topRight" && {right: 0, top: navBarHeight},
