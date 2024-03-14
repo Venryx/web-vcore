@@ -5,6 +5,7 @@ import * as frameworkExportsObject from "./index.js";
 import "js-vextensions/Helpers/@ApplyCECode.js";
 //export * from "./UserTypes.js";
 import "./UserTypes.js";
+import "./Utils/General/DuplicateLibCheck.js";
 import {RestoreOrigDefinePropertyFunc} from "./@EnableExportOverwrites.js";
 
 //type __ = typeof import("../node_modules/js-vextensions/Helpers/@ApplyCETypes");
