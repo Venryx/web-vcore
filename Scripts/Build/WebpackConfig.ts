@@ -103,6 +103,10 @@ function GetModuleConsolidations(opt: CreateWebpackConfig_Options) {
 		try {
 			//result[name] = FindNodeModule_FromUserProjectRoot(opt.config, name);
 			result[name] = FindNodeModule_FromWebVCoreRoot(opt.config, name);
+
+			// cause an error to occur if the parent project tried importing from the web-vcore ".yalc" folder directly (it should never do this)
+			// todo: replace with eslint rule
+			result[`web-vcore/.yalc/${name}`] = "never_import_from_the_yalc_folder_directly";
 		} catch {
 			// if couldn't find node-module, just ignore entry (to match with old behavior; the alias stuff needs a general cleanup)
 		}
