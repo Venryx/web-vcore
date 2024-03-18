@@ -1,4 +1,4 @@
-import {Draggable, DraggableProvided, DraggableStateSnapshot, DroppableProvided, DroppableStateSnapshot} from "react-beautiful-dnd";
+import {Draggable, DraggableProvided, DraggableStateSnapshot, DroppableProvided, DroppableStateSnapshot} from "@hello-pangea/dnd";
 import {GetDOM, ShallowChanged} from "react-vextensions";
 import {ToJSON} from "js-vextensions";
 import React from "react";

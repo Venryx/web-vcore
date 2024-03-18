@@ -12,7 +12,7 @@ export class DefaultLoadingUI extends BaseComponentPlus({} as {comp: BaseCompone
 	render() {
 		const {comp, bailMessage, style} = this.props;
 		const compProps_neededPropsOnly = Object.entries(comp.props).filter(a=>{
-			// allow attachment of react-beautiful-dnd's drag-handle props, otherwise a prominent warning is generated (in dev mode)
+			// allow attachment of hello-pangea-dnd's drag-handle props, otherwise a prominent warning is generated (in dev mode)
 			if (a[0].startsWith("data-rbd-drag-handle-")) return true;
 			return false;
 		}).ToMapObj(a=>a[0], a=>a[1]);

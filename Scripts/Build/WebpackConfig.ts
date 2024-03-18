@@ -81,7 +81,7 @@ function GetModuleConsolidations(opt: CreateWebpackConfig_Options) {
 		...[
 			"js-vextensions", // js (base)
 			"react-vextensions", "react-vcomponents", "react-vmenu", "react-vmessagebox", "react-vscrollview", "react-vmarkdown", // +react
-			"graphql-feedback", "graphql-forum", // +graphql
+			"graphql-forum", // +graphql
 			"mobx-graphlink", // +mobx
 			"web-vcore", // +framework
 			"webpack-runtime-require", // misc
@@ -95,7 +95,8 @@ function GetModuleConsolidations(opt: CreateWebpackConfig_Options) {
 			//"mobx-firelink/node_modules/mobx": paths.base("node_modules", "mobx"), // fsr, needed to prevent 2nd mobx, when mobx-firelink is npm-linked [has this always been true?]
 
 			// convenience consolidations, since they have npm-patches applied (and we don't want to have to adjust the match-counts)
-			"react-beautiful-dnd",
+			//"react-beautiful-dnd",
+			//"@hello-pangea/dnd",
 			"immer",
 		],
 	];
@@ -112,7 +113,7 @@ function GetModuleConsolidations(opt: CreateWebpackConfig_Options) {
 		}
 	}
 
-	console.log("Found aliases/consolidations for:", Object.keys(result));
+	console.log("Found aliases/consolidations for:", Object.keys(result).filter(a=>!a.includes("/.yalc/")));
 
 	return result;
 }

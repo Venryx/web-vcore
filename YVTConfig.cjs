@@ -4,7 +4,6 @@ console.log("VLIBS_USER:", process.env.VLIBS_USER);
 
 exports.venryx_standardSymlinkedPackages = [
 	"eslint-config-vbase",
-	"graphql-feedback",
 	"js-vextensions",
 	"react-uplot",
 	"react-vextensions",

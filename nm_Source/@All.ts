@@ -14,7 +14,7 @@ import "./moment.js";
 //import "./rc-slider.js";
 import "./rc-tooltip.js";
 import "./react.js";
-import "./react-beautiful-dnd.js";
+import "./hello-pangea-dnd.js";
 import "./react-dom.js";
 import "./react-uplot.js";
 import "./react-vcomponents.js";
