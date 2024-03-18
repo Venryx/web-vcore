@@ -8,9 +8,12 @@ BailHandler_loadingUI_default_Set(info=>{
 	return <DefaultLoadingUI comp={info.comp} bailMessage={info.bailMessage}/>;
 });
 
-export class DefaultLoadingUI extends BaseComponentPlus({} as {comp: BaseComponent<any>, bailMessage: BailError, style?}, {}) {
+export class DefaultLoadingUI extends BaseComponent<{
+	comp: BaseComponent<any>, bailMessage: BailError, style?,
+	extraUI_inRoot?: JSX.Element, extraUI_inRow?: JSX.Element,
+}, {}> {
 	render() {
-		const {comp, bailMessage, style} = this.props;
+		const {comp, bailMessage, style, extraUI_inRoot, extraUI_inRow} = this.props;
 		const compProps_neededPropsOnly = Object.entries(comp.props).filter(a=>{
 			// allow attachment of hello-pangea-dnd's drag-handle props, otherwise a prominent warning is generated (in dev mode)
 			if (a[0].startsWith("data-rbd-drag-handle-")) return true;
@@ -30,7 +33,9 @@ export class DefaultLoadingUI extends BaseComponentPlus({} as {comp: BaseCompone
 					<Text>Loading...</Text>
 					<InfoButton ml={5} mt={2} // dunno why mt:2 needed, but wouldn't center fully otherwise
 						sel text={`Details (comp: ${comp["name"] ?? comp.constructor?.name}): ${bailMessage.message}`}/>
+					{extraUI_inRow}
 				</Row>
+				{extraUI_inRoot}
 			</div>
 		);
 	}
