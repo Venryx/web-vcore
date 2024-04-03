@@ -10659,7 +10659,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"react-vscrollview@npm:1.0.10, react-vscrollview@workspace:.yalc/react-vscrollview":
+"react-vscrollview@npm:1.0.11, react-vscrollview@workspace:.yalc/react-vscrollview":
   version: 0.0.0-use.local
   resolution: "react-vscrollview@workspace:.yalc/react-vscrollview"
   peerDependencies:
@@ -13034,7 +13034,7 @@ __metadata:
     react-vmarkdown: "npm:1.0.4"
     react-vmenu: "npm:1.0.14"
     react-vmessagebox: "npm:1.0.17"
-    react-vscrollview: "npm:1.0.10"
+    react-vscrollview: "npm:1.0.11"
     remarkable: "npm:^2.0.1"
     remarkable-react: "npm:^1.4.3"
     sass: "npm:^1.56.1"
@@ -13051,7 +13051,7 @@ __metadata:
     webpack-cli: "npm:5.1.4"
     webpack-dependency-tools: "npm:0.0.1"
     webpack-dev-middleware: "npm:7.0.0"
-    webpack-runtime-require: "npm:1.0.0"
+    webpack-runtime-require: "npm:2.0.0"
     webpack-string-replacer: "npm:0.0.20"
   peerDependencies:
     firebase: ^9.0.0
@@ -13149,12 +13149,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-runtime-require@npm:1.0.0":
-  version: 1.0.0
-  resolution: "webpack-runtime-require@npm:1.0.0"
-  checksum: 83fe9bfbaa89ed6258c7b54f6b437d7d8a72d284aa1fe2473f7b738a02513fd923ea3c9651d907f1121508201c54ade44348e3742d3a495eb755c4d08e90a1fc
-  languageName: node
-  linkType: hard
+"webpack-runtime-require@npm:2.0.0, webpack-runtime-require@workspace:.yalc/webpack-runtime-require":
+  version: 0.0.0-use.local
+  resolution: "webpack-runtime-require@workspace:.yalc/webpack-runtime-require"
+  languageName: unknown
+  linkType: soft
 
 "webpack-sources@npm:^1.1.0":
   version: 1.4.3

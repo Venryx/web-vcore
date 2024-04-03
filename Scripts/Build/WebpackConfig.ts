@@ -156,11 +156,21 @@ export function CreateWebpackConfig(opt: CreateWebpackConfig_Options) {
 		name: opt.name,
 		mode: PROD && !QUICK ? "production" : "development",
 		optimization: {
-			// use paths as runtime identifiers for webpack modules (easier debugging)
-			//namedModules: true, // commented; not needed, since "output.pathinfo=true" (and, before at least, would cause problems when inconsistent between bundles)
-			//namedModules: true,
-			moduleIds: "named",
 			emitOnErrors: false,
+
+			// use paths as runtime identifiers for webpack modules (easier debugging, and helps webpack-runtime-require)
+			moduleIds: "named",
+
+			// The size of dm prod-builds, with various setting combinations: (second size is when gzipped, rounded to multiple of 0.1mb unfortunately; "exports" describes which exports WRR can find)
+			// 2024-04-02: Set none:                               3.56mb/992kb [exports: very limited, due to module-merging + export-privatizing]
+			// 2024-04-02: Set usedExports:                        3.64mb/1.0mb [exports: very limited, due to module-merging + export-privatizing]
+			// 2024-04-02: Set concatenateModules:                 3.89mb/1.0mb [exports: the most important ones, ie. exports referenced from other modules]
+			// 2024-04-02: Set usedExports+concatenateModules:     4.04mb/1.1mb [exports: all exports]
+
+			// disable removal/privatizing of unused exports, even in prod (otherwise webpack-runtime-require can't access unused-from-other-module exports)
+			usedExports: false,
+			// disable concatenation/merging of modules, even in prod (otherwise webpack merges many modules, causing exports between them to be removed/privatized)
+			concatenateModules: false,
 		},
 		target: "web",
 		devtool: opt.config.compiler_devtool as any,

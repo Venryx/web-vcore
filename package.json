@@ -1,7 +1,7 @@
 {
 	"name": "web-vcore",
 	"description": "Core code shared between my projects, for web-app frontends.",
-	"version": "0.0.103",
+	"version": "0.0.104",
 	"license": "MIT",
 	"author": "Venryx (https://venryx.com)",
 	"repository": "https://github.com/Venryx/web-vcore",
@@ -152,7 +152,7 @@
 		"webpack-cli": "5.1.4",
 		"webpack-dependency-tools": "0.0.1",
 		"webpack-dev-middleware": "7.0.0",
-		"webpack-runtime-require": "1.0.0",
+		"webpack-runtime-require": "2.0.0",
 		"webpack-string-replacer": "0.0.20"
 	},
 	"packageManager": "yarn@4.0.2",
