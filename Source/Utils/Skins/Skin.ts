@@ -16,6 +16,8 @@ export abstract class Skin {
 	abstract HeaderFont(): string;
 	abstract MainFont(): string;
 	abstract TextColor(): chroma.Color;
+	abstract TextColor_Dark(): chroma.Color;
+	abstract TextColor_Light(): chroma.Color;
 	//abstract NavBarTextColor(): chroma.Color;
 	abstract NavBarBoxShadow(): string; // temp (until NavBar is moved to web-vcore)
 	abstract HeaderColor(): chroma.Color;

@@ -49,7 +49,9 @@ export class DefaultSkin extends Skin {
 		];
 		return fonts.join(", ");
 	}
-	override TextColor() { return Chroma("rgba(255,255,255,.7)"); }
+	override TextColor() { return this.TextColor_Light(); }
+	override TextColor_Dark() { return Chroma("rgb(50,50,50)"); }
+	override TextColor_Light() { return Chroma("rgba(255,255,255,.7)"); }
 	//override NavBarTextColor() { return "rgb(255,255,255)"; }
 	override NavBarBoxShadow() { return "rgba(100, 100, 100, .3) 0px 0px 3px, rgba(70,70,70,.5) 0px 0px 150px"; }
 	override HeaderColor() { return this.ListEntryBackgroundColor_Dark(); }
