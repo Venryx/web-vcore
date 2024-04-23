@@ -2,6 +2,12 @@
 
 Core code shared between my projects, for web-app frontends.
 
+### NOTE: PROJECT RELOCATED
+
+This repo is no longer the "source of truth" for the `web-vcore` package; it is now developed/maintained at the following path in the Debate Map monorepo: https://github.com/debate-map/app/tree/main/Packages/web-vcore
+* The main reason for this relocation is that it allows new contributors to the Debate Map project to more easily make changes throughout the frontend's codebase, without having to figure out how to use [yalc](https://github.com/wclr/yalc) (or other package-substitution tools) right out of the gate.
+* Debate Map is the most significant project using `web-vcore` (by quite a margin), hence my choosing it as the "host" monorepo.
+
 ### Installation
 
 > todo: update these instructions
